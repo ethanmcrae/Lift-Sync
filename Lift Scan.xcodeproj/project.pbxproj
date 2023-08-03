@@ -13,6 +13,12 @@
 		3AE50D112A79A23D00E33A34 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AE50D102A79A23D00E33A34 /* Preview Assets.xcassets */; };
 		3AE50D132A79A23D00E33A34 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D122A79A23D00E33A34 /* Persistence.swift */; };
 		3AE50D162A79A23D00E33A34 /* Lift_Scan.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D142A79A23D00E33A34 /* Lift_Scan.xcdatamodeld */; };
+		3AE50D202A79A25C00E33A34 /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D1F2A79A25C00E33A34 /* QRScannerView.swift */; };
+		3AE50D222A7A16E100E33A34 /* WorkoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D212A7A16E100E33A34 /* WorkoutManager.swift */; };
+		3AE50D242A7A1DA700E33A34 /* QRScannerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D232A7A1DA700E33A34 /* QRScannerButton.swift */; };
+		3AE50D262A7A1EE300E33A34 /* WorkoutCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D252A7A1EE300E33A34 /* WorkoutCategoryView.swift */; };
+		3AE50D282A7A1F4F00E33A34 /* WorkoutGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D272A7A1F4F00E33A34 /* WorkoutGridView.swift */; };
+		3AE50D2A2A7A20E500E33A34 /* ScannedWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D292A7A20E500E33A34 /* ScannedWorkoutView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +31,12 @@
 		3AE50D152A79A23D00E33A34 /* Lift_Scan.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Lift_Scan.xcdatamodel; sourceTree = "<group>"; };
 		3AE50D172A79A23D00E33A34 /* Lift_Scan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lift_Scan.entitlements; sourceTree = "<group>"; };
 		3AE50D182A79A23D00E33A34 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3AE50D1F2A79A25C00E33A34 /* QRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
+		3AE50D212A7A16E100E33A34 /* WorkoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutManager.swift; sourceTree = "<group>"; };
+		3AE50D232A7A1DA700E33A34 /* QRScannerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerButton.swift; sourceTree = "<group>"; };
+		3AE50D252A7A1EE300E33A34 /* WorkoutCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutCategoryView.swift; sourceTree = "<group>"; };
+		3AE50D272A7A1F4F00E33A34 /* WorkoutGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutGridView.swift; sourceTree = "<group>"; };
+		3AE50D292A7A20E500E33A34 /* ScannedWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannedWorkoutView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +71,8 @@
 			children = (
 				3AE50D092A79A23A00E33A34 /* Lift_ScanApp.swift */,
 				3AE50D0B2A79A23A00E33A34 /* ContentView.swift */,
+				3AE50D212A7A16E100E33A34 /* WorkoutManager.swift */,
+				3AE50D1E2A79A24F00E33A34 /* Views */,
 				3AE50D0D2A79A23D00E33A34 /* Assets.xcassets */,
 				3AE50D122A79A23D00E33A34 /* Persistence.swift */,
 				3AE50D172A79A23D00E33A34 /* Lift_Scan.entitlements */,
@@ -75,6 +89,18 @@
 				3AE50D102A79A23D00E33A34 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		3AE50D1E2A79A24F00E33A34 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3AE50D1F2A79A25C00E33A34 /* QRScannerView.swift */,
+				3AE50D272A7A1F4F00E33A34 /* WorkoutGridView.swift */,
+				3AE50D292A7A20E500E33A34 /* ScannedWorkoutView.swift */,
+				3AE50D232A7A1DA700E33A34 /* QRScannerButton.swift */,
+				3AE50D252A7A1EE300E33A34 /* WorkoutCategoryView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,10 +173,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3AE50D262A7A1EE300E33A34 /* WorkoutCategoryView.swift in Sources */,
 				3AE50D132A79A23D00E33A34 /* Persistence.swift in Sources */,
 				3AE50D162A79A23D00E33A34 /* Lift_Scan.xcdatamodeld in Sources */,
 				3AE50D0C2A79A23A00E33A34 /* ContentView.swift in Sources */,
 				3AE50D0A2A79A23A00E33A34 /* Lift_ScanApp.swift in Sources */,
+				3AE50D242A7A1DA700E33A34 /* QRScannerButton.swift in Sources */,
+				3AE50D282A7A1F4F00E33A34 /* WorkoutGridView.swift in Sources */,
+				3AE50D202A79A25C00E33A34 /* QRScannerView.swift in Sources */,
+				3AE50D222A7A16E100E33A34 /* WorkoutManager.swift in Sources */,
+				3AE50D2A2A7A20E500E33A34 /* ScannedWorkoutView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
