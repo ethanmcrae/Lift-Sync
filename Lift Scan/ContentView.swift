@@ -9,36 +9,36 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-    @EnvironmentObject var workoutManager: WorkoutManager
-
-    @State private var isPresentingScanner = false
-    @State private var scannedCode: String?
-    @State private var selectedCategory = "Legs" // Default category
-    
     var body: some View {
-        NavigationView {
-            VStack {
-                QRScannerButton(isPresentingScanner: $isPresentingScanner)
-                if let scannedCode = scannedCode {
-                    ScannedWorkoutView(scannedCode: scannedCode)
-                } else {
-                    WorkoutCategoryView(selectedCategory: $selectedCategory)
-                    WorkoutGridView(selectedCategory: $selectedCategory)
+        TabView {
+            HomeView()
+                .tabItem {
+                    Label("Home", systemImage: "house.fill")
                 }
-            }
-            .sheet(isPresented: $isPresentingScanner) {
-                QRScannerView { code in
-                    scannedCode = code
-                    isPresentingScanner = false
+            
+            // TODO: Create StatsView file
+            Text("Todo")
+                .tabItem {
+                    Label("Stats", systemImage: "chart.bar.fill")
                 }
-            }
+            
+            // TODO: Create SettingsView file
+            SettingsView()
+                .tabItem {
+                    Label("Settings", systemImage: "gearshape.fill")
+                }
         }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        let persistentContainer = previewContainer()
+        let workoutManager = WorkoutManager(container: persistentContainer)
+        let categoryManager = CategoryManager()
+
+        return ContentView()
+            .environmentObject(workoutManager)
+            .environmentObject(categoryManager)
     }
 }
-

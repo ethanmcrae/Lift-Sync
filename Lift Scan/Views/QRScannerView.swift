@@ -10,6 +10,7 @@ import AVFoundation
 
 struct QRScannerView: UIViewControllerRepresentable {
     var onFound: (String) -> Void
+    @Environment(\.presentationMode) var presentationMode
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self, onFound: onFound)
@@ -32,6 +33,10 @@ struct QRScannerView: UIViewControllerRepresentable {
                 guard let stringValue = readableObject.stringValue else { return }
                 onFound(stringValue)
             }
+        }
+        
+        @objc func cancel() {
+            parent.presentationMode.wrappedValue.dismiss()
         }
     }
     
@@ -71,6 +76,21 @@ struct QRScannerView: UIViewControllerRepresentable {
         viewController.view.layer.addSublayer(previewLayer)
 
         captureSession.startRunning()
+        
+        // Create a cancel button
+        let button = UIButton(frame: CGRect(x: 20, y: 20, width: 80, height: 40))
+        button.setTitle("Cancel", for: .normal)
+        button.backgroundColor = UIColor.systemRed
+        button.layer.cornerRadius = 5
+        button.addTarget(context.coordinator, action: #selector(Coordinator.cancel), for: .touchUpInside)
+
+        // Create a semi-transparent layer under the cancel button
+        let backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: 120, height: 80))
+        backgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        backgroundView.layer.cornerRadius = 5
+        
+        viewController.view.addSubview(backgroundView)
+        viewController.view.addSubview(button)
 
         return viewController
     }

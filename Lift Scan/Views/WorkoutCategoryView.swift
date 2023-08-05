@@ -9,30 +9,36 @@ import SwiftUI
 
 struct WorkoutCategoryView: View {
     @Binding var selectedCategory: String
-    let categories = ["Legs", "Back / Biceps", "Chest / Triceps", "Core / Shoulders"]
+    @EnvironmentObject var categoryManager: CategoryManager
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
-                ForEach(categories, id: \.self) { category in
+                ForEach(categoryManager.categories, id: \.self) { category in
                     Button(action: {
-                        selectedCategory = category
+                        withAnimation {
+                            selectedCategory = category
+                        }
                     }) {
                         Text(category)
-                            .padding(.horizontal)
-                            .background(selectedCategory == category ? Color(#colorLiteral(red: 0.4, green: 0.0, blue: 0.6, alpha: 1.0)) : Color(#colorLiteral(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)))
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 25)
+                            .background(LinearGradient(gradient: Gradient(colors: [Color(hex: "#3b386e"), Color(hex: "#314594")]), startPoint: .leading, endPoint: .trailing))
                             .foregroundColor(.white)
                             .cornerRadius(15)
+                            .opacity(selectedCategory == category ? 1.0 : 0.7)
                     }
                 }
             }
             .padding(.top)
+            .padding(.leading)
         }
     }
 }
 
+
 struct WorkoutCategoryView_Previews: PreviewProvider {
-    @State static var selectedCategory = "Legs"
+    @State static var selectedCategory = ""
     
     static var previews: some View {
         WorkoutCategoryView(selectedCategory: $selectedCategory)
