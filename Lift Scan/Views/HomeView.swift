@@ -13,6 +13,13 @@ struct HomeView: View {
     @State private var scannedCode: String?
     @State private var scannedWorkout: Workout?
     @State private var selectedCategory = ""
+    @State private var previousScannedCode = ""
+    
+    private func onDisappear() -> Void {
+        print("🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠")
+        print("🟠🟠 Reset Scanned Workout Object 🟠🟠")
+        self.scannedWorkout = nil
+    }
 
     var body: some View {
         NavigationView {
@@ -22,16 +29,24 @@ struct HomeView: View {
                     set: { if $0 { self.activeSheet = .scanner } else { self.activeSheet = nil } }
                 ))
                 WorkoutCategoryView(selectedCategory: $selectedCategory)
-                WorkoutGridView(selectedCategory: $selectedCategory)
+                WorkoutGridView(selectedCategory: $selectedCategory, onDisappear: self.onDisappear)
                 if let scannedWorkout = scannedWorkout {
-                    NavigationLink(destination: ScannedWorkoutView(workout: scannedWorkout), isActive: Binding<Bool>(get: { scannedWorkout != nil }, set: { _ in })) {
+                    NavigationLink(destination: ScannedWorkoutView(workout: scannedWorkout, onDisappear: self.onDisappear), isActive: Binding<Bool>(get: { scannedWorkout != nil }, set: { _ in })) {
                         EmptyView()
                     }
+                    .onAppear(perform: {
+                        print("💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥")
+                        print("Scanned Workout: \(String(describing: scannedWorkout))")
+                    })
                 }
             }
-            .onChange(of: scannedCode) {
+            .onAppear(perform: {
+                print("🏡")
+                print("Scanned Workout: \(String(describing: scannedWorkout))")
+            })
+            .onChange(of: scannedCode) { _ in
                 if let newScannedCode = scannedCode {
-                    print("\nNew scanned code: \(scannedCode!)\n")
+                    print("\nNew scanned code: \(newScannedCode)\n")
                     let foundWorkout = self.workoutManager.findWorkout(byCode: newScannedCode)
                     print("Here is the workout found by scanning: \(String(describing: foundWorkout))")
                     if let foundWorkout = foundWorkout {
@@ -41,6 +56,7 @@ struct HomeView: View {
                     } else {
                         self.activeSheet = .newWorkout
                     }
+                    self.previousScannedCode = newScannedCode
                     scannedCode = nil
                 }
             }
@@ -51,7 +67,7 @@ struct HomeView: View {
                         scannedCode = code
                     }
                 case .newWorkout:
-                    NewWorkoutFormView(isPresenting: .constant(false), onComplete: { newWorkout in
+                    NewWorkoutFormView(isPresenting: .constant(false), qrCode: previousScannedCode, onComplete: { newWorkout in
                         scannedWorkout = newWorkout
                         activeSheet = nil
                     })

@@ -12,6 +12,7 @@ struct NewWorkoutFormView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     @Binding var isPresenting: Bool
     @State var newWorkoutName = ""
+    let qrCode: String?
     var onComplete: ((Workout?) -> Void)
 
     var body: some View {
@@ -22,7 +23,7 @@ struct NewWorkoutFormView: View {
             Section {
                 Button(action: {
                     let trimmedName = newWorkoutName.trimmingCharacters(in: .whitespacesAndNewlines)
-                    if !trimmedName.isEmpty, let newWorkout = workoutManager.createWorkout(name: trimmedName, category: nil, color: nil, categoryManager: categoryManager) {
+                    if !trimmedName.isEmpty, let newWorkout = workoutManager.createWorkout(name: trimmedName, category: nil, color: nil, qrCode: qrCode, categoryManager: categoryManager) {
                         newWorkoutName = ""
                         isPresenting = false
                         onComplete(newWorkout)

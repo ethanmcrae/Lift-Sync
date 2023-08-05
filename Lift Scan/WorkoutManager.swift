@@ -19,6 +19,7 @@ class WorkoutManager: ObservableObject {
         self.container = container
         self.viewContext = container.viewContext
         fetchWorkouts()
+        self.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
     }
 
     private func fetchWorkouts() {
@@ -35,10 +36,18 @@ class WorkoutManager: ObservableObject {
     }
 
     func findWorkout(byCode qrCode: String) -> Workout? {
+        print("\n\nSearching for workout by code")
         for categoryWorkouts in workouts.values {
             if let workout = categoryWorkouts.first(where: { workout in
+                print(workout.name ?? "Unknown")
+                print(workout)
                 if let qrCodes = workout.qrCodes?.allObjects as? [QRCode] {
-                    return true
+                    for qrCode in qrCodes {
+                        print("\(qrCode) == \(qrCode.url ?? "No url")")
+                    }
+                    let match = qrCodes.contains(where: { $0.url == qrCode })
+                    print("Match: \(match)")
+                    return match
                 }
                 return false
             }) {
@@ -67,7 +76,7 @@ class WorkoutManager: ObservableObject {
         }
     }
     
-    func createWorkout(name: String, category: String?, color: String?, categoryManager: CategoryManager) -> Workout? {
+    func createWorkout(name: String, category: String?, color: String?, qrCode: String? = nil, categoryManager: CategoryManager) -> Workout? {
         // Check if a workout with the same name already exists
         if let existingWorkout = findWorkout(byName: name) {
             return existingWorkout
@@ -78,6 +87,19 @@ class WorkoutManager: ObservableObject {
         newWorkout.name = name
         newWorkout.category = category
         newWorkout.color = color
+        
+        // Create QR Code reference
+        print("🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵")
+        print("🔵🔵 QR Code String: \(qrCode ?? "-") 🔵🔵")
+        if qrCode != nil && !qrCode!.isEmpty {
+            print("🔵🔵 Creating QR Code to assign to workout 🔵🔵")
+            let newQrCode: QRCode = QRCode(context: viewContext)
+            newQrCode.url = qrCode
+            newWorkout.addToQrCodes(newQrCode)
+        }
+        
+        print("🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢")
+        print("🟢🟢 Workout qrCodes: \(String(describing: newWorkout.qrCodes)) 🟢🟢") // Debug line
 
         updateCloud(errorMessage: "Failed to save workout")
         

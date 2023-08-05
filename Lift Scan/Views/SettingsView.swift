@@ -18,6 +18,10 @@ struct SettingsView: View {
     @State private var showingDeleteCategoryAlert = false
     @State private var showingRemoveCustomWorkoutsAlert = false
     @State private var showingRemoveAllWorkoutsAlert = false
+    
+    private func endEditing() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
 
     var body: some View {
         Form {
@@ -47,6 +51,7 @@ struct SettingsView: View {
                         
                         // Reset form element(s)
                         name = ""
+                        self.endEditing()
                     }) {
                         Text("Add Workout")
                     }
@@ -89,7 +94,9 @@ struct SettingsView: View {
                     Button(action: {
                         guard newCategory != "" else { return }
                         categoryManager.categories.append(newCategory)
+                        // Reset form
                         newCategory = ""
+                        self.endEditing()
                     }) {
                         Text("Add Category")
                     }
@@ -97,7 +104,7 @@ struct SettingsView: View {
             }
             
             Section(header: Text("Manage Workouts")) {
-                Button("Remove All Custom Workouts") {
+                Button("Remove all custom workouts") {
                     showingRemoveCustomWorkoutsAlert = true
                 }
                 .foregroundColor(.red)
@@ -112,7 +119,7 @@ struct SettingsView: View {
                     )
                 }
                 
-                Button("Remove All Workouts") {
+                Button("Remove all workouts") {
                     showingRemoveAllWorkoutsAlert = true
                 }
                 .foregroundColor(.red)

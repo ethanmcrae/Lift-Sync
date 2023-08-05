@@ -12,8 +12,8 @@ struct ScannedWorkoutView: View {
     @State private var showLogForm = false
     @State private var showingDeleteAlert = false
     @State private var workoutLogToDelete: WorkoutLog?
-
     var workout: Workout
+    var onDisappear: () -> Void
     
     private func deleteWorkoutLogs(at offsets: IndexSet) {
         guard let logs = workout.logs?.allObjects as? [WorkoutLog] else { return }
@@ -52,6 +52,9 @@ struct ScannedWorkoutView: View {
                     }
                 }
             }
+        }
+        .onDisappear {
+            self.onDisappear()
         }
         .alert(isPresented: $showingDeleteAlert) {
             Alert(
@@ -103,7 +106,7 @@ struct ScannedWorkoutView_Previews: PreviewProvider {
         // Add the workoutLog to the workout
         workout.addToLogs(workoutLog)
 
-        return ScannedWorkoutView(workout: workout)
+        return ScannedWorkoutView(workout: workout, onDisappear: {})
             .environmentObject(WorkoutManager(container: container))
     }
 }

@@ -11,12 +11,13 @@ import UIKit
 struct WorkoutGridView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     @Binding var selectedCategory: String
+    var onDisappear: () -> Void
 
     var body: some View {
         let workouts = workoutManager.workouts[selectedCategory]?.filter { $0.name != nil } ?? []
         LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 15), count: 2), spacing: 15) {
             ForEach(workouts) { workout in
-                NavigationLink(destination: ScannedWorkoutView(workout: workout)
+                NavigationLink(destination: ScannedWorkoutView(workout: workout, onDisappear: onDisappear)
                     .environmentObject(workoutManager)) {
                     VStack {
                         Rectangle()
@@ -43,7 +44,7 @@ struct WorkoutGridView_Previews: PreviewProvider {
         let workoutManager = WorkoutManager(container: persistentContainer)
         let categoryManager = CategoryManager()
 
-        return WorkoutGridView(selectedCategory: $selectedCategory)
+        return WorkoutGridView(selectedCategory: $selectedCategory, onDisappear: {})
             .environmentObject(workoutManager)
             .environmentObject(categoryManager)
     }
