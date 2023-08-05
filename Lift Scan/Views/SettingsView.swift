@@ -12,7 +12,7 @@ struct SettingsView: View {
     @EnvironmentObject var categoryManager: CategoryManager
     @State private var name = ""
     @State private var category = ""
-    @State private var color = Color(.yellow)
+    @State private var color = Color("AccentColor")
     @State private var newCategory = ""
     @State private var deleteCategoryIndex: Int? = nil
     @State private var showingDeleteCategoryAlert = false
@@ -47,7 +47,7 @@ struct SettingsView: View {
                         print("\n\n")
                         print("Submitted ✅")
                         
-                        workoutManager.createWorkout(name: name, category: category, color: color.hexString, categoryManager: categoryManager)
+                        workoutManager.createWorkout(name: name, category: category, color: color.toHex(), categoryManager: categoryManager)
                         
                         // Reset form element(s)
                         name = ""

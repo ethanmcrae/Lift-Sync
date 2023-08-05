@@ -13,6 +13,8 @@
 		3AC27F1C2A7DAB2300D21A43 /* NewWorkoutFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC27F1B2A7DAB2300D21A43 /* NewWorkoutFormView.swift */; };
 		3AC27F202A7DE1DC00D21A43 /* NewWorkoutLogFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC27F1F2A7DE1DC00D21A43 /* NewWorkoutLogFormView.swift */; };
 		3AC27F222A7DFB6B00D21A43 /* PreviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC27F212A7DFB6B00D21A43 /* PreviewManager.swift */; };
+		3AC27F242A7EC4D100D21A43 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC27F232A7EC4D100D21A43 /* ColorExtension.swift */; };
+		3AC27F262A7EC70700D21A43 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC27F252A7EC70700D21A43 /* ViewExtension.swift */; };
 		3AE50D0A2A79A23A00E33A34 /* Lift_ScanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D092A79A23A00E33A34 /* Lift_ScanApp.swift */; };
 		3AE50D0C2A79A23A00E33A34 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D0B2A79A23A00E33A34 /* ContentView.swift */; };
 		3AE50D0E2A79A23D00E33A34 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AE50D0D2A79A23D00E33A34 /* Assets.xcassets */; };
@@ -34,6 +36,8 @@
 		3AC27F1B2A7DAB2300D21A43 /* NewWorkoutFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWorkoutFormView.swift; sourceTree = "<group>"; };
 		3AC27F1F2A7DE1DC00D21A43 /* NewWorkoutLogFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWorkoutLogFormView.swift; sourceTree = "<group>"; };
 		3AC27F212A7DFB6B00D21A43 /* PreviewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewManager.swift; sourceTree = "<group>"; };
+		3AC27F232A7EC4D100D21A43 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		3AC27F252A7EC70700D21A43 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		3AE50D062A79A23A00E33A34 /* Lift Scan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lift Scan.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AE50D092A79A23A00E33A34 /* Lift_ScanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lift_ScanApp.swift; sourceTree = "<group>"; };
 		3AE50D0B2A79A23A00E33A34 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -84,7 +88,9 @@
 				3AE50D092A79A23A00E33A34 /* Lift_ScanApp.swift */,
 				3AE50D0B2A79A23A00E33A34 /* ContentView.swift */,
 				3AC27F212A7DFB6B00D21A43 /* PreviewManager.swift */,
+				3AC27F232A7EC4D100D21A43 /* ColorExtension.swift */,
 				3AE50D212A7A16E100E33A34 /* WorkoutManager.swift */,
+				3AC27F252A7EC70700D21A43 /* ViewExtension.swift */,
 				3A14F0692A7C4DA70005E554 /* CategoryManager.swift */,
 				3AE50D1E2A79A24F00E33A34 /* Views */,
 				3AE50D0D2A79A23D00E33A34 /* Assets.xcassets */,
@@ -191,12 +197,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3AC27F262A7EC70700D21A43 /* ViewExtension.swift in Sources */,
 				3AC27F202A7DE1DC00D21A43 /* NewWorkoutLogFormView.swift in Sources */,
 				3AE50D262A7A1EE300E33A34 /* WorkoutCategoryView.swift in Sources */,
 				3AE50D132A79A23D00E33A34 /* Persistence.swift in Sources */,
 				3AE50D162A79A23D00E33A34 /* Lift_Scan.xcdatamodeld in Sources */,
 				3AC27F1C2A7DAB2300D21A43 /* NewWorkoutFormView.swift in Sources */,
 				3AE50D0C2A79A23A00E33A34 /* ContentView.swift in Sources */,
+				3AC27F242A7EC4D100D21A43 /* ColorExtension.swift in Sources */,
 				3AE50D0A2A79A23A00E33A34 /* Lift_ScanApp.swift in Sources */,
 				3A359F1E2A7C0F38000E90F9 /* HomeView.swift in Sources */,
 				3AE50D242A7A1DA700E33A34 /* QRScannerButton.swift in Sources */,

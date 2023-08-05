@@ -17,12 +17,14 @@ struct QRScannerButton: View {
             Image(systemName: "qrcode.viewfinder")
                 .resizable()
                 .frame(width: 80, height: 80)
-                .padding()
-                .background(Color(#colorLiteral(red: 0.4, green: 0.0, blue: 0.6, alpha: 1.0)))
+                .padding(40)
+                .background(Color("AccentColor"))
                 .foregroundColor(.white)
-                .clipShape(Circle())
+//                .clipShape(Circle())
+                .cornerRadius(50)
         }
-        .padding(.top, 50)
+        .padding(.top, 30)
+        .padding(.bottom, 10)
     }
 }
 

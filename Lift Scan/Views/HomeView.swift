@@ -40,6 +40,8 @@ struct HomeView: View {
                     })
                 }
             }
+            .fullScreen()
+            .backgroundColor()
             .onAppear(perform: {
                 print("🏡")
                 print("Scanned Workout: \(String(describing: scannedWorkout))")

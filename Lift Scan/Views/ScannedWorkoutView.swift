@@ -25,9 +25,13 @@ struct ScannedWorkoutView: View {
     var body: some View {
         VStack {
             Text(workout.name ?? "Removed")
+                .font(.title)
+                .padding(.bottom, 40)
             Button("Log New Workout") {
                 showLogForm = true
             }
+            .padding()
+            .buttonStyle(.borderedProminent)
             .sheet(isPresented: $showLogForm) {
                 NewWorkoutLogFormView(isPresenting: $showLogForm, workout: workout, onComplete: { workoutLog in
                     workoutManager.updateCloud(errorMessage: "Failed to save log")
