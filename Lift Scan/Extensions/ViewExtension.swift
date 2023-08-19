@@ -9,8 +9,14 @@ import Foundation
 import SwiftUI
 
 struct BackgroundColor: ViewModifier {
+    let color: Color
+    
+    init(_ color: Color) {
+        self.color = color
+    }
+    
     func body(content: Content) -> some View {
-        content.background(Color("BackgroundColor").ignoresSafeArea())
+        content.background(color.ignoresSafeArea())
     }
 }
 
@@ -21,8 +27,8 @@ struct FullScreen: ViewModifier {
 }
 
 extension View {
-    func backgroundColor() -> some View {
-        self.modifier(BackgroundColor())
+    func backgroundColor(_ color: Color) -> some View {
+        self.modifier(BackgroundColor(color))
     }
     
     func fullScreen() -> some View {

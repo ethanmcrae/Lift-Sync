@@ -38,8 +38,8 @@ struct NewWorkoutLogFormView: View {
                             }
                         }
                 }
-                Section(header: Text("Weights")) {
-                    if let setsInt = Int(sets) {
+                if let setsInt = Int(sets) {
+                    Section(header: Text("Weight")) {
                         ForEach(0..<setsInt, id: \.self) { index in
                             HStack {
                                 TextField("Set # \(index+1)", text: Binding(
@@ -84,10 +84,24 @@ struct NewWorkoutLogFormView: View {
                     }
                 }
             }
-            .navigationTitle("New Workout Log")
+            .navigationTitle("Workout Log")
             .navigationBarItems(leading: Button("Cancel") {
                 isPresenting = false
             })
         }
+    }
+}
+
+struct NewWorkoutLogFormView_Previews: PreviewProvider {
+    static var previews: some View {
+        let container = PreviewManager.container()
+        let context = container.viewContext
+        let workout = Workout(context: context)
+        @State var isPresenting = true
+        workout.name = "Workout Preview"
+        // Add any other properties you want for your preview
+
+        return NewWorkoutLogFormView(isPresenting: $isPresenting, workout: workout, onComplete: {_ in })
+            .environmentObject(WorkoutManager(container: container))
     }
 }

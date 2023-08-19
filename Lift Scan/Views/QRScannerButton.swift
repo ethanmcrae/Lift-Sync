@@ -16,15 +16,13 @@ struct QRScannerButton: View {
         }) {
             Image(systemName: "qrcode.viewfinder")
                 .resizable()
-                .frame(width: 80, height: 80)
-                .padding(40)
-                .background(Color("AccentColor"))
-                .foregroundColor(.white)
-//                .clipShape(Circle())
-                .cornerRadius(50)
+                .frame(width: 100, height: 100)
+                .padding(30)
+                .background(Color("BackgroundColor"))
+                .foregroundColor(Color("BackgroundInvertedColor").opacity(0.9))
+                .cornerRadius(42)
         }
-        .padding(.top, 30)
-        .padding(.bottom, 10)
+        .padding(.vertical, 50)
     }
 }
 
@@ -32,6 +30,9 @@ struct QRScannerButton_Previews: PreviewProvider {
     @State static var isPresentingScanner = false
     
     static var previews: some View {
-        QRScannerButton(isPresentingScanner: $isPresentingScanner)
+        ZStack {
+            Color("AccentColor-600")
+            QRScannerButton(isPresentingScanner: $isPresentingScanner)
+        }
     }
 }

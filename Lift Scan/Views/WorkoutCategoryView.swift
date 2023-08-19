@@ -20,21 +20,22 @@ struct WorkoutCategoryView: View {
                             selectedCategory = category
                         }
                     }) {
+                        let isSelected = category == selectedCategory
+                        let shadowColor = isSelected ? Color("BackgroundColor-300") : Color(.clear)
                         Text(category)
-                            .padding(.horizontal, 20)
+//                            .font(.title2)
+                            .font(.system(size: isSelected ? 30 : 20))
+                            
+                            .padding(.horizontal, 30)
                             .padding(.vertical, 25)
-                            .background(
-                                category == selectedCategory
-                                    ? LinearGradient(gradient: Gradient(colors: [Color("AccentColor"), Color("AccentColor-600")]), startPoint: .leading, endPoint: .trailing)
-                                    : LinearGradient(gradient: Gradient(colors: [Color.clear]), startPoint: .leading, endPoint: .trailing)
-                            )
-                            .foregroundColor(.white)
+                            .foregroundColor(Color("BackgroundInvertedColor"))
+                            .shadow(color: shadowColor, radius: 14)
                             .cornerRadius(15)
                             .opacity(selectedCategory == category ? 1.0 : 0.7)
                     }
                 }
             }
-            .padding(.top)
+            .padding(.vertical)
             .padding(.leading)
         }
     }
@@ -43,36 +44,29 @@ struct WorkoutCategoryView: View {
 
 struct WorkoutCategoryView_Previews: PreviewProvider {
     static var previews: some View {
-        let persistentContainer = previewContainer()
+        let persistentContainer = PreviewManager.container()
         let workoutManager = WorkoutManager(container: persistentContainer)
         let categoryManager = CategoryManager()
         @State var selectedCategory = "Legs"
-        
-        // Create Mock Workouts
-        let workout1 = Workout(context: workoutManager.viewContext)
-        workout1.name = "Seated Rows"
-        workout1.color = "#00ffff"
-        workout1.category = "Legs"
-        
-        let workout2 = Workout(context: workoutManager.viewContext)
-        workout2.name = "Bench Press"
-        workout2.color = "#cc00dd"
-        workout2.category = "Legs"
-        
-        let workout3 = Workout(context: workoutManager.viewContext)
-        workout3.name = "Squats"
-        workout3.color = "#cc55dd"
-        workout3.category = "Legs"
-        
-        workoutManager.workouts["Legs"] = [workout1, workout2, workout3]
 
         return ZStack {
-            Color("BackgroundColor")
-                .ignoresSafeArea()
+            VStack {
+                Color("AccentColor-600")
+                Color("BackgroundColor")
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .edgesIgnoringSafeArea(.all)
             
-            WorkoutCategoryView(selectedCategory: $selectedCategory)
-                .environmentObject(workoutManager)
-                .environmentObject(categoryManager)
+            VStack {
+                Spacer()
+                Spacer()
+                Spacer()
+                WorkoutCategoryView(selectedCategory: $selectedCategory)
+                    .environmentObject(workoutManager)
+                    .environmentObject(categoryManager)
+                Spacer()
+                Spacer()
+            }
         }
     }
 }

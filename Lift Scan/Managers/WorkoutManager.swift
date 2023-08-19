@@ -36,17 +36,10 @@ class WorkoutManager: ObservableObject {
     }
 
     func findWorkout(byCode qrCode: String) -> Workout? {
-        print("\n\nSearching for workout by code")
         for categoryWorkouts in workouts.values {
             if let workout = categoryWorkouts.first(where: { workout in
-                print(workout.name ?? "Unknown")
-                print(workout)
                 if let qrCodes = workout.qrCodes?.allObjects as? [QRCode] {
-                    for qrCode in qrCodes {
-                        print("\(qrCode) == \(qrCode.url ?? "No url")")
-                    }
                     let match = qrCodes.contains(where: { $0.url == qrCode })
-                    print("Match: \(match)")
                     return match
                 }
                 return false
@@ -89,17 +82,11 @@ class WorkoutManager: ObservableObject {
         newWorkout.color = color
         
         // Create QR Code reference
-        print("🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵")
-        print("🔵🔵 QR Code String: \(qrCode ?? "-") 🔵🔵")
         if qrCode != nil && !qrCode!.isEmpty {
-            print("🔵🔵 Creating QR Code to assign to workout 🔵🔵")
             let newQrCode: QRCode = QRCode(context: viewContext)
             newQrCode.url = qrCode
             newWorkout.addToQrCodes(newQrCode)
         }
-        
-        print("🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢")
-        print("🟢🟢 Workout qrCodes: \(String(describing: newWorkout.qrCodes)) 🟢🟢") // Debug line
 
         updateCloud(errorMessage: "Failed to save workout")
         
@@ -149,5 +136,59 @@ class WorkoutManager: ObservableObject {
         updateCloud(errorMessage: "Failed to delete workout log")
     }
 
+    // Return a dictionary of date and number of workouts on that date
+    func workoutsPerDate() -> [Date: Int] {
+        var dateWorkouts: [Date: Int] = [:]
+        
+        // Assuming we want to show data for the past 6 days (including today)
+        let daysToShow = 6
+        let currentDate = Date()
+        
+        // Initialize every day with 0 workouts
+        for day in 0..<daysToShow {
+            let date = Calendar.current.date(byAdding: .day, value: -day, to: currentDate)!
+            let dateWithoutTime = Calendar.current.startOfDay(for: date)
+            dateWorkouts[dateWithoutTime] = 0
+        }
+        
+        for categoryWorkouts in workouts.values {
+            for workout in categoryWorkouts {
+                let logs = workout.logs?.allObjects as? [WorkoutLog] ?? []
+                for log in logs {
+                    // Ignoring time components of date for comparison
+                    let dateWithoutTime = Calendar.current.startOfDay(for: log.date ?? Date())
+                    dateWorkouts[dateWithoutTime, default: 0] += 1
+                }
+            }
+        }
+        
+        return dateWorkouts
+    }
+
+    // Returns average weight for a given workout over time
+    func averageWeight(for workoutName: String) -> [Date: Double] {
+        var weightProgression: [Date: Double] = [:]
+        
+        guard let workout = findWorkout(byName: workoutName) else { return [:] }
+        let logs = workout.logs?.allObjects as? [WorkoutLog] ?? []
+        for log in logs {
+            guard let weights = log.weights as? Set<Weight> else { continue }
+            let reps = log.reps
+            let sets = log.sets
+            
+            let totalReps = Double(reps * sets)
+            var cumulativeWeight = 0.0
+            
+            for weight in weights {
+                cumulativeWeight += Double(weight.weightValue) * totalReps
+            }
+
+            let avgProgression = cumulativeWeight / (totalReps * Double(weights.count))
+            weightProgression[log.date ?? Date()] = avgProgression
+        }
+        
+        return weightProgression
+    }
+    
     // We will add more methods here for creating and updating workouts
 }

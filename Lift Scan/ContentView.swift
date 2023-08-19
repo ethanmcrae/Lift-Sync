@@ -9,7 +9,11 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
+        let tabHighlightColor = colorScheme == .dark ? Color.white : Color.black
+        
         TabView {
             HomeView()
                 .tabItem {
@@ -17,7 +21,7 @@ struct ContentView: View {
                 }
             
             // TODO: Create StatsView file
-            Text("Todo")
+            StatsView()
                 .tabItem {
                     Label("Stats", systemImage: "chart.bar.fill")
                 }
@@ -27,32 +31,14 @@ struct ContentView: View {
                     Label("Settings", systemImage: "gearshape.fill")
                 }
         }
+        .accentColor(tabHighlightColor)
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let persistentContainer = previewContainer()
-        let workoutManager = WorkoutManager(container: persistentContainer)
+        let workoutManager = PreviewManager.mockWorkoutManager()
         let categoryManager = CategoryManager()
-        
-        // Create Mock Workouts
-        let workout1 = Workout(context: workoutManager.viewContext)
-        workout1.name = "Seated Rows"
-        workout1.color = "#00ffff"
-        workout1.category = "Legs"
-        
-        let workout2 = Workout(context: workoutManager.viewContext)
-        workout2.name = "Bench Press"
-        workout2.color = "#cc00dd"
-        workout2.category = "Legs"
-        
-        let workout3 = Workout(context: workoutManager.viewContext)
-        workout3.name = "Squats"
-        workout3.color = "#cc55dd"
-        workout3.category = "Legs"
-        
-        workoutManager.workouts["Legs"] = [workout1, workout2, workout3]
 
         return ContentView()
             .environmentObject(workoutManager)

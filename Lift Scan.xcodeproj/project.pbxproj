@@ -15,6 +15,12 @@
 		3AC27F222A7DFB6B00D21A43 /* PreviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC27F212A7DFB6B00D21A43 /* PreviewManager.swift */; };
 		3AC27F242A7EC4D100D21A43 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC27F232A7EC4D100D21A43 /* ColorExtension.swift */; };
 		3AC27F262A7EC70700D21A43 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC27F252A7EC70700D21A43 /* ViewExtension.swift */; };
+		3AC28E022A814C8C0084D5CF /* GochiHand-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3AC28E012A814C8C0084D5CF /* GochiHand-Regular.ttf */; };
+		3AC28E052A83416A0084D5CF /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC28E042A83416A0084D5CF /* StatsView.swift */; };
+		3AC28E092A8342F30084D5CF /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC28E082A8342F30084D5CF /* DateExtension.swift */; };
+		3AC28E0B2A8343CA0084D5CF /* AverageWeightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC28E0A2A8343CA0084D5CF /* AverageWeightView.swift */; };
+		3AC28E0D2A8343F70084D5CF /* WorkoutsFrequencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC28E0C2A8343F70084D5CF /* WorkoutsFrequencyView.swift */; };
+		3AC28E0F2A83441C0084D5CF /* PickerWorkoutWeightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC28E0E2A83441C0084D5CF /* PickerWorkoutWeightView.swift */; };
 		3AE50D0A2A79A23A00E33A34 /* Lift_ScanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D092A79A23A00E33A34 /* Lift_ScanApp.swift */; };
 		3AE50D0C2A79A23A00E33A34 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D0B2A79A23A00E33A34 /* ContentView.swift */; };
 		3AE50D0E2A79A23D00E33A34 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AE50D0D2A79A23D00E33A34 /* Assets.xcassets */; };
@@ -38,6 +44,12 @@
 		3AC27F212A7DFB6B00D21A43 /* PreviewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewManager.swift; sourceTree = "<group>"; };
 		3AC27F232A7EC4D100D21A43 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		3AC27F252A7EC70700D21A43 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
+		3AC28E012A814C8C0084D5CF /* GochiHand-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GochiHand-Regular.ttf"; path = "../../../../../../Downloads/Gochi_Hand/GochiHand-Regular.ttf"; sourceTree = "<group>"; };
+		3AC28E042A83416A0084D5CF /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		3AC28E082A8342F30084D5CF /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
+		3AC28E0A2A8343CA0084D5CF /* AverageWeightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageWeightView.swift; sourceTree = "<group>"; };
+		3AC28E0C2A8343F70084D5CF /* WorkoutsFrequencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutsFrequencyView.swift; sourceTree = "<group>"; };
+		3AC28E0E2A83441C0084D5CF /* PickerWorkoutWeightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerWorkoutWeightView.swift; sourceTree = "<group>"; };
 		3AE50D062A79A23A00E33A34 /* Lift Scan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lift Scan.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AE50D092A79A23A00E33A34 /* Lift_ScanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lift_ScanApp.swift; sourceTree = "<group>"; };
 		3AE50D0B2A79A23A00E33A34 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -66,6 +78,45 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3AC28E002A814B980084D5CF /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				3AC28E012A814C8C0084D5CF /* GochiHand-Regular.ttf */,
+			);
+			path = fonts;
+			sourceTree = "<group>";
+		};
+		3AC28E032A83415A0084D5CF /* StatsViews */ = {
+			isa = PBXGroup;
+			children = (
+				3AC28E042A83416A0084D5CF /* StatsView.swift */,
+				3AC28E0E2A83441C0084D5CF /* PickerWorkoutWeightView.swift */,
+				3AC28E0A2A8343CA0084D5CF /* AverageWeightView.swift */,
+				3AC28E0C2A8343F70084D5CF /* WorkoutsFrequencyView.swift */,
+			);
+			path = StatsViews;
+			sourceTree = "<group>";
+		};
+		3AC28E062A8342A30084D5CF /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				3AC27F232A7EC4D100D21A43 /* ColorExtension.swift */,
+				3AC28E082A8342F30084D5CF /* DateExtension.swift */,
+				3AC27F252A7EC70700D21A43 /* ViewExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		3AC28E072A8342B90084D5CF /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				3AC27F212A7DFB6B00D21A43 /* PreviewManager.swift */,
+				3AE50D212A7A16E100E33A34 /* WorkoutManager.swift */,
+				3A14F0692A7C4DA70005E554 /* CategoryManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
 		3AE50CFD2A79A23A00E33A34 = {
 			isa = PBXGroup;
 			children = (
@@ -85,13 +136,11 @@
 		3AE50D082A79A23A00E33A34 /* Lift Scan */ = {
 			isa = PBXGroup;
 			children = (
+				3AC28E002A814B980084D5CF /* fonts */,
 				3AE50D092A79A23A00E33A34 /* Lift_ScanApp.swift */,
 				3AE50D0B2A79A23A00E33A34 /* ContentView.swift */,
-				3AC27F212A7DFB6B00D21A43 /* PreviewManager.swift */,
-				3AC27F232A7EC4D100D21A43 /* ColorExtension.swift */,
-				3AE50D212A7A16E100E33A34 /* WorkoutManager.swift */,
-				3AC27F252A7EC70700D21A43 /* ViewExtension.swift */,
-				3A14F0692A7C4DA70005E554 /* CategoryManager.swift */,
+				3AC28E062A8342A30084D5CF /* Extensions */,
+				3AC28E072A8342B90084D5CF /* Managers */,
 				3AE50D1E2A79A24F00E33A34 /* Views */,
 				3AE50D0D2A79A23D00E33A34 /* Assets.xcassets */,
 				3AE50D122A79A23D00E33A34 /* Persistence.swift */,
@@ -116,6 +165,7 @@
 			children = (
 				3AE50D1F2A79A25C00E33A34 /* QRScannerView.swift */,
 				3A359F1D2A7C0F38000E90F9 /* HomeView.swift */,
+				3AC28E032A83415A0084D5CF /* StatsViews */,
 				3AC27F1B2A7DAB2300D21A43 /* NewWorkoutFormView.swift */,
 				3AC27F1F2A7DE1DC00D21A43 /* NewWorkoutLogFormView.swift */,
 				3AE50D272A7A1F4F00E33A34 /* WorkoutGridView.swift */,
@@ -186,6 +236,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3AE50D112A79A23D00E33A34 /* Preview Assets.xcassets in Resources */,
+				3AC28E022A814C8C0084D5CF /* GochiHand-Regular.ttf in Resources */,
 				3AE50D0E2A79A23D00E33A34 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -198,9 +249,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				3AC27F262A7EC70700D21A43 /* ViewExtension.swift in Sources */,
+				3AC28E092A8342F30084D5CF /* DateExtension.swift in Sources */,
 				3AC27F202A7DE1DC00D21A43 /* NewWorkoutLogFormView.swift in Sources */,
 				3AE50D262A7A1EE300E33A34 /* WorkoutCategoryView.swift in Sources */,
 				3AE50D132A79A23D00E33A34 /* Persistence.swift in Sources */,
+				3AC28E0D2A8343F70084D5CF /* WorkoutsFrequencyView.swift in Sources */,
 				3AE50D162A79A23D00E33A34 /* Lift_Scan.xcdatamodeld in Sources */,
 				3AC27F1C2A7DAB2300D21A43 /* NewWorkoutFormView.swift in Sources */,
 				3AE50D0C2A79A23A00E33A34 /* ContentView.swift in Sources */,
@@ -211,7 +264,10 @@
 				3AE50D282A7A1F4F00E33A34 /* WorkoutGridView.swift in Sources */,
 				3AE50D202A79A25C00E33A34 /* QRScannerView.swift in Sources */,
 				3A14F06A2A7C4DA70005E554 /* CategoryManager.swift in Sources */,
+				3AC28E0B2A8343CA0084D5CF /* AverageWeightView.swift in Sources */,
+				3AC28E052A83416A0084D5CF /* StatsView.swift in Sources */,
 				3AC27F222A7DFB6B00D21A43 /* PreviewManager.swift in Sources */,
+				3AC28E0F2A83441C0084D5CF /* PickerWorkoutWeightView.swift in Sources */,
 				3A359F202A7C12C2000E90F9 /* SettingsView.swift in Sources */,
 				3AE50D222A7A16E100E33A34 /* WorkoutManager.swift in Sources */,
 				3AE50D2A2A7A20E500E33A34 /* ScannedWorkoutView.swift in Sources */,

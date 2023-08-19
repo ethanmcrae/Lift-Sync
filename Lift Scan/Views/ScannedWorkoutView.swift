@@ -27,9 +27,19 @@ struct ScannedWorkoutView: View {
             Text(workout.name ?? "Removed")
                 .font(.title)
                 .padding(.bottom, 40)
-            Button("Log New Workout") {
+            Button(action: {
                 showLogForm = true
-            }
+            }, label: {
+                HStack(alignment: .center, spacing: 2) {
+                    Image(systemName: "plus.circle")
+                        .font(.title2)
+                        .foregroundColor(Color("TextAccentColor"))
+                    Text("Log New Workout")
+                        .font(.title3)
+                        .foregroundColor(Color("TextAccentColor"))
+                        .padding(12)
+                }
+            })
             .padding()
             .buttonStyle(.borderedProminent)
             .sheet(isPresented: $showLogForm) {
@@ -38,13 +48,28 @@ struct ScannedWorkoutView: View {
                     showLogForm = false
                 })
             }
+
             List {
                 ForEach(workout.logs?.allObjects as? [WorkoutLog] ?? [], id: \.self) { log in
                     VStack(alignment: .leading) {
-                        HStack(alignment: .bottom, spacing: 0) {
-                            Text("\(log.sets) x \(log.reps): ")
-                            ForEach((log.weights?.allObjects as? [Weight] ?? []).sorted(by: { $0.index < $1.index }), id: \.self) { weight in
-                                Text("\(weight.weightValue) ").foregroundColor(weight.incomplete ? .yellow : .primary)
+                        ScrollView(.horizontal) {
+                            HStack(alignment: .center, spacing: 0) {
+                                Text("\(log.sets) ")
+                                    .font(.custom("GochiHand-Regular", size: 36))
+                                Text("sets of")
+                                    .font(.custom("GochiHand-Regular", size: 17))
+                                    .opacity(0.8)
+                                Text(" \(log.reps)")
+                                    .font(.custom("GochiHand-Regular", size: 36))
+//                                Spacer() ❔ Optional...
+                                Text(" | ")
+                                    .font(.custom("GochiHand-Regular", size: 36))
+                                    .opacity(0.8)
+//                                Spacer() ❔ Optional...
+                                ForEach((log.weights?.allObjects as? [Weight] ?? []).sorted(by: { $0.index < $1.index }), id: \.self) { weight in
+                                    Text("\(weight.weightValue) ").foregroundColor(weight.incomplete ? .yellow : .green)
+                                        .font(.custom("GochiHand-Regular", size: 30))
+                                }
                             }
                         }
                     }
@@ -77,7 +102,7 @@ struct ScannedWorkoutView: View {
 
 struct ScannedWorkoutView_Previews: PreviewProvider {
     static var previews: some View {
-        let container = previewContainer()
+        let container = PreviewManager.container()
         let context = container.viewContext
         let workout = Workout(context: context)
         workout.name = "Workout Preview"
@@ -86,8 +111,8 @@ struct ScannedWorkoutView_Previews: PreviewProvider {
         // Create a workoutLog for the workout
         let workoutLog = WorkoutLog(context: context)
         workoutLog.date = Date()
-        workoutLog.reps = 10
-        workoutLog.sets = 5
+        workoutLog.reps = 12
+        workoutLog.sets = 3
         
         // Create a weight for the workoutLog
         let weight1 = Weight(context: context)
@@ -105,10 +130,37 @@ struct ScannedWorkoutView_Previews: PreviewProvider {
         let weight3 = Weight(context: context)
         weight3.weightValue = 115
         weight3.index = 2
+        weight3.incomplete = true
         workoutLog.addToWeights(weight3)
 
         // Add the workoutLog to the workout
         workout.addToLogs(workoutLog)
+        
+        // Create workoutLogs
+        let workoutLog1 = WorkoutLog(context: context)
+        workoutLog1.date = Date()
+        workoutLog1.reps = 12
+        workoutLog1.sets = 3
+        for (index, value) in [100, 110, 120, 125].enumerated() {
+            let weight = Weight(context: context)
+            weight.weightValue = Int16(value)
+            weight.index = Int16(index)
+            workoutLog1.addToWeights(weight)
+        }
+        workout.addToLogs(workoutLog1)
+        
+        // Create workoutLogs
+        let workoutLog2 = WorkoutLog(context: context)
+        workoutLog2.date = Date()
+        workoutLog2.reps = 5
+        workoutLog2.sets = 1
+        for (index, value) in [150].enumerated() {
+            let weight = Weight(context: context)
+            weight.weightValue = Int16(value)
+            weight.index = Int16(index)
+            workoutLog2.addToWeights(weight)
+        }
+        workout.addToLogs(workoutLog2)
 
         return ScannedWorkoutView(workout: workout, onDisappear: {})
             .environmentObject(WorkoutManager(container: container))

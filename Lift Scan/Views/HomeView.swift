@@ -16,8 +16,6 @@ struct HomeView: View {
     @State private var previousScannedCode = ""
     
     private func onDisappear() -> Void {
-        print("🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠")
-        print("🟠🟠 Reset Scanned Workout Object 🟠🟠")
         self.scannedWorkout = nil
     }
 
@@ -28,31 +26,28 @@ struct HomeView: View {
                     get: { self.activeSheet == .scanner },
                     set: { if $0 { self.activeSheet = .scanner } else { self.activeSheet = nil } }
                 ))
-                WorkoutCategoryView(selectedCategory: $selectedCategory)
-                WorkoutGridView(selectedCategory: $selectedCategory, onDisappear: self.onDisappear)
+                ZStack {
+                    Color("BackgroundColor")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .edgesIgnoringSafeArea(.all)
+                    VStack {
+                        WorkoutCategoryView(selectedCategory: $selectedCategory)
+                        WorkoutGridView(selectedCategory: $selectedCategory, onDisappear: self.onDisappear)
+                        Spacer()
+                    }
+                }
                 if let scannedWorkout = scannedWorkout {
                     NavigationLink(destination: ScannedWorkoutView(workout: scannedWorkout, onDisappear: self.onDisappear), isActive: Binding<Bool>(get: { scannedWorkout != nil }, set: { _ in })) {
                         EmptyView()
                     }
-                    .onAppear(perform: {
-                        print("💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥")
-                        print("Scanned Workout: \(String(describing: scannedWorkout))")
-                    })
                 }
             }
             .fullScreen()
-            .backgroundColor()
-            .onAppear(perform: {
-                print("🏡")
-                print("Scanned Workout: \(String(describing: scannedWorkout))")
-            })
+            .backgroundColor(Color("AccentColor-600"))
             .onChange(of: scannedCode) { _ in
                 if let newScannedCode = scannedCode {
-                    print("\nNew scanned code: \(newScannedCode)\n")
                     let foundWorkout = self.workoutManager.findWorkout(byCode: newScannedCode)
-                    print("Here is the workout found by scanning: \(String(describing: foundWorkout))")
                     if let foundWorkout = foundWorkout {
-                        print("FOUND WORKOUT: \(foundWorkout.name ?? "nvm...")")
                         self.scannedWorkout = foundWorkout
                         self.activeSheet = nil
                     } else {
@@ -90,7 +85,7 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        let persistentContainer = previewContainer()
+        let persistentContainer = PreviewManager.container()
         let workoutManager = WorkoutManager(container: persistentContainer)
         let categoryManager = CategoryManager()
 

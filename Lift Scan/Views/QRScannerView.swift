@@ -85,9 +85,9 @@ struct QRScannerView: UIViewControllerRepresentable {
         button.addTarget(context.coordinator, action: #selector(Coordinator.cancel), for: .touchUpInside)
 
         // Create a semi-transparent layer under the cancel button
-        let backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: 120, height: 80))
+        let backgroundView = UIView(frame: CGRect(x: 10, y: 10, width: 100, height: 60))
         backgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        backgroundView.layer.cornerRadius = 5
+        backgroundView.layer.cornerRadius = 15
         
         viewController.view.addSubview(backgroundView)
         viewController.view.addSubview(button)

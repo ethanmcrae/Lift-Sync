@@ -12,7 +12,7 @@ struct SettingsView: View {
     @EnvironmentObject var categoryManager: CategoryManager
     @State private var name = ""
     @State private var category = ""
-    @State private var color = Color("AccentColor")
+    @State private var color = Color("AccentColor-400")
     @State private var newCategory = ""
     @State private var deleteCategoryIndex: Int? = nil
     @State private var showingDeleteCategoryAlert = false
@@ -22,20 +22,29 @@ struct SettingsView: View {
     private func endEditing() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
+    
+    private func areThereCategories() -> Bool {
+        return !categoryManager.categories.isEmpty
+    }
 
     var body: some View {
         Form {
-            if !categoryManager.categories.isEmpty {
-                Section(header: Text("New Custom Workouts")) {
+            if areThereCategories() {
+                // 🟩 Create Workout
+                Section(header: Text("Add New Workout").font(.headline).padding(.bottom, 10)) {
+                    
                     TextField("Name", text: $name)
-                    Picker("Workout Category", selection: $category) {
+                    
+                    Picker("Category", selection: $category) {
                         ForEach(categoryManager.categories, id: \.self) { categoryName in
                             Text(categoryName)
                         }
                     }
+                    
                     ColorPicker(selection: $color, label: {
-                        Text("Choose color")
+                        Text("Color")
                     })
+                    
                     Button(action: {
                         print("Submitting: New Workout Form")
                         print("Color \($color)")
@@ -53,7 +62,9 @@ struct SettingsView: View {
                         name = ""
                         self.endEditing()
                     }) {
-                        Text("Add Workout")
+                        Text("Create Workout")
+                            .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                            .foregroundColor(Color("AccentColor"))
                     }
                 }
                 .onAppear {
@@ -63,34 +74,19 @@ struct SettingsView: View {
                         }
                     }
                 }
+                
+                Section {
+                   
+                }
+                .frame(maxWidth: .infinity)
             }
             
-            Section(header: Text("Manage Categories")) {
-                List {
-                    ForEach(Array(zip(categoryManager.categories.indices, categoryManager.categories)), id: \.1) { index, category in
-                        Text(category)
-                    }
-                    .onDelete { indexSet in
-                        guard let index = indexSet.first else { return }
-                        deleteCategoryIndex = index
-                        showingDeleteCategoryAlert = true
-                    }
-                    .alert(isPresented: $showingDeleteCategoryAlert) {
-                        Alert(
-                            title: Text("Remove category?"),
-                            message: Text("Are you sure you want to remove this category? This cannot be undone."),
-                            primaryButton: .destructive(Text("Remove")) {
-                                if let index = deleteCategoryIndex {
-                                    categoryManager.categories.remove(at: index)
-                                }
-                            },
-                            secondaryButton: .cancel()
-                        )
-                    }
+            // 🟩 Create Category
+            Section {
+                Section {
+                    TextField("Category name...", text: $newCategory)
                 }
-                
-                HStack {
-                    TextField("Legs, Chest, Back / Bicepts", text: $newCategory)
+                Section {
                     Button(action: {
                         guard newCategory != "" else { return }
                         categoryManager.categories.append(newCategory)
@@ -98,12 +94,58 @@ struct SettingsView: View {
                         newCategory = ""
                         self.endEditing()
                     }) {
-                        Text("Add Category")
+                        Text("Create Category")
+                            .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                            .foregroundColor(Color("AccentColor"))
+                    }
+                }
+            } header: {
+                VStack(alignment: .leading) {
+                    Divider()
+                        .padding(.vertical, 10)
+                    Text("Add New Category")
+                        .font(.headline)
+                        .padding(.bottom, 10)
+                }
+            }
+            
+            // 🟨 Modify Categories
+            if self.areThereCategories() {
+                Section {
+                    List {
+                        ForEach(Array(zip(categoryManager.categories.indices, categoryManager.categories)), id: \.1) { index, category in
+                            Text(category)
+                        }
+                        .onDelete { indexSet in
+                            guard let index = indexSet.first else { return }
+                            deleteCategoryIndex = index
+                            showingDeleteCategoryAlert = true
+                        }
+                        .alert(isPresented: $showingDeleteCategoryAlert) {
+                            Alert(
+                                title: Text("Remove category?"),
+                                message: Text("Are you sure you want to remove this category? This cannot be undone."),
+                                primaryButton: .destructive(Text("Remove")) {
+                                    if let index = deleteCategoryIndex {
+                                        categoryManager.categories.remove(at: index)
+                                    }
+                                },
+                                secondaryButton: .cancel()
+                            )
+                        }
+                    }
+                } header: {
+                    VStack(alignment: .leading) {
+                        Divider()
+                            .padding(.vertical, 10)
+                        Text("Existing Categories")
+                            .font(.headline)
+                            .padding(.bottom, 10)
                     }
                 }
             }
             
-            Section(header: Text("Manage Workouts")) {
+            Section {
                 Button("Remove all custom workouts") {
                     showingRemoveCustomWorkoutsAlert = true
                 }
@@ -133,6 +175,14 @@ struct SettingsView: View {
                         secondaryButton: .cancel()
                     )
                 }
+            } header: {
+                VStack(alignment: .leading) {
+                    Divider()
+                        .padding(.vertical, 10)
+                    Text("Delete Workouts")
+                        .font(.headline)
+                        .padding(.bottom, 10)
+                }
             }
         }
     }
@@ -142,8 +192,7 @@ struct SettingsView: View {
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         let categoryManager = CategoryManager()
-        let container = previewContainer()
-        let context = container.viewContext
+        let container = PreviewManager.container()
         
         SettingsView()
             .environmentObject(WorkoutManager(container: container))

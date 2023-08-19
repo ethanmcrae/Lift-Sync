@@ -62,4 +62,13 @@ extension Color {
             return String(format: "%02lX%02lX%02lX", lroundf(r * 255), lroundf(g * 255), lroundf(b * 255))
         }
     }
+    
+    func darker(by percentage: CGFloat = 30.0) -> Color? {
+        let uiColor = UIColor(self)
+        var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        guard uiColor.getHue(&h, saturation: &s, brightness: &b, alpha: &a) else { return nil }
+        
+        let newBrightness = max(b - percentage/100, 0.0)
+        return Color(uiColor: UIColor(hue: h, saturation: s, brightness: newBrightness, alpha: a))
+    }
 }
