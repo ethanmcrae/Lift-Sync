@@ -85,8 +85,7 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        let persistentContainer = PreviewManager.container()
-        let workoutManager = WorkoutManager(container: persistentContainer)
+        let workoutManager = PreviewManager.mockWorkoutManager()
         let categoryManager = CategoryManager()
 
         return HomeView()

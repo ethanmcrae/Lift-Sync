@@ -7,13 +7,8 @@
         <attribute name="url" attributeType="String" defaultValueString=""/>
         <relationship name="workout" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Workout" inverseName="qrCodes" inverseEntity="Workout"/>
     </entity>
-    <entity name="Weight" representedClassName="Weight" syncable="YES" codeGenerationType="class">
-        <attribute name="incomplete" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
-        <attribute name="index" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="weightValue" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="log" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WorkoutLog" inverseName="weights" inverseEntity="WorkoutLog"/>
-    </entity>
     <entity name="Workout" representedClassName="Workout" syncable="YES" codeGenerationType="class">
+        <attribute name="barWeight" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="category" optional="YES" attributeType="String"/>
         <attribute name="color" optional="YES" attributeType="String"/>
         <attribute name="name" attributeType="String" defaultValueString="Workout X"/>
@@ -21,10 +16,16 @@
         <relationship name="qrCodes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="QRCode" inverseName="workout" inverseEntity="QRCode"/>
     </entity>
     <entity name="WorkoutLog" representedClassName="WorkoutLog" syncable="YES" codeGenerationType="class">
+        <attribute name="barWeight" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="date" attributeType="Date" defaultDateTimeInterval="712732740" usesScalarValueType="NO"/>
-        <attribute name="reps" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="sets" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="weights" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Weight" inverseName="log" inverseEntity="Weight"/>
+        <relationship name="sets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="WorkoutSet" inverseName="log" inverseEntity="WorkoutSet"/>
         <relationship name="workout" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Workout" inverseName="logs" inverseEntity="Workout"/>
+    </entity>
+    <entity name="WorkoutSet" representedClassName="WorkoutSet" syncable="YES" codeGenerationType="class">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="incomplete" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="reps" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="weight" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="log" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WorkoutLog" inverseName="sets" inverseEntity="WorkoutLog"/>
     </entity>
 </model>

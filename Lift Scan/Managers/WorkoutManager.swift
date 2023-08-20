@@ -21,6 +21,10 @@ class WorkoutManager: ObservableObject {
         fetchWorkouts()
         self.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
     }
+    
+    var allWorkouts: [Workout] {
+        return Array(workouts.values).flatMap { $0 }
+    }
 
     private func fetchWorkouts() {
         let fetchRequest: NSFetchRequest<Workout> = Workout.fetchRequest()
@@ -92,6 +96,22 @@ class WorkoutManager: ObservableObject {
         
         return newWorkout
     }
+    
+    func createLog(workout: Workout) -> WorkoutLog {
+        let workoutLog = WorkoutLog(context: viewContext)
+        workoutLog.date = Date()
+        workoutLog.workout = workout
+        workoutLog.barWeight = workout.barWeight
+        return workoutLog
+    }
+    
+    func recordSet(reps: Int16, weight: Int16, complete: Bool = true, log: WorkoutLog) -> Void {
+        let setEntity = WorkoutSet(context: viewContext)
+        setEntity.date = Date()
+        setEntity.weight = Int16(weight)
+        setEntity.incomplete = !complete
+        log.addToSets(setEntity)
+    }
 
     func removeCustomWorkouts() {
         for categoryWorkouts in workouts.values {
@@ -125,9 +145,9 @@ class WorkoutManager: ObservableObject {
     
     func deleteLog(_ log: WorkoutLog) {
         // Remove weights associated with this workout log
-        if let weights = log.weights as? Set<Weight> {
-            for weight in weights {
-                viewContext.delete(weight)
+        if let workoutSets = log.sets as? Set<WorkoutSet> {
+            for workoutSet in workoutSets {
+                viewContext.delete(workoutSet)
             }
         }
         
@@ -166,25 +186,25 @@ class WorkoutManager: ObservableObject {
     }
 
     // Returns average weight for a given workout over time
-    func averageWeight(for workoutName: String) -> [Date: Double] {
-        var weightProgression: [Date: Double] = [:]
+    func weightHistory(for workoutName: String) -> [Date: [(reps: Int, weight: Int)]] {
+        var weightProgression: [Date: [(reps: Int, weight: Int)]] = [:]
         
         guard let workout = findWorkout(byName: workoutName) else { return [:] }
+        
         let logs = workout.logs?.allObjects as? [WorkoutLog] ?? []
         for log in logs {
-            guard let weights = log.weights as? Set<Weight> else { continue }
-            let reps = log.reps
-            let sets = log.sets
+            guard let workoutSets = log.sets as? Set<WorkoutSet> else { continue }
+            guard let workoutDate = log.date else { continue }
             
-            let totalReps = Double(reps * sets)
-            var cumulativeWeight = 0.0
+            var logData: [(reps: Int, weight: Int)] = []
             
-            for weight in weights {
-                cumulativeWeight += Double(weight.weightValue) * totalReps
+            for workoutSet in workoutSets {
+                let reps = Int(workoutSet.reps)
+                let weight = Int(workoutSet.weight)
+                logData.append((reps: reps, weight: weight))
             }
-
-            let avgProgression = cumulativeWeight / (totalReps * Double(weights.count))
-            weightProgression[log.date ?? Date()] = avgProgression
+            
+            weightProgression[workoutDate] = logData
         }
         
         return weightProgression

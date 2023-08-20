@@ -72,16 +72,16 @@ struct PreviewManager {
         // Creating multiple workoutLogs for the workout
         for day in dayRange {
             let workoutLog = WorkoutLog(context: context)
-            workoutLog.date = Calendar.current.date(byAdding: .day, value: -day, to: Date())
-            workoutLog.reps = Int16.random(in: 5...12)
-            workoutLog.sets = Int16.random(in: 1...5)
+            let workoutDate = Calendar.current.date(byAdding: .day, value: -day, to: Date())
+            workoutLog.date = workoutDate
             
             let weightValues = [100, 110, 115, 120, 125, 130]
-            for (index, value) in weightValues.prefix(Int.random(in: 1...weightValues.count)).enumerated() {
-                let weight = Weight(context: context)
-                weight.weightValue = Int16(value)
-                weight.index = Int16(index)
-                workoutLog.addToWeights(weight)
+            for value in weightValues.prefix(Int.random(in: 1...weightValues.count)) {
+                let workoutSet = WorkoutSet(context: context)
+                workoutSet.weight = Int16(value)
+                workoutSet.reps = Int16.random(in: 5...12)
+                workoutSet.date = workoutDate
+                workoutLog.addToSets(workoutSet)
             }
             
             workout.addToLogs(workoutLog)

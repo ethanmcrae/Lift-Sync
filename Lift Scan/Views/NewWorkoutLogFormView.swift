@@ -65,19 +65,21 @@ struct NewWorkoutLogFormView: View {
                 }
                 Section {
                     Button(action: {
-                        let workoutLog = WorkoutLog(context: workoutManager.viewContext)
-                        workoutLog.date = Date()
-                        workoutLog.sets = Int16(sets) ?? 0
-                        workoutLog.reps = Int16(reps) ?? 0
-                        let filteredWeights = weights.filter { $0.value != 0 }
-                        for (index, weight) in filteredWeights.enumerated() {
-                            let weightEntity = Weight(context: workoutManager.viewContext)
-                            weightEntity.index = Int16(index)
-                            weightEntity.weightValue = Int16(weight.value)
-                            weightEntity.incomplete = weight.incomplete
-                            workoutLog.addToWeights(weightEntity)
-                        }
-                        workoutLog.workout = workout
+//                        let workoutLog = WorkoutLog(context: workoutManager.viewContext)
+//                        workoutLog.date = Date()
+//                        workoutLog.sets = Int16(sets) ?? 0
+//                        workoutLog.reps = Int16(reps) ?? 0
+//                        let filteredWeights = weights.filter { $0.value != 0 }
+//                        for (index, weight) in filteredWeights.enumerated() {
+//                            let weightEntity = Weight(context: workoutManager.viewContext)
+//                            weightEntity.index = Int16(index)
+//                            weightEntity.weightValue = Int16(weight.value)
+//                            weightEntity.incomplete = weight.incomplete
+//                            workoutLog.addToWeights(weightEntity)
+//                        }
+//                        workoutLog.workout = workout
+                        
+                        let workoutLog = workoutManager.createLog(workout: workout)
                         onComplete(workoutLog)
                     }) {
                         Text("Log Workout")

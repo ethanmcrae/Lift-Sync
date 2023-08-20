@@ -9,6 +9,7 @@ import SwiftUI
 
 struct StatsView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
+    @State var selectedWorkout: String?
     
     var body: some View {
         ScrollView {
@@ -16,10 +17,13 @@ struct StatsView: View {
                 // Frequency of Workouts over Time
                 WorkoutsFrequencyView(data: workoutManager.workoutsPerDate())
                 
-                // Average Weight over Time for a selected workout
-                PickerWorkoutWeightView(workoutManager: workoutManager)
+                // Workout picker for the weight over time graph
+                PickerWorkoutWeightView(workoutManager: workoutManager, selectedWorkout: $selectedWorkout)
                 
-                // More statistics views can be added here
+                // Graph of the weight progression
+                if selectedWorkout != nil {
+                    AverageWeightView(data: workoutManager.weightHistory(for: selectedWorkout!))
+                }
             }
             .padding()
         }
@@ -29,8 +33,7 @@ struct StatsView: View {
 
 struct StatsView_Previews: PreviewProvider {
     static var previews: some View {
-        let persistentContainer = PreviewManager.container()
-        let workoutManager = WorkoutManager(container: persistentContainer)
+        let workoutManager = PreviewManager.mockWorkoutManager()
 
         return StatsView()
             .environmentObject(workoutManager)

@@ -53,21 +53,16 @@ struct ScannedWorkoutView: View {
                 ForEach(workout.logs?.allObjects as? [WorkoutLog] ?? [], id: \.self) { log in
                     VStack(alignment: .leading) {
                         ScrollView(.horizontal) {
-                            HStack(alignment: .center, spacing: 0) {
-                                Text("\(log.sets) ")
-                                    .font(.custom("GochiHand-Regular", size: 36))
-                                Text("sets of")
-                                    .font(.custom("GochiHand-Regular", size: 17))
-                                    .opacity(0.8)
-                                Text(" \(log.reps)")
-                                    .font(.custom("GochiHand-Regular", size: 36))
-//                                Spacer() ❔ Optional...
-                                Text(" | ")
-                                    .font(.custom("GochiHand-Regular", size: 36))
-                                    .opacity(0.8)
-//                                Spacer() ❔ Optional...
-                                ForEach((log.weights?.allObjects as? [Weight] ?? []).sorted(by: { $0.index < $1.index }), id: \.self) { weight in
-                                    Text("\(weight.weightValue) ").foregroundColor(weight.incomplete ? .yellow : .green)
+                            ForEach(log.sets?.allObjects as? [WorkoutSet] ?? [], id: \.self) { workoutSet in
+                                HStack(alignment: .center, spacing: 0) {
+                                    Text(" \(workoutSet.reps)")
+                                        .font(.custom("GochiHand-Regular", size: 36))
+    //                                Spacer() ❔ Optional...
+                                    Text(" | ")
+                                        .font(.custom("GochiHand-Regular", size: 36))
+                                        .opacity(0.8)
+    //                                Spacer() ❔ Optional...
+                                    Text("\(workoutSet.weight) ").foregroundColor(workoutSet.incomplete ? .yellow : .green)
                                         .font(.custom("GochiHand-Regular", size: 30))
                                 }
                             }
@@ -81,6 +76,8 @@ struct ScannedWorkoutView: View {
                     }
                 }
             }
+            // Graph of the weight progression
+            AverageWeightView(data: workoutManager.weightHistory(for: workout.name ?? "Unknown"))
         }
         .onDisappear {
             self.onDisappear()
@@ -102,67 +99,10 @@ struct ScannedWorkoutView: View {
 
 struct ScannedWorkoutView_Previews: PreviewProvider {
     static var previews: some View {
-        let container = PreviewManager.container()
-        let context = container.viewContext
-        let workout = Workout(context: context)
-        workout.name = "Workout Preview"
-        // Add any other properties you want for your preview
-
-        // Create a workoutLog for the workout
-        let workoutLog = WorkoutLog(context: context)
-        workoutLog.date = Date()
-        workoutLog.reps = 12
-        workoutLog.sets = 3
-        
-        // Create a weight for the workoutLog
-        let weight1 = Weight(context: context)
-        weight1.weightValue = 100
-        weight1.index = 0
-        workoutLog.addToWeights(weight1)
-        
-        // Create a weight for the workoutLog
-        let weight2 = Weight(context: context)
-        weight2.weightValue = 110
-        weight2.index = 1
-        workoutLog.addToWeights(weight2)
-        
-        // Create a weight for the workoutLog
-        let weight3 = Weight(context: context)
-        weight3.weightValue = 115
-        weight3.index = 2
-        weight3.incomplete = true
-        workoutLog.addToWeights(weight3)
-
-        // Add the workoutLog to the workout
-        workout.addToLogs(workoutLog)
-        
-        // Create workoutLogs
-        let workoutLog1 = WorkoutLog(context: context)
-        workoutLog1.date = Date()
-        workoutLog1.reps = 12
-        workoutLog1.sets = 3
-        for (index, value) in [100, 110, 120, 125].enumerated() {
-            let weight = Weight(context: context)
-            weight.weightValue = Int16(value)
-            weight.index = Int16(index)
-            workoutLog1.addToWeights(weight)
-        }
-        workout.addToLogs(workoutLog1)
-        
-        // Create workoutLogs
-        let workoutLog2 = WorkoutLog(context: context)
-        workoutLog2.date = Date()
-        workoutLog2.reps = 5
-        workoutLog2.sets = 1
-        for (index, value) in [150].enumerated() {
-            let weight = Weight(context: context)
-            weight.weightValue = Int16(value)
-            weight.index = Int16(index)
-            workoutLog2.addToWeights(weight)
-        }
-        workout.addToLogs(workoutLog2)
+        let workoutManager = PreviewManager.mockWorkoutManager()
+        let workout = workoutManager.workouts["Legs"]!.first!
 
         return ScannedWorkoutView(workout: workout, onDisappear: {})
-            .environmentObject(WorkoutManager(container: container))
+            .environmentObject(workoutManager)
     }
 }
