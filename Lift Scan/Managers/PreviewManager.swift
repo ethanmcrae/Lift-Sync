@@ -78,9 +78,9 @@ struct PreviewManager {
             let weightValues = [100, 110, 115, 120, 125, 130]
             for value in weightValues.prefix(Int.random(in: 1...weightValues.count)) {
                 let workoutSet = WorkoutSet(context: context)
-                workoutSet.weight = Int16(value)
+                workoutSet.weight = Float(value)
                 workoutSet.reps = Int16.random(in: 5...12)
-                workoutSet.date = workoutDate
+                workoutSet.date = workoutDate?.addingTimeInterval(Double(value)) // Higher weights will be newer
                 workoutLog.addToSets(workoutSet)
             }
             

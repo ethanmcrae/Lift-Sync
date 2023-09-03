@@ -19,17 +19,19 @@ struct ContentView: View {
                 .tabItem {
                     Label("Home", systemImage: "house.fill")
                 }
+                .accentColor(Color("AccentColor"))
             
-            // TODO: Create StatsView file
             StatsView()
                 .tabItem {
                     Label("Stats", systemImage: "chart.bar.fill")
                 }
+                .accentColor(Color("AccentColor"))
 
             SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gearshape.fill")
                 }
+                .accentColor(Color("AccentColor"))
         }
         .accentColor(tabHighlightColor)
     }

@@ -88,7 +88,7 @@ struct SettingsView: View {
                 }
                 Section {
                     Button(action: {
-                        guard newCategory != "" else { return }
+                        guard !newCategory.isEmpty else { return }
                         categoryManager.categories.append(newCategory)
                         // Reset form
                         newCategory = ""
@@ -191,11 +191,11 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
+        let workoutManager = PreviewManager.mockWorkoutManager()
         let categoryManager = CategoryManager()
-        let container = PreviewManager.container()
         
         SettingsView()
-            .environmentObject(WorkoutManager(container: container))
+            .environmentObject(workoutManager)
             .environmentObject(categoryManager)
     }
 }

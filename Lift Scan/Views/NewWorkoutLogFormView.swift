@@ -9,101 +9,83 @@ import SwiftUI
 
 struct NewWorkoutLogFormView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
-    @Binding var isPresenting: Bool
     var workout: Workout
-    @State var sets = ""
-    @State var reps = ""
-    // TODO: Engineer a way to not have this hardcoded (This is fixing an "Index out of range" error)
-    @State var weights: [(value: Int, incomplete: Bool)] = [
-        (0, false), (0, false), (0, false), (0, false), (0, false), (0, false), (0, false), (0, false), (0, false), (0, false), (0, false)
-    ]
-    var onComplete: (WorkoutLog) -> Void
+    @Binding var weight: Float
+    @Binding var reps: Int16
+    @Binding var complete: Bool
+    var onSubmit: () -> Void
 
     var body: some View {
-        NavigationView {
-            Form {
-                Section(header: Text("Sets & Reps")) {
-                    TextField("Sets", text: $sets)
-                        .keyboardType(.numberPad)
-                        .onChange(of: sets) { newValue in
-                            if Int(newValue) == nil {
-                                sets = String(newValue.dropLast())
-                            }
-                        }
-                    TextField("Reps", text: $reps)
-                        .keyboardType(.numberPad)
-                        .onChange(of: reps) { newValue in
-                            if Int(newValue) == nil {
-                                reps = String(newValue.dropLast())
-                            }
-                        }
-                }
-                if let setsInt = Int(sets) {
-                    Section(header: Text("Weight")) {
-                        ForEach(0..<setsInt, id: \.self) { index in
-                            HStack {
-                                TextField("Set # \(index+1)", text: Binding(
-                                    get: {
-                                        String(weights[index].value)
-                                    },
-                                    set: {
-                                        if let value = Int($0) {
-                                            weights[index].value = value
-                                        }
-                                    }
-                                ))
-                                .foregroundColor(weights[index].incomplete ? .yellow : .primary)
-                                Toggle(isOn: Binding(
-                                    get: { !weights[index].incomplete },
-                                    set: { weights[index].incomplete = !$0 }
-                                )) {
-                                    Text("Complete")
-                                }
-                            }
-                        }
+        VStack {
+            Section(header: Text("Record Set").font(.title2).padding(.bottom, 20)) {
+                HStack {
+                    // Reps picker wheel
+                    VStack {
+                        Text("Reps")
+                            .font(.subheadline)
+                        RepsPicker(reps: $reps)
                     }
-                }
-                Section {
-                    Button(action: {
-//                        let workoutLog = WorkoutLog(context: workoutManager.viewContext)
-//                        workoutLog.date = Date()
-//                        workoutLog.sets = Int16(sets) ?? 0
-//                        workoutLog.reps = Int16(reps) ?? 0
-//                        let filteredWeights = weights.filter { $0.value != 0 }
-//                        for (index, weight) in filteredWeights.enumerated() {
-//                            let weightEntity = Weight(context: workoutManager.viewContext)
-//                            weightEntity.index = Int16(index)
-//                            weightEntity.weightValue = Int16(weight.value)
-//                            weightEntity.incomplete = weight.incomplete
-//                            workoutLog.addToWeights(weightEntity)
-//                        }
-//                        workoutLog.workout = workout
-                        
-                        let workoutLog = workoutManager.createLog(workout: workout)
-                        onComplete(workoutLog)
-                    }) {
-                        Text("Log Workout")
+                    // Weight picker wheel
+                    VStack {
+                        Text("Weight")
+                            .font(.subheadline)
+                        WeightPicker(weight: $weight)
+                    }
+                    // Complete radio button
+                    VStack {
+                        Text("Complete")
+                            .font(.subheadline)
+                        Spacer()
+                        Button(action: {
+                            complete.toggle()
+                        }) {
+                            if complete {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                                    .foregroundColor(Color("BackgroundInvertedColor"))
+                            } else {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                                    .foregroundColor(Color(.orange))
+                            }
+                        }
+                        Spacer()
                     }
                 }
             }
-            .navigationTitle("Workout Log")
-            .navigationBarItems(leading: Button("Cancel") {
-                isPresenting = false
-            })
+            Section {
+                // Log New Workout Button
+                Button(action: {
+                    workoutManager.recordSet(reps: reps, weight: weight, workout: workout)
+                    onSubmit()
+                }, label: {
+                    HStack(alignment: .center, spacing: 2) {
+                        Image(systemName: "plus.circle")
+                            .font(.title2)
+                            .foregroundColor(Color("TextAccentColor"))
+                        Text("Record Sets")
+                            .font(.title3)
+                            .foregroundColor(Color("TextAccentColor"))
+                            .padding(12)
+                    }
+                })
+//                .padding()
+                .padding(.bottom, 20)
+                .buttonStyle(.borderedProminent)
+            }
         }
     }
 }
 
 struct NewWorkoutLogFormView_Previews: PreviewProvider {
     static var previews: some View {
-        let container = PreviewManager.container()
-        let context = container.viewContext
-        let workout = Workout(context: context)
-        @State var isPresenting = true
-        workout.name = "Workout Preview"
-        // Add any other properties you want for your preview
+        let workoutManager = PreviewManager.mockWorkoutManager()
+        let workout = workoutManager.workouts["Legs"]!.first!
+        @State var weight: Float = 120.0
+        @State var reps: Int16 = 12
+        @State var complete = false
 
-        return NewWorkoutLogFormView(isPresenting: $isPresenting, workout: workout, onComplete: {_ in })
-            .environmentObject(WorkoutManager(container: container))
+        return NewWorkoutLogFormView(workout: workout, weight: $weight, reps: $reps, complete: $complete, onSubmit: {})
+            .environmentObject(workoutManager)
     }
 }

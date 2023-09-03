@@ -14,16 +14,25 @@ struct NewWorkoutFormView: View {
     @State var newWorkoutName = ""
     let qrCode: String?
     var onComplete: ((Workout?) -> Void)
+    @Binding var category: String
 
     var body: some View {
         Form {
             Section(header: Text("New Workout")) {
                 TextField("Workout Name", text: $newWorkoutName)
+                
+                Picker("Category", selection: $category) {
+                    ForEach(categoryManager.categories, id: \.self) { categoryName in
+                        Text(categoryName)
+                    }
+                }
             }
             Section {
                 Button(action: {
                     let trimmedName = newWorkoutName.trimmingCharacters(in: .whitespacesAndNewlines)
-                    if !trimmedName.isEmpty, let newWorkout = workoutManager.createWorkout(name: trimmedName, category: nil, color: nil, qrCode: qrCode, categoryManager: categoryManager) {
+                    let absoluteCategory: String? = category.isEmpty ? nil : category
+                    if !trimmedName.isEmpty {
+                        let newWorkout = workoutManager.createWorkout(name: trimmedName, category: absoluteCategory, color: nil, qrCode: qrCode, categoryManager: categoryManager)
                         newWorkoutName = ""
                         isPresenting = false
                         onComplete(newWorkout)

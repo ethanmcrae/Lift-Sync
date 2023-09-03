@@ -11,12 +11,12 @@ struct HomeView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     @State private var activeSheet: ActiveSheet?
     @State private var scannedCode: String?
-    @State private var scannedWorkout: Workout?
+    @State private var selectedWorkout: Workout?
     @State private var selectedCategory = ""
     @State private var previousScannedCode = ""
     
     private func onDisappear() -> Void {
-        self.scannedWorkout = nil
+        self.selectedWorkout = nil
     }
 
     var body: some View {
@@ -36,8 +36,8 @@ struct HomeView: View {
                         Spacer()
                     }
                 }
-                if let scannedWorkout = scannedWorkout {
-                    NavigationLink(destination: ScannedWorkoutView(workout: scannedWorkout, onDisappear: self.onDisappear), isActive: Binding<Bool>(get: { scannedWorkout != nil }, set: { _ in })) {
+                if let selectedWorkout = selectedWorkout {
+                    NavigationLink(destination: SelectedWorkoutView(workout: selectedWorkout, onDisappear: self.onDisappear), isActive: Binding<Bool>(get: { selectedWorkout != nil }, set: { _ in })) {
                         EmptyView()
                     }
                 }
@@ -48,7 +48,7 @@ struct HomeView: View {
                 if let newScannedCode = scannedCode {
                     let foundWorkout = self.workoutManager.findWorkout(byCode: newScannedCode)
                     if let foundWorkout = foundWorkout {
-                        self.scannedWorkout = foundWorkout
+                        self.selectedWorkout = foundWorkout
                         self.activeSheet = nil
                     } else {
                         self.activeSheet = .newWorkout
@@ -65,9 +65,9 @@ struct HomeView: View {
                     }
                 case .newWorkout:
                     NewWorkoutFormView(isPresenting: .constant(false), qrCode: previousScannedCode, onComplete: { newWorkout in
-                        scannedWorkout = newWorkout
+                        selectedWorkout = newWorkout
                         activeSheet = nil
-                    })
+                    }, category: $selectedCategory)
                 }
             }
         }

@@ -11,65 +11,86 @@ struct WorkoutGridView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     @Binding var selectedCategory: String
     var onDisappear: () -> Void
+    @State var workout: Workout?
+    private func onCreateNewWorkout() -> Void {
+        self.workout = nil
+    }
 
     var body: some View {
-        let workouts = workoutManager.workouts[selectedCategory]?.filter { $0.name != nil } ?? []
-        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 15), count: 2), spacing: 15) {
-            ForEach(workouts) { workout in
-                let gradientColors: [Color] = [Color("BackgroundColor-300").opacity(0.8), Color("BackgroundColor-300").opacity(0.5)]
-                let gradient = LinearGradient(gradient: Gradient(colors: gradientColors), startPoint: .leading, endPoint: .trailing)
-                let mixedColor = workout.color != nil ? Color(hex: workout.color!) ?? Color("YellowColor-300") : Color("YellowColor-400")
-                // Complete color products
-                let mainColor = mixedColor.overlay(gradient)
-                let shadowColorColor = mixedColor.darker(by: 0.5) ?? Color(.black).opacity(0.5)
-                let shadowColor = shadowColorColor.opacity(0.15)
-                
-                NavigationLink(destination: ScannedWorkoutView(workout: workout, onDisappear: onDisappear)
-                    .environmentObject(workoutManager)) {
-                        Text(workout.name ?? "Unknown")
+        VStack {
+            VStack {
+                let workouts = workoutManager.workouts[selectedCategory]?.filter { $0.name != nil } ?? []
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 15), count: 2), spacing: 15) {
+                    ForEach(workouts) { workout in
+                        let gradientColors: [Color] = [Color("BackgroundColor-300").opacity(0.8), Color("BackgroundColor-300").opacity(0.5)]
+                        let gradient = LinearGradient(gradient: Gradient(colors: gradientColors), startPoint: .leading, endPoint: .trailing)
+                        let mixedColor = workout.color != nil ? Color(hex: workout.color!) ?? Color("AccentAlt-300") : Color("AccentAlt-400")
+                        // Complete color products
+                        let mainColor = mixedColor.overlay(gradient)
+                        let shadowColorColor = mixedColor.darker(by: 0.5) ?? Color(.black).opacity(0.5)
+                        let shadowColor = shadowColorColor.opacity(0.15)
+                        
+                        NavigationLink(destination: SelectedWorkoutView(workout: workout, onDisappear: onDisappear)
+                            .environmentObject(workoutManager)) {
+                                Text(workout.name ?? "Unknown")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(Color("BackgroundInvertedColor"))
+                                    .padding(20)
+                                    .frame(minWidth: 0, maxWidth: .infinity)
+                                    .shadow(color: Color("BackgroundColor"), radius: 10)
+                                    .background(mainColor)
+                                    .cornerRadius(10)
+                                    .shadow(color: shadowColor, radius: 10, x: 5, y: 10)
+                                    .onAppear {
+                                        print("🔥 Workout: \(workout)")
+                                    }
+                            }
+                    }
+                }
+                .padding(.horizontal)
+            }
+            
+            if !selectedCategory.isEmpty {
+                // Add new button
+                Spacer()
+                NavigationLink(destination:                     NewWorkoutFormView(isPresenting: .constant(false), qrCode: nil, onComplete: { newWorkout in
+                    self.workout = newWorkout
+                }, category: $selectedCategory)) {
+                    HStack(alignment: .center, spacing: 2) {
+                        Image(systemName: "plus.circle")
+                            .font(.title)
+                            .foregroundColor(Color("BackgroundInvertedColor"))
+                        Text("Add Workout")
                             .font(.title3)
                             .fontWeight(.semibold)
                             .foregroundColor(Color("BackgroundInvertedColor"))
                             .padding(20)
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                            .shadow(color: Color("BackgroundColor"), radius: 10)
-                            .background(mainColor)
-                            .cornerRadius(10)
-                            .shadow(color: shadowColor, radius: 10, x: 5, y: 10)
-                    .onAppear {
-                        print("🔥 Workout: \(workout)")
+                    }
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .shadow(color: Color("BackgroundColor"), radius: 10)
+                    .background(Color("AccentColor"))
+                    .cornerRadius(10)
+                    .shadow(color: Color(.black).opacity(0.75), radius: 10, x: 5, y: 10)
+                    //                .padding(.top, 20)
+                }
+                
+                if let newWorkout = workout {
+                    NavigationLink(destination: SelectedWorkoutView(workout: newWorkout, onDisappear: self.onCreateNewWorkout), isActive: Binding<Bool>(get: { newWorkout != nil }, set: { _ in })) {
+                        EmptyView()
                     }
                 }
             }
         }
-        .padding(.horizontal)
+        .frame(maxHeight: .infinity)
     }
 }
 
 struct WorkoutGridView_Previews: PreviewProvider {
     static var previews: some View {
         @State var selectedCategory = "Legs"
-        let persistentContainer = PreviewManager.container()
-        let workoutManager = WorkoutManager(container: persistentContainer)
+        let workoutManager = PreviewManager.mockWorkoutManager()
         let categoryManager = CategoryManager()
-        
-        // Create Mock Workouts
-        let workout1 = Workout(context: workoutManager.viewContext)
-        workout1.name = "Seated Rows"
-//        workout1.color = "#00ffff"
-        workout1.category = selectedCategory
-        
-        let workout2 = Workout(context: workoutManager.viewContext)
-        workout2.name = "Bench Press"
-        workout2.color = "#cc00dd"
-        workout2.category = selectedCategory
-        
-        let workout3 = Workout(context: workoutManager.viewContext)
-        workout3.name = "Squats"
-        workout3.color = "#cc55dd"
-        workout3.category = selectedCategory
-        
-        workoutManager.workouts[selectedCategory] = [workout1, workout2, workout3]
 
         return ZStack {
             VStack {
@@ -80,11 +101,10 @@ struct WorkoutGridView_Previews: PreviewProvider {
             .edgesIgnoringSafeArea(.all)
             VStack {
                 Spacer()
-                Spacer()
+                    .frame(maxHeight: .infinity)
                 WorkoutGridView(selectedCategory: $selectedCategory, onDisappear: {})
                     .environmentObject(workoutManager)
                     .environmentObject(categoryManager)
-                Spacer()
             }
         }
     }

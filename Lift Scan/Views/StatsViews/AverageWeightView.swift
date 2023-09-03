@@ -9,13 +9,14 @@ import SwiftUI
 import Charts
 
 struct AverageWeightView: View {
-    var data: [Date: [(reps: Int, weight: Int)]]
+    var data: [Date: [(reps: Int, weight: Float)]]
     
-    var chronologicalData: [(key: Date, value: [(reps: Int, weight: Int)])] {
+    var chronologicalData: [(key: Date, value: [(reps: Int, weight: Float)])] {
         return data.sorted(by: { $0.key < $1.key })
     }
     
     var body: some View {
+        var averageLinemark: [PointMark] = []
         Chart {
             ForEach(0..<chronologicalData.count, id: \.self) { index in
                 let entry = chronologicalData[index]
@@ -24,28 +25,47 @@ struct AverageWeightView: View {
                 let maxWeight = entry.value.max(by: { $0.weight < $1.weight })?.weight
                 let minWeight = entry.value.max(by: { $1.weight < $0.weight })?.weight
                 
+                // Maximum
+                LineMark(
+                    x:.value("Date", dateString),
+                    y: .value("Weight", maxWeight ?? 0.0 as Float)
+                )
+                .foregroundStyle(Color("BackgroundInvertedColor"))
                 PointMark(
                     x: .value("Date", dateString),
-                    y: .value("Weight", maxWeight ?? 0)
+                    y: .value("Weight", maxWeight ?? 0.0 as Float)
                 )
-                .symbolSize(200.0)
-                .foregroundStyle(Color.green.opacity(0.75))
-                PointMark(
-                    x: .value("Date", dateString),
-                    y: .value("Weight", minWeight ?? 0)
-                )
-                .symbolSize(200.0)
-                .foregroundStyle(Color.yellow.opacity(0.75))
+                .symbolSize(150.0)
+                .foregroundStyle(Color("BackgroundInvertedColor"))
                 
+                // Minimum
+//                LineMark(
+//                    x:.value("Date", dateString),
+//                    y: .value("Weight", minWeight ?? 0.0 as Float)
+//                )
+//                .foregroundStyle(Color("BackgroundInvertedColor"))
+                PointMark(
+                    x: .value("Date", dateString),
+                    y: .value("Weight", minWeight ?? 0.0 as Float)
+                )
+                .symbolSize(125.0)
+                .foregroundStyle(Color("BackgroundInvertedColor"))
+                
+                // All reps
                 ForEach(entry.value.indices, id: \.self) { valueIndex in
                     let workoutSet = entry.value[valueIndex]
                     PointMark(
                         x: .value("Date", dateString),
                         y: .value("Weight", workoutSet.weight)
                     )
+                    .foregroundStyle(Color("BackgroundInvertedColor"))
                 }
             }
         }
+        .backgroundColor(Color("AccentColor-400"))
+        .chartYScale(domain: .automatic)
+        .chartXScale(domain: .automatic)
+        .frame(minHeight: 200)
     }
 }
 

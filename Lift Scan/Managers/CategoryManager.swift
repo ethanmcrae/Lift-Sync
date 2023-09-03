@@ -21,4 +21,8 @@ class CategoryManager: ObservableObject {
         // Try to load categories from iCloud, or use a default set
         categories = NSUbiquitousKeyValueStore.default.array(forKey: "categories") as? [String] ?? []
     }
+    
+    func removeCategory(_ categoryName: String) {
+        categories = categories.filter({ $0 != categoryName })
+    }
 }
