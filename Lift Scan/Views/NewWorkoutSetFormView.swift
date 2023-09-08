@@ -1,5 +1,5 @@
 //
-//  NewWorkoutLogFormView.swift
+//  NewWorkoutSetFormView.swift
 //  Lift Scan
 //
 //  Created by Ethan McRae on 8/4/23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct NewWorkoutLogFormView: View {
+struct NewWorkoutSetFormView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     var workout: Workout
     @Binding var weight: Float
@@ -77,7 +77,7 @@ struct NewWorkoutLogFormView: View {
     }
 }
 
-struct NewWorkoutLogFormView_Previews: PreviewProvider {
+struct NewWorkoutSetFormView_Previews: PreviewProvider {
     static var previews: some View {
         let workoutManager = PreviewManager.mockWorkoutManager()
         let workout = workoutManager.workouts["Legs"]!.first!
@@ -85,7 +85,7 @@ struct NewWorkoutLogFormView_Previews: PreviewProvider {
         @State var reps: Int16 = 12
         @State var complete = false
 
-        return NewWorkoutLogFormView(workout: workout, weight: $weight, reps: $reps, complete: $complete, onSubmit: {})
+        return NewWorkoutSetFormView(workout: workout, weight: $weight, reps: $reps, complete: $complete, onSubmit: {})
             .environmentObject(workoutManager)
     }
 }
