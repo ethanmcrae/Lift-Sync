@@ -20,6 +20,7 @@ struct NewWorkoutFormView: View {
         Form {
             Section(header: Text("New Workout")) {
                 TextField("Workout Name", text: $newWorkoutName)
+                    .autocapitalization(.words)
                 
                 Picker("Category", selection: $category) {
                     ForEach(categoryManager.categories, id: \.self) { categoryName in

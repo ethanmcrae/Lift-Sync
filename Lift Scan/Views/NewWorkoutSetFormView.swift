@@ -9,83 +9,148 @@ import SwiftUI
 
 struct NewWorkoutSetFormView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
-    var workout: Workout
+    @Binding var isPresented: Bool
     @Binding var weight: Float
     @Binding var reps: Int16
     @Binding var complete: Bool
-    var onSubmit: () -> Void
+    @Binding var selectedForDeletion: Bool
+    let update: Bool
+    var onPrimary: () -> Void
+    var onSecondary: () -> Void
+    @State var showingDeleteAlert = false
+    
+    var correctText: String {
+        return "\(update ? "Update" : "Record")"
+    }
 
     var body: some View {
         VStack {
-            Section(header: Text("Record Set").font(.title2).padding(.bottom, 20)) {
+            Section(header: Text(correctText + " Set").font(.title).padding(.bottom, 50).padding(.top, 20)) {
                 HStack {
-                    // Reps picker wheel
-                    VStack {
-                        Text("Reps")
-                            .font(.subheadline)
-                        RepsPicker(reps: $reps)
-                    }
-                    // Weight picker wheel
-                    VStack {
-                        Text("Weight")
-                            .font(.subheadline)
-                        WeightPicker(weight: $weight)
-                    }
                     // Complete radio button
                     VStack {
-                        Text("Complete")
+                        Text("All")
                             .font(.subheadline)
-                        Spacer()
                         Button(action: {
+                            print("")
                             complete.toggle()
+                            print("Complete: \(complete)")
                         }) {
                             if complete {
                                 Image(systemName: "checkmark.circle.fill")
                                     .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                                     .foregroundColor(Color("BackgroundInvertedColor"))
+                                    .frame(height: 150)
                             } else {
-                                Image(systemName: "checkmark.circle.fill")
+                                Image(systemName: "xmark.circle.fill")
                                     .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                                     .foregroundColor(Color(.orange))
+                                    .frame(height: 150)
                             }
                         }
-                        Spacer()
+                    }
+                    
+                    Spacer()
+                    Spacer()
+                    
+                    // Reps picker wheel
+                    VStack {
+                        Text("Reps")
+                            .font(.subheadline)
+                        RepsPicker(reps: $reps)
+                            .frame(width: 125, height: 150)
+                    }
+                    
+                    Spacer()
+                    
+                    // Weight picker wheel
+                    VStack {
+                        Text("Weight")
+                            .font(.subheadline)
+                        WeightPicker(weight: $weight)
+                            .frame(width: 150, height: 150)
                     }
                 }
             }
             Section {
-                // Log New Workout Button
-                Button(action: {
-                    workoutManager.recordSet(reps: reps, weight: weight, workout: workout)
-                    onSubmit()
-                }, label: {
-                    HStack(alignment: .center, spacing: 2) {
-                        Image(systemName: "plus.circle")
-                            .font(.title2)
-                            .foregroundColor(Color("TextAccentColor"))
-                        Text("Record Sets")
-                            .font(.title3)
-                            .foregroundColor(Color("TextAccentColor"))
-                            .padding(12)
-                    }
-                })
-//                .padding()
-                .padding(.bottom, 20)
-                .buttonStyle(.borderedProminent)
+                HStack {
+                    // Cancel Button
+                    Button(action: {
+                        if update {
+                            selectedForDeletion = true
+                            showingDeleteAlert = true
+                        } else {
+                            isPresented = false
+                        }
+                    }, label: {
+                        HStack(alignment: .center, spacing: 2) {
+                            Image(systemName: update ? "minus.circle" : "arrow.uturn.backward.circle")
+                                .font(.title2)
+                                .foregroundColor(Color.red)
+                            Text(update ? "Delete" : "Cancel")
+                                .font(.title3)
+                                .foregroundColor(Color.red)
+                                .padding(12)
+                        }
+                    })
+                    .padding(.bottom, 20)
+                    .buttonStyle(.bordered)
+                    
+                    Spacer()
+                    
+                    // Log New Workout Button
+                    Button(action: {
+                        onPrimary()
+                        isPresented = false
+                    }, label: {
+                        HStack(alignment: .center, spacing: 2) {
+                            Image(systemName: update ? "square.and.pencil" : "plus.circle")
+                                .font(.title2)
+                                .foregroundColor(Color("TextAccentColor"))
+                            Text(correctText)
+                                .font(.title3)
+                                .foregroundColor(Color("TextAccentColor"))
+                                .padding(12)
+                        }
+                    })
+                    //                .padding()
+                    .padding(.bottom, 20)
+                    .buttonStyle(.borderedProminent)
+                }
+                .padding()
             }
+        }
+        .padding(20)
+        .alert(isPresented: $showingDeleteAlert) {
+            Alert(
+                title: Text("Delete workout log?"),
+                message: Text("Are you sure you want to delete this workout log? This cannot be undone."),
+                primaryButton: .destructive(Text("Delete")) {
+                    withAnimation {
+                        onSecondary()
+                        isPresented = false
+                    }
+                },
+                secondaryButton: .cancel() {
+                    withAnimation {
+                        selectedForDeletion = false
+                    }
+                }
+            )
         }
     }
 }
 
 struct NewWorkoutSetFormView_Previews: PreviewProvider {
     static var previews: some View {
-        let workoutManager = PreviewManager.mockWorkoutManager()
-        let workout = workoutManager.workouts["Legs"]!.first!
         @State var weight: Float = 120.0
         @State var reps: Int16 = 12
-        @State var complete = false
+        @State var complete = true
+        @State var isPresented = true
+        @State var selectedForDeletion = true
+        let onPrimary = {}
+        let onSecondary = {}
 
-        return NewWorkoutSetFormView(workout: workout, weight: $weight, reps: $reps, complete: $complete, onSubmit: {})
-            .environmentObject(workoutManager)
+        return NewWorkoutSetFormView(isPresented: $isPresented, weight: $weight, reps: $reps, complete: $complete, selectedForDeletion: $selectedForDeletion, update: false, onPrimary: onPrimary, onSecondary: onSecondary)
     }
 }

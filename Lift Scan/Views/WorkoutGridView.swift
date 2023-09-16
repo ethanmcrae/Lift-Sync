@@ -18,7 +18,7 @@ struct WorkoutGridView: View {
 
     var body: some View {
         VStack {
-            VStack {
+            ScrollView(.vertical) {
                 let workouts = workoutManager.workouts[selectedCategory]?.filter { $0.name != nil } ?? []
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 15), count: 2), spacing: 15) {
                     ForEach(workouts) { workout in
@@ -30,7 +30,7 @@ struct WorkoutGridView: View {
                         let shadowColorColor = mixedColor.darker(by: 0.5) ?? Color(.black).opacity(0.5)
                         let shadowColor = shadowColorColor.opacity(0.15)
                         
-                        NavigationLink(destination: SelectedWorkoutView(workout: workout, onDisappear: onDisappear)
+                        NavigationLink(destination: SelectedWorkoutView(workout: Binding<Workout>(get: { workout }, set: { _ in }), onDisappear: onDisappear)
                             .environmentObject(workoutManager)) {
                                 Text(workout.name ?? "Unknown")
                                     .font(.title3)
@@ -42,19 +42,25 @@ struct WorkoutGridView: View {
                                     .background(mainColor)
                                     .cornerRadius(10)
                                     .shadow(color: shadowColor, radius: 10, x: 5, y: 10)
-                                    .onAppear {
-                                        print("🔥 Workout: \(workout)")
-                                    }
                             }
                     }
                 }
-                .padding(.horizontal)
+                .padding(.bottom, 30)
+                .padding()
             }
+            .frame(maxHeight: .infinity)
+            .mask(
+                LinearGradient(
+                    gradient: Gradient(colors: [Color.white, Color.white, Color.clear]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
             
             if !selectedCategory.isEmpty {
                 // Add new button
                 Spacer()
-                NavigationLink(destination:                     NewWorkoutFormView(isPresenting: .constant(false), qrCode: nil, onComplete: { newWorkout in
+                NavigationLink(destination: NewWorkoutFormView(isPresenting: .constant(false), qrCode: nil, onComplete: { newWorkout in
                     self.workout = newWorkout
                 }, category: $selectedCategory)) {
                     HStack(alignment: .center, spacing: 2) {
@@ -75,8 +81,8 @@ struct WorkoutGridView: View {
                     //                .padding(.top, 20)
                 }
                 
-                if let newWorkout = workout {
-                    NavigationLink(destination: SelectedWorkoutView(workout: newWorkout, onDisappear: self.onCreateNewWorkout), isActive: Binding<Bool>(get: { newWorkout != nil }, set: { _ in })) {
+                if self.workout != nil {
+                    NavigationLink(destination: SelectedWorkoutView(workout: Binding<Workout>(get: { self.workout! }, set: { newValue in self.workout = newValue }), onDisappear: self.onCreateNewWorkout), isActive: Binding<Bool>(get: { true }, set: { _ in })) {
                         EmptyView()
                     }
                 }
@@ -90,7 +96,7 @@ struct WorkoutGridView_Previews: PreviewProvider {
     static var previews: some View {
         @State var selectedCategory = "Legs"
         let workoutManager = PreviewManager.mockWorkoutManager()
-        let categoryManager = CategoryManager()
+        let categoryManager = PreviewManager.mockCategoryManager()
 
         return ZStack {
             VStack {

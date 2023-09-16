@@ -26,6 +26,7 @@ struct WorkoutCategoryView: View {
                                 .simultaneousGesture(TapGesture().onEnded {
                                     withAnimation {
                                         selectedCategory = category
+                                        scrollView.scrollTo(category, anchor: .center)
                                         isAddNewSelected = false
                                     }
                                 })
@@ -47,7 +48,7 @@ struct WorkoutCategoryView: View {
                             }
                         }
                     }
-                    .padding(.vertical)
+//                    .padding(.vertical)
                     .padding(.leading)
                     .onChange(of: isAddNewSelected) { scrollRight in
                         if scrollRight {
@@ -57,17 +58,22 @@ struct WorkoutCategoryView: View {
                         }
                     }
                 }
+                .padding(.vertical, selectedCategory.isEmpty ? 0 : 10)
                 .alert(isPresented: $showingDeleteAlert, content: {
                     Alert(
                         title: Text("Delete \(categoryForDeletion)?"),
                         message: Text("The associated workouts will not be deleted."),
                         primaryButton: .destructive(Text("Remove")) {
-                            categoryManager.removeCategory(categoryForDeletion)
+                            categoryManager.delete(categoryForDeletion)
                         },
                         secondaryButton: .cancel())
                 })
+                .frame(height: 80)
+//                .background(Color.orange)
             }
         }
+        .frame(height: 80)
+//        .background(Color.yellow)
     }
 }
 
@@ -80,11 +86,12 @@ struct CategoryLabel: View {
         Text(categoryName)
             .font(.system(size: isSelected ? 30 : 20))
             .padding(.horizontal, 30)
-            .padding(.vertical, 25)
             .foregroundColor(Color("BackgroundInvertedColor"))
+            .frame(height: 60)
             .shadow(color: shadowColor, radius: 14)
             .cornerRadius(15)
             .opacity(isSelected ? 1.0 : 0.7)
+//            .background(Color.green)
     }
 }
 
@@ -97,7 +104,8 @@ struct AddCategoryForm: View {
     var body: some View {
         HStack {
             // Text Input for "Workout Category"
-            TextField("New workout...", text: $categoryName)
+            TextField("New category...", text: $categoryName)
+                .autocapitalization(.words)
                 .padding(10)
                 .background(Color("BackgroundInvertedColor").opacity(0.1)) // Assuming you have this color or replace it with any other
                 .cornerRadius(8)
@@ -112,30 +120,33 @@ struct AddCategoryForm: View {
             Button(action: {
                 guard !categoryName.isEmpty else { return }
                 withAnimation {
-                    categoryManager.categories.append(categoryName)
+                    // Update state
+                    categoryManager.create(categoryName)
+                    // Update UI
                     categoryName = ""
                     isAddNewSelected = false
                 }
             }) {
                 Image(systemName: "plus.circle.fill")
-                    .font(.system(size: 22))
+                    .font(.system(size: 28))
                     .padding(.horizontal, 12)
                     .padding(.vertical, 12)
-                    .background(Color.accentColor)
-                    .cornerRadius(8)
-                    .foregroundColor(.white)
+//                    .background(Color.accentColor)
+//                    .cornerRadius(8)
+                    .foregroundColor(Color("AccentColor-400"))
             }
         }
-        .padding()
-        .frame(width: width)
-        .padding()
+//        .padding()
+        .frame(width: width, height: 60)
+        .padding(.horizontal)
+//        .background(Color.teal)
     }
 }
 
 struct WorkoutCategoryView_Previews: PreviewProvider {
     static var previews: some View {
         let workoutManager = PreviewManager.mockWorkoutManager()
-        let categoryManager = CategoryManager()
+        let categoryManager = PreviewManager.mockCategoryManager()
         @State var selectedCategory = "Legs"
 
         return ZStack {
@@ -148,13 +159,10 @@ struct WorkoutCategoryView_Previews: PreviewProvider {
             
             VStack {
                 Spacer()
-                Spacer()
-                Spacer()
+                    .frame(height: 50)
                 WorkoutCategoryView(selectedCategory: $selectedCategory)
                     .environmentObject(workoutManager)
                     .environmentObject(categoryManager)
-                Spacer()
-                Spacer()
             }
         }
     }

@@ -11,6 +11,7 @@
 
 // When deleting a category, how do you want to handle all of the CUSTOM workouts that are tied to that category? They wont be able to be tapped on anymore...
 // Move the forms in Settings to more intuitive places. Exmaple: Create a + button in the Custom Workout Grid when a category is selected.
+// Add a bar weight
 
 // - - - - - - - - - - - - - - - - - - - -
 
@@ -39,20 +40,22 @@ import CoreData
 struct LiftScanApp: App {
     let persistentContainer: NSPersistentCloudKitContainer
     @StateObject private var workoutManager: WorkoutManager
-    @StateObject private var categoryManager = CategoryManager()
+    @StateObject private var categoryManager: CategoryManager
 
     init() {
         persistentContainer = NSPersistentCloudKitContainer(name: "Lift_Scan")
         persistentContainer.loadPersistentStores { (storeDescription, error) in
             if let error = error as NSError? {
                 print("Unresolved error \(error), \(error.userInfo)")
-                Alert(title: Text("Error: \(error.localizedDescription)"))
             }
         }
         persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
 
         let workoutManager = WorkoutManager(container: persistentContainer)
         self._workoutManager = StateObject(wrappedValue: workoutManager)
+        
+        let categoryManager = CategoryManager(container: persistentContainer)
+        self._categoryManager = StateObject(wrappedValue: categoryManager)
     }
 
     var body: some Scene {

@@ -10,37 +10,55 @@ import CoreData
 
 struct ContentView: View {
     @Environment(\.colorScheme) var colorScheme
+    @State var isActive: Bool = false
+    let version = 1.0
     
     var body: some View {
-        let tabHighlightColor = colorScheme == .dark ? Color.white : Color.black
-        
-        TabView {
-            HomeView()
-                .tabItem {
-                    Label("Home", systemImage: "house.fill")
+        ZStack {
+            if self.isActive {
+                if version == 1.0 {
+                    HomeView()
+                } else if version == 1.1 {
+                    let tabHighlightColor = colorScheme == .dark ? Color.white : Color.black
+                    TabView {
+                        HomeView()
+                            .tabItem {
+                                Label("Home", systemImage: "house.fill")
+                            }
+                            .accentColor(Color("AccentColor"))
+                        
+                        StatsView()
+                            .tabItem {
+                                Label("Stats", systemImage: "chart.bar.fill")
+                            }
+                            .accentColor(Color("AccentColor"))
+                        
+                        SettingsView()
+                            .tabItem {
+                                Label("Settings", systemImage: "gearshape.fill")
+                            }
+                            .accentColor(Color("AccentColor"))
+                    }
+                    .accentColor(tabHighlightColor)
                 }
-                .accentColor(Color("AccentColor"))
-            
-            StatsView()
-                .tabItem {
-                    Label("Stats", systemImage: "chart.bar.fill")
-                }
-                .accentColor(Color("AccentColor"))
-
-            SettingsView()
-                .tabItem {
-                    Label("Settings", systemImage: "gearshape.fill")
-                }
-                .accentColor(Color("AccentColor"))
+            } else {
+                SplashView()
+            }
         }
-        .accentColor(tabHighlightColor)
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                withAnimation {
+                    self.isActive = true
+                }
+            }
+        }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let workoutManager = PreviewManager.mockWorkoutManager()
-        let categoryManager = CategoryManager()
+        let categoryManager = PreviewManager.mockCategoryManager()
 
         return ContentView()
             .environmentObject(workoutManager)

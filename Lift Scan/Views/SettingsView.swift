@@ -88,8 +88,8 @@ struct SettingsView: View {
                 }
                 Section {
                     Button(action: {
-                        guard !newCategory.isEmpty else { return }
-                        categoryManager.categories.append(newCategory)
+                        // Update state
+                        categoryManager.create(newCategory)
                         // Reset form
                         newCategory = ""
                         self.endEditing()
@@ -127,7 +127,7 @@ struct SettingsView: View {
                                 message: Text("Are you sure you want to remove this category? This cannot be undone."),
                                 primaryButton: .destructive(Text("Remove")) {
                                     if let index = deleteCategoryIndex {
-                                        categoryManager.categories.remove(at: index)
+                                        categoryManager.delete(categoryManager.categories[index])
                                     }
                                 },
                                 secondaryButton: .cancel()
@@ -192,7 +192,7 @@ struct SettingsView: View {
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         let workoutManager = PreviewManager.mockWorkoutManager()
-        let categoryManager = CategoryManager()
+        let categoryManager = PreviewManager.mockCategoryManager()
         
         SettingsView()
             .environmentObject(workoutManager)
