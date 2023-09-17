@@ -10,6 +10,7 @@ import SwiftUI
 struct WorkoutCategoryView: View {
     @Binding var selectedCategory: String
     @EnvironmentObject var categoryManager: CategoryManager
+    @Binding var homeTutorialStep: Int
     @State var isAddNewSelected = false
     @State var showingDeleteAlert = false
     @State var categoryForDeletion = ""
@@ -34,6 +35,9 @@ struct WorkoutCategoryView: View {
                                     print("LONG PRESS")
                                     categoryForDeletion = category
                                     showingDeleteAlert = true
+                                }
+                                .popover(isPresented: TutorialManager.isShowingPopover(TutorialManager.Tutorial.home, currentStep: $homeTutorialStep, expected: 4)) {
+                                    TutorialHomePopup(text: "View associated workouts", step: $homeTutorialStep, tutorial: TutorialManager.Tutorial.home)
                                 }
                         }
                         if isAddNewSelected {
@@ -148,6 +152,7 @@ struct WorkoutCategoryView_Previews: PreviewProvider {
         let workoutManager = PreviewManager.mockWorkoutManager()
         let categoryManager = PreviewManager.mockCategoryManager()
         @State var selectedCategory = "Legs"
+        @State var homeTutorialStep = 4
 
         return ZStack {
             VStack {
@@ -160,7 +165,7 @@ struct WorkoutCategoryView_Previews: PreviewProvider {
             VStack {
                 Spacer()
                     .frame(height: 50)
-                WorkoutCategoryView(selectedCategory: $selectedCategory)
+                WorkoutCategoryView(selectedCategory: $selectedCategory, homeTutorialStep: $homeTutorialStep)
                     .environmentObject(workoutManager)
                     .environmentObject(categoryManager)
             }

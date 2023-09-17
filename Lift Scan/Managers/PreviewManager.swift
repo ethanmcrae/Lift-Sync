@@ -80,11 +80,11 @@ struct PreviewManager {
         let categoryManager = CategoryManager(container: persistentContainer)
         let context = persistentContainer.viewContext
         
-        categoryManager.create("Legs")
-        categoryManager.create("Core")
-        categoryManager.create("Chest / Tri")
-        categoryManager.create("Back / Bic")
-        categoryManager.create("Test")
+//        categoryManager.create("Legs")
+//        categoryManager.create("Core")
+//        categoryManager.create("Chest / Tri")
+//        categoryManager.create("Back / Bic")
+//        categoryManager.create("Test")
         
         return categoryManager
     }

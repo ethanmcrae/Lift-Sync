@@ -11,6 +11,10 @@
 		3A359F1E2A7C0F38000E90F9 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A359F1D2A7C0F38000E90F9 /* HomeView.swift */; };
 		3A359F202A7C12C2000E90F9 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A359F1F2A7C12C2000E90F9 /* SettingsView.swift */; };
 		3A93605C2AB60A15006B7467 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A93605B2AB60A15006B7467 /* SplashView.swift */; };
+		3A93605E2AB611A4006B7467 /* TutorialManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A93605D2AB611A4006B7467 /* TutorialManager.swift */; };
+		3A9360612AB616DA006B7467 /* TutorialHomeView_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9360602AB616DA006B7467 /* TutorialHomeView_1.swift */; };
+		3A9360662AB73C03006B7467 /* TutorialHomePopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9360652AB73C03006B7467 /* TutorialHomePopup.swift */; };
+		3A93606B2AB74453006B7467 /* CreateFirstCategoryForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A93606A2AB74453006B7467 /* CreateFirstCategoryForm.swift */; };
 		3A993D302A9576000082F59A /* RepsPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A993D2F2A9576000082F59A /* RepsPicker.swift */; };
 		3AC27F1C2A7DAB2300D21A43 /* NewWorkoutFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC27F1B2A7DAB2300D21A43 /* NewWorkoutFormView.swift */; };
 		3AC27F202A7DE1DC00D21A43 /* NewWorkoutSetFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC27F1F2A7DE1DC00D21A43 /* NewWorkoutSetFormView.swift */; };
@@ -45,6 +49,10 @@
 		3A359F1D2A7C0F38000E90F9 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		3A359F1F2A7C12C2000E90F9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3A93605B2AB60A15006B7467 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		3A93605D2AB611A4006B7467 /* TutorialManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialManager.swift; sourceTree = "<group>"; };
+		3A9360602AB616DA006B7467 /* TutorialHomeView_1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialHomeView_1.swift; sourceTree = "<group>"; };
+		3A9360652AB73C03006B7467 /* TutorialHomePopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialHomePopup.swift; sourceTree = "<group>"; };
+		3A93606A2AB74453006B7467 /* CreateFirstCategoryForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFirstCategoryForm.swift; sourceTree = "<group>"; };
 		3A993D2F2A9576000082F59A /* RepsPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepsPicker.swift; sourceTree = "<group>"; };
 		3AC27F1B2A7DAB2300D21A43 /* NewWorkoutFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWorkoutFormView.swift; sourceTree = "<group>"; };
 		3AC27F1F2A7DE1DC00D21A43 /* NewWorkoutSetFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWorkoutSetFormView.swift; sourceTree = "<group>"; };
@@ -88,6 +96,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3A93605F2AB6169B006B7467 /* TutorialHomeViews */ = {
+			isa = PBXGroup;
+			children = (
+				3A9360602AB616DA006B7467 /* TutorialHomeView_1.swift */,
+				3A9360652AB73C03006B7467 /* TutorialHomePopup.swift */,
+			);
+			path = TutorialHomeViews;
+			sourceTree = "<group>";
+		};
+		3A9360622AB61ED0006B7467 /* HomeViewComponents */ = {
+			isa = PBXGroup;
+			children = (
+				3A93606A2AB74453006B7467 /* CreateFirstCategoryForm.swift */,
+			);
+			path = HomeViewComponents;
+			sourceTree = "<group>";
+		};
 		3AC28E002A814B980084D5CF /* fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -123,6 +148,7 @@
 				3AC27F212A7DFB6B00D21A43 /* PreviewManager.swift */,
 				3AE50D212A7A16E100E33A34 /* WorkoutManager.swift */,
 				3A14F0692A7C4DA70005E554 /* CategoryManager.swift */,
+				3A93605D2AB611A4006B7467 /* TutorialManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -175,9 +201,11 @@
 			children = (
 				3AE50D1F2A79A25C00E33A34 /* QRScannerView.swift */,
 				3A359F1D2A7C0F38000E90F9 /* HomeView.swift */,
+				3A9360622AB61ED0006B7467 /* HomeViewComponents */,
 				3AC28E032A83415A0084D5CF /* StatsViews */,
 				3AC27F1B2A7DAB2300D21A43 /* NewWorkoutFormView.swift */,
 				3AC27F1F2A7DE1DC00D21A43 /* NewWorkoutSetFormView.swift */,
+				3A93605F2AB6169B006B7467 /* TutorialHomeViews */,
 				3A93605B2AB60A15006B7467 /* SplashView.swift */,
 				3AE50D272A7A1F4F00E33A34 /* WorkoutGridView.swift */,
 				3AE101122A9407D4001948B3 /* WeightPicker.swift */,
@@ -267,7 +295,9 @@
 				3ADC39862AB0C149005AF5D8 /* BarWeightForm.swift in Sources */,
 				3ADC39842AB0C01B005AF5D8 /* BarWeightPicker.swift in Sources */,
 				3AC28E092A8342F30084D5CF /* DateExtension.swift in Sources */,
+				3A9360612AB616DA006B7467 /* TutorialHomeView_1.swift in Sources */,
 				3A993D302A9576000082F59A /* RepsPicker.swift in Sources */,
+				3A93606B2AB74453006B7467 /* CreateFirstCategoryForm.swift in Sources */,
 				3AC27F202A7DE1DC00D21A43 /* NewWorkoutSetFormView.swift in Sources */,
 				3AE101132A9407D4001948B3 /* WeightPicker.swift in Sources */,
 				3AE50D262A7A1EE300E33A34 /* WorkoutCategoryView.swift in Sources */,
@@ -280,10 +310,12 @@
 				3AC27F242A7EC4D100D21A43 /* ColorExtension.swift in Sources */,
 				3AE50D0A2A79A23A00E33A34 /* Lift_ScanApp.swift in Sources */,
 				3A359F1E2A7C0F38000E90F9 /* HomeView.swift in Sources */,
+				3A93605E2AB611A4006B7467 /* TutorialManager.swift in Sources */,
 				3AE50D242A7A1DA700E33A34 /* QRScannerButton.swift in Sources */,
 				3AE50D282A7A1F4F00E33A34 /* WorkoutGridView.swift in Sources */,
 				3AE50D202A79A25C00E33A34 /* QRScannerView.swift in Sources */,
 				3A14F06A2A7C4DA70005E554 /* CategoryManager.swift in Sources */,
+				3A9360662AB73C03006B7467 /* TutorialHomePopup.swift in Sources */,
 				3AC28E0B2A8343CA0084D5CF /* AverageWeightView.swift in Sources */,
 				3AC28E052A83416A0084D5CF /* StatsView.swift in Sources */,
 				3AC27F222A7DFB6B00D21A43 /* PreviewManager.swift in Sources */,

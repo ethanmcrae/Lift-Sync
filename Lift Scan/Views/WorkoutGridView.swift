@@ -11,6 +11,7 @@ struct WorkoutGridView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
     @Binding var selectedCategory: String
     var onDisappear: () -> Void
+    @Binding var homeTutorialStep: Int
     @State var workout: Workout?
     private func onCreateNewWorkout() -> Void {
         self.workout = nil
@@ -78,7 +79,9 @@ struct WorkoutGridView: View {
                     .background(Color("AccentColor"))
                     .cornerRadius(10)
                     .shadow(color: Color(.black).opacity(0.75), radius: 10, x: 5, y: 10)
-                    //                .padding(.top, 20)
+                    .popover(isPresented: TutorialManager.isShowingPopover(TutorialManager.Tutorial.home, currentStep: $homeTutorialStep, expected: 5)) {
+                        TutorialHomePopup(text: "Create your first workout here", step: $homeTutorialStep, tutorial: TutorialManager.Tutorial.home)
+                    }
                 }
                 
                 if self.workout != nil {
@@ -95,6 +98,7 @@ struct WorkoutGridView: View {
 struct WorkoutGridView_Previews: PreviewProvider {
     static var previews: some View {
         @State var selectedCategory = "Legs"
+        @State var homeTutorialStep = 5
         let workoutManager = PreviewManager.mockWorkoutManager()
         let categoryManager = PreviewManager.mockCategoryManager()
 
@@ -108,7 +112,7 @@ struct WorkoutGridView_Previews: PreviewProvider {
             VStack {
                 Spacer()
                     .frame(maxHeight: .infinity)
-                WorkoutGridView(selectedCategory: $selectedCategory, onDisappear: {})
+                WorkoutGridView(selectedCategory: $selectedCategory, onDisappear: {}, homeTutorialStep: $homeTutorialStep)
                     .environmentObject(workoutManager)
                     .environmentObject(categoryManager)
             }
