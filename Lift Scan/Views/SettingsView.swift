@@ -56,7 +56,7 @@ struct SettingsView: View {
                         print("\n\n")
                         print("Submitted ✅")
                         
-                        workoutManager.createWorkout(name: name, category: category, color: color.toHex(), categoryManager: categoryManager)
+                        workoutManager.createWorkout(name: name, categoryName: category, color: color.toHex(), categoryManager: categoryManager)
                         
                         // Reset form element(s)
                         name = ""

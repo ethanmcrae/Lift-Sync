@@ -36,8 +36,8 @@ struct WorkoutCategoryView: View {
                                     categoryForDeletion = category
                                     showingDeleteAlert = true
                                 }
-                                .popover(isPresented: TutorialManager.isShowingPopover(TutorialManager.Tutorial.home, currentStep: $homeTutorialStep, expected: 4)) {
-                                    TutorialHomePopup(text: "View associated workouts", step: $homeTutorialStep, tutorial: TutorialManager.Tutorial.home)
+                                .popover(isPresented: TutorialManager.isShowingPopover(TutorialManager.Tutorial.home, currentStep: $homeTutorialStep, expected: 5)) {
+                                    TutorialHomePopup(text: "Workouts go here", step: $homeTutorialStep, tutorial: TutorialManager.Tutorial.home)
                                 }
                         }
                         if isAddNewSelected {
@@ -66,9 +66,10 @@ struct WorkoutCategoryView: View {
                 .alert(isPresented: $showingDeleteAlert, content: {
                     Alert(
                         title: Text("Delete \(categoryForDeletion)?"),
-                        message: Text("The associated workouts will not be deleted."),
+                        message: Text("This deletes the category. The associated workouts will not be deleted."),
                         primaryButton: .destructive(Text("Remove")) {
                             categoryManager.delete(categoryForDeletion)
+                            selectedCategory = ""
                         },
                         secondaryButton: .cancel())
                 })

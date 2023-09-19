@@ -46,17 +46,18 @@ class CategoryManager: ObservableObject {
 
     func create(_ name: String) {
         guard !name.isEmpty else {
+            // Exit early if the category name is empty
             print("Empty category name input")
-            return // Exit early if the category name is empty
+            return
         }
         
         // Ensure the name is properly trimmed and case is ignored
         let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
 
         // Check if the category name already exists
-        if categoryExists(trimmedName) {
+        if let categoryMatch = getCategory(trimmedName) {
             print("Category \(name) already exists!")
-            return // Exit early if the category already exists
+            return // Exit early
         }
 
         // Create and save the new category
@@ -67,6 +68,41 @@ class CategoryManager: ObservableObject {
         categories.append(newCategory.name!)
 
         updateCloud(errorMessage: "Error saving category")
+    }
+    
+    func getCategory(_ name: String) -> Category? {
+        let trimmedString = name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        if let matchedCategory = categoryEntities.first(where: { $0.name!.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == trimmedString }) {
+            return matchedCategory
+        } else {
+            return nil
+        }
+    }
+    
+    func getWorkouts(from category: Category) -> [Workout] {
+        return category.workouts?.allObjects as? [Workout] ?? []
+    }
+    
+    func getWorkouts(from categoryName: String) -> [Workout] {
+        if let category = getCategory(categoryName) {
+            return category.workouts?.allObjects as? [Workout] ?? []
+        } else {
+            return []
+        }
+    }
+    
+    func associateWorkout(_ workout: Workout, to category: Category, sync: Bool = true) {
+        // Do not duplicate the workout reference
+        let existingWorkouts = category.workouts?.allObjects as? [Workout] ?? []
+        let duplicate = existingWorkouts.contains(workout)
+        if !duplicate {
+            category.addToWorkouts(workout)
+            
+            // Sync with cloud
+            if sync {
+                updateCloud(errorMessage: "Failed to link workout to category")
+            }
+        }
     }
     
     func rename(from oldName: String, to newName: String) {
@@ -117,6 +153,14 @@ class CategoryManager: ObservableObject {
 
         // Delete the category from the entities
         if let categoryToDelete = categoryEntities.first(where: { $0.name?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == trimmedName }) {
+            // Disassociate all workouts from the category
+            let workouts = categoryToDelete.workouts?.allObjects as? [Workout] ?? []
+            for workout in workouts {
+                categoryToDelete.removeFromWorkouts(workout)
+                workout.removeFromCategories(categoryToDelete)
+            }
+            
+            // Delete from persistent memory
             categoryEntities.removeAll { $0 == categoryToDelete }
             viewContext.delete(categoryToDelete)
         }
@@ -124,7 +168,7 @@ class CategoryManager: ObservableObject {
         // Update local arrays
         categories.removeAll { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == trimmedName }
 
-        // Update the cloud
+        // Sync with cloud state
         updateCloud(errorMessage: "Error deleting category")
     }
 
@@ -139,3 +183,19 @@ class CategoryManager: ObservableObject {
     }
 }
 
+enum CategoryErrors: Error, LocalizedError {
+    case invalidInput
+    case dataUnavailable
+    case unknownError
+
+    var errorDescription: String? {
+        switch self {
+        case .invalidInput:
+            return "Check your arguments and try again."
+        case .dataUnavailable:
+            return "Data is unavailable."
+        case .unknownError:
+            return "An unknown error occurred."
+        }
+    }
+}

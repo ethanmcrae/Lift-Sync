@@ -8,10 +8,18 @@
 import SwiftUI
 
 struct WeightPicker: View {
-    // Generates 0 -> 300 with an increment of 2.5
-    let values: [Float] = stride(from: 0.0, through: 300.0, by: 2.5).map { $0 }
-    
     @Binding var weight: Float
+    let values: [Float]
+    
+    
+    init(weight: Binding<Float>) {
+        self._weight = weight
+        
+        // Generates 0 -> 300 with increments of 1 and 2.5
+        let firstValues: [Float] = stride(from: 0.0, through: 12.0, by: 1.0).map { $0 }
+        let secondValues: [Float] = stride(from: 12.5, through: 300.0, by: 2.5).map { $0 }
+        self.values = firstValues + secondValues
+    }
 
     var body: some View {
         VStack {

@@ -28,6 +28,7 @@ struct CreateFirstCategoryForm: View {
                 Button("Create") {
                     guard !categoryName.isEmpty else { return }
                     categoryManager.create(categoryName)
+                    categoryName = ""
                 }
                 .font(.title3)
             } header: {
@@ -42,6 +43,16 @@ struct CreateFirstCategoryForm: View {
 }
 
 #Preview {
+    var categoryManager = CategoryManager(container: NSPersistentCloudKitContainer(name: "Lift_Scan"))
+    @State var categoryName = ""
+    @State var tutorialStep = 0
+    let tutorial = TutorialManager.Tutorial.home
+    
+    return CreateFirstCategoryForm(categoryName: $categoryName, tutorialStep: $tutorialStep, tutorial: tutorial)
+        .environmentObject(categoryManager)
+}
+
+#Preview("Tutorial") {
     var categoryManager = CategoryManager(container: NSPersistentCloudKitContainer(name: "Lift_Scan"))
     @State var categoryName = ""
     @State var tutorialStep = 3

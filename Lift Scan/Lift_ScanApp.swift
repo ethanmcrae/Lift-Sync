@@ -38,6 +38,7 @@ import CoreData
 
 @main
 struct LiftScanApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     let persistentContainer: NSPersistentCloudKitContainer
     @StateObject private var workoutManager: WorkoutManager
     @StateObject private var categoryManager: CategoryManager
@@ -64,5 +65,14 @@ struct LiftScanApp: App {
                 .environmentObject(workoutManager)
                 .environmentObject(categoryManager)
         }
+    }
+}
+
+// Force Portrait Orientation
+class AppDelegate: NSObject, UIApplicationDelegate {
+    static var orientationLock = UIInterfaceOrientationMask.portrait
+
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        return AppDelegate.orientationLock
     }
 }

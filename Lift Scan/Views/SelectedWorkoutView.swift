@@ -52,6 +52,7 @@ struct SelectedWorkoutView: View {
                         .multilineTextAlignment(.center)
                         .autocapitalization(.words)
                         .font(.title)
+//                        .fontWeight(.bold)
                         .foregroundColor(.primary)
                         .padding(.vertical, 10)
                         .background(Color("BackgroundInvertedColor").opacity(0.1))
@@ -64,6 +65,7 @@ struct SelectedWorkoutView: View {
                 HStack {
                     Text(workout.name ?? "Undefined")
                         .font(.title)
+                        .fontWeight(.bold)
                         .padding(.vertical, 10)
                 }
 //                .padding(.bottom, 20)
@@ -83,13 +85,27 @@ struct SelectedWorkoutView: View {
             ZStack {
                 ScrollView(.vertical) {
                     LazyVStack {
-                        ForEach(Array((workout.logs?.allObjects as? [WorkoutLog] ?? []).enumerated()), id: \.element) { index, log in
+                        let sortedLogs = (workout.logs?.allObjects as? [WorkoutLog] ?? []).sorted {
+                            $0.date! > $1.date!
+                        }
+                        
+                        ForEach(Array(sortedLogs.enumerated()), id: \.element) { index, log in
                             WorkoutSetListView(log: log, formattedWeight: formattedWeight, weight: $weight, reps: $reps, complete: $complete, index: index, editMode: $editMode)
                         }
                         Spacer()
                             .frame(height: 130)
                     }
                 }
+                
+                // Creates a transparent-feeling gradient that slightly covers the logs shown at the bottom of the screen.
+                Rectangle()
+                    .fill(LinearGradient(
+                        gradient: Gradient(colors: [.clear, .clear, .background.opacity(0.5)]),
+                        startPoint: .top,
+                        endPoint: .bottom
+                    ))
+                    .ignoresSafeArea()
+                    .allowsHitTesting(false)
                 
                 VStack {
                     Spacer()
@@ -276,20 +292,14 @@ struct WorkoutSetRow: View {
                     showingRecordAdjustForm.toggle()
                 }
             }) {
-                HStack(spacing: 2) {
-                    Text(formattedWeight(workoutSet.weight)).font(.title) // Weight
-                    Text("lb").font(.subheadline).opacity(0.7) // Unit
-                    Text(" x ").font(.title2).opacity(0.7).fontWeight(.heavy) // Multiplier
-                    Text(" \(workoutSet.reps) ").font(.title) // Reps
-                    Spacer()
-                }
-                .foregroundStyle(Color("BackgroundInvertedColor"))
+                RowContent
             }
+            .disabled(editMode == .inactive)
             
             HStack {
                 Spacer()
                 if workoutSet.incomplete {
-                    Image(systemName: "exclamationmark.circle.fill")
+                    Image(systemName: "xmark.circle.fill")
                         .font(.title2)
                         .foregroundStyle(Color.orange)
                 } else {
@@ -317,6 +327,17 @@ struct WorkoutSetRow: View {
             }
         })
     }
+    
+    var RowContent: some View {
+        HStack(spacing: 2) {
+            Text(formattedWeight(workoutSet.weight)).font(.title) // Weight
+            Text("lb").font(.subheadline).opacity(0.7) // Unit
+            Text(" x ").font(.title2).opacity(0.7).fontWeight(.heavy) // Multiplier
+            Text(" \(workoutSet.reps) ").font(.title) // Reps
+            Spacer()
+        }
+        .foregroundStyle(Color("BackgroundInvertedColor"))
+    }
 }
 
 enum ActiveAlert: Identifiable {
@@ -331,12 +352,10 @@ enum ActiveAlert: Identifiable {
     }
 }
 
-struct SelectedWorkoutView_Previews: PreviewProvider {
-    static var previews: some View {
-        let workoutManager = PreviewManager.mockWorkoutManager()
-        @State var workout = workoutManager.workouts["Chest / Tri"]!.first!
+#Preview {
+    let workoutManager = PreviewManager.mockWorkoutManager()
+    @State var workout = workoutManager.workouts["Chest / Tri"]!.first!
 
-        return SelectedWorkoutView(workout: $workout, onDisappear: {})
-            .environmentObject(workoutManager)
-    }
+    return SelectedWorkoutView(workout: $workout, onDisappear: {})
+        .environmentObject(workoutManager)
 }

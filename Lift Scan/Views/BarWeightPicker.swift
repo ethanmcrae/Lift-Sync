@@ -14,14 +14,14 @@ struct BarWeightPicker: View {
     @Binding var barWeight: Int16
 
     var body: some View {
-        VStack {
+//        VStack {
             Picker("Select Value", selection: $barWeight) {
                 ForEach(values, id: \.self) { value in
                     Text("\(value)").tag(value)
                 }
             }
             .pickerStyle(.inline)
-        }
+//        }
     }
 }
 

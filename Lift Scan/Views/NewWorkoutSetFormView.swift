@@ -19,6 +19,8 @@ struct NewWorkoutSetFormView: View {
     var onSecondary: () -> Void
     @State var showingDeleteAlert = false
     
+    var cancelButtonColor: Color { update ? Color.red : Color.backgroundInverted.opacity(0.8) }
+    
     var correctText: String {
         return "\(update ? "Update" : "Record")"
     }
@@ -84,14 +86,13 @@ struct NewWorkoutSetFormView: View {
                         }
                     }, label: {
                         HStack(alignment: .center, spacing: 2) {
-                            Image(systemName: update ? "minus.circle" : "arrow.uturn.backward.circle")
+                            Image(systemName: update ? "minus.circle" : "chevron.backward.circle")
                                 .font(.title2)
-                                .foregroundColor(Color.red)
                             Text(update ? "Delete" : "Cancel")
                                 .font(.title3)
-                                .foregroundColor(Color.red)
                                 .padding(12)
                         }
+                        .foregroundStyle(cancelButtonColor)
                     })
                     .padding(.bottom, 20)
                     .buttonStyle(.bordered)
@@ -141,16 +142,34 @@ struct NewWorkoutSetFormView: View {
     }
 }
 
-struct NewWorkoutSetFormView_Previews: PreviewProvider {
-    static var previews: some View {
-        @State var weight: Float = 120.0
-        @State var reps: Int16 = 12
-        @State var complete = true
-        @State var isPresented = true
-        @State var selectedForDeletion = true
-        let onPrimary = {}
-        let onSecondary = {}
+//struct NewWorkoutSetFormView_Previews: PreviewProvider {
+//    static var previews: some View {
+//
+//    }
+//}
 
-        return NewWorkoutSetFormView(isPresented: $isPresented, weight: $weight, reps: $reps, complete: $complete, selectedForDeletion: $selectedForDeletion, update: false, onPrimary: onPrimary, onSecondary: onSecondary)
-    }
+#Preview("Create") {
+    @State var weight: Float = 120.0
+    @State var reps: Int16 = 12
+    @State var complete = true
+    @State var isPresented = true
+    @State var selectedForDeletion = true
+    let update = false
+    let onPrimary = {}
+    let onSecondary = {}
+
+    return NewWorkoutSetFormView(isPresented: $isPresented, weight: $weight, reps: $reps, complete: $complete, selectedForDeletion: $selectedForDeletion, update: update, onPrimary: onPrimary, onSecondary: onSecondary)
+}
+
+#Preview("Update") {
+    @State var weight: Float = 120.0
+    @State var reps: Int16 = 12
+    @State var complete = true
+    @State var isPresented = true
+    @State var selectedForDeletion = true
+    let update = true
+    let onPrimary = {}
+    let onSecondary = {}
+
+    return NewWorkoutSetFormView(isPresented: $isPresented, weight: $weight, reps: $reps, complete: $complete, selectedForDeletion: $selectedForDeletion, update: update, onPrimary: onPrimary, onSecondary: onSecondary)
 }

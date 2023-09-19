@@ -23,6 +23,14 @@ class WorkoutManager: ObservableObject {
         self.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
     }
     
+    private var mockWorkout: Workout {
+        let entityDescription = NSEntityDescription.entity(forEntityName: "Workout", in: viewContext)!
+        let workout = Workout(entity: entityDescription, insertInto: nil)
+        workout.name = "Mock"
+        
+        return workout
+    }
+    
     var allWorkouts: [Workout] {
         return Array(workouts.values).flatMap { $0 }
     }
@@ -32,15 +40,32 @@ class WorkoutManager: ObservableObject {
 
         do {
             let fetchedWorkouts = try viewContext.fetch(fetchRequest)
+            
             // Group the workouts by category
-            self.workouts = Dictionary(grouping: fetchedWorkouts) { $0.category ?? undefinedCategoryName }
+            var workoutDictionary: [String: [Workout]] = [:]
+            for workout in fetchedWorkouts {
+                let categories = workout.categories?.allObjects as? [Category] ?? []
+                // If the workout has no categories, group it under the undefined category
+                if categories.isEmpty {
+                    workoutDictionary[undefinedCategoryName, default: []].append(workout)
+                } else {
+                    for category in categories {
+                        let categoryName = category.name ?? undefinedCategoryName
+                        workoutDictionary[categoryName, default: []].append(workout)
+                    }
+                }
+            }
+            
+            self.workouts = workoutDictionary
+            print("🌟")
+            print(self.workouts)
         } catch {
             // Handle the error here
             print("Failed to fetch workouts: \(error)")
         }
     }
 
-    func findWorkout(byCode qrCode: String) -> Workout? {
+    func getWorkout(byCode qrCode: String) -> Workout? {
         for categoryWorkouts in workouts.values {
             if let workout = categoryWorkouts.first(where: { workout in
                 if let qrCodes = workout.qrCodes?.allObjects as? [QRCode] {
@@ -55,7 +80,7 @@ class WorkoutManager: ObservableObject {
         return nil
     }
     
-    func findWorkout(byName name: String) -> Workout? {
+    func getWorkout(byName name: String) -> Workout? {
         for categoryWorkouts in workouts.values {
             if let workout = categoryWorkouts.first(where: { $0.name?.lowercased() == name.lowercased() }) {
                 return workout
@@ -74,20 +99,50 @@ class WorkoutManager: ObservableObject {
         }
     }
     
-    func createWorkout(name: String, category: String?, color: String?, qrCode: String? = nil, categoryManager: CategoryManager?) -> Workout {
+    func associateCategory(_ category: Category, to workout: Workout, sync: Bool = true) {
+        // Do not duplicate the category reference
+        let existingCategories = workout.categories?.allObjects as? [Category] ?? []
+        let duplicate = existingCategories.contains(category)
+        if !duplicate {
+            workout.addToCategories(category)
+            
+            // Sync with cloud
+            if sync {
+                updateCloud(errorMessage: "Failed to link workout to category")
+            }
+        }
+    }
+    
+    func createWorkout(name: String, categoryName: String?, color: String?, qrCode: String? = nil, categoryManager: CategoryManager, barWeight: Int16 = 0) -> Workout {
         // Clean up the name
         let cleanName = name.trimmingCharacters(in: .whitespacesAndNewlines)
         
         // Check if a workout with the same name already exists
-        if let existingWorkout = findWorkout(byName: cleanName) {
+        if let existingWorkout = getWorkout(byName: cleanName) {
+            // Add a new category if necessary
+            if let categoryName = categoryName {
+                if let category = categoryManager.getCategory(categoryName) {
+                    associateCategory(category, to: existingWorkout)
+                }
+            }
             return existingWorkout
         }
         
         // Create the workout
         let newWorkout: Workout = Workout(context: viewContext)
+        
+        // Associate the category and the new workout together
+        if categoryName != nil {
+            if let category = categoryManager.getCategory(categoryName!) {
+                associateCategory(category, to: newWorkout, sync: false)
+                categoryManager.associateWorkout(newWorkout, to: category, sync: false)
+            }
+        }
+        
+        // Assign other workout properties
         newWorkout.name = cleanName
-        newWorkout.category = category
         newWorkout.color = color
+        newWorkout.barWeight = barWeight
         
         // Look for `WorkoutLog` entities with matching name and assign them to the `.logs` property of the workout
         let fetchRequest: NSFetchRequest<WorkoutLog> = WorkoutLog.fetchRequest()
@@ -234,22 +289,28 @@ class WorkoutManager: ObservableObject {
     }
     
     func removeWorkout(_ workout: Workout) {
-        let category = workout.category ?? undefinedCategoryName
-
-        // Check if the category exists
-        if var categoryWorkouts = workouts[category] {
-            // Find the workout in the array (based on some identifiable property or object reference)
-            if let index = categoryWorkouts.firstIndex(where: { $0.id == workout.id }) {
-                // Remove from in-memory list
-                categoryWorkouts.remove(at: index)
-                workouts[category] = categoryWorkouts
-
-                // Delete from persistent storage
-                viewContext.delete(workout)
-                do {
-                    try viewContext.save()
-                } catch {
-                    print("Failed to delete workout from persistent storage: \(error)")
+        let categories = workout.categories?.allObjects as? [Category] ?? []
+        
+        for category in categories {
+            // Disassociate the category and workout from one-another
+            category.removeFromWorkouts(workout)
+            workout.removeFromCategories(category)
+            
+            // Double-check if the category exists locally
+            if var categoryWorkouts = workouts[category.name!] {
+                // Find the workout in the array (based on some identifiable property or object reference)
+                if let index = categoryWorkouts.firstIndex(where: { $0.id == workout.id }) {
+                    // Remove from in-memory list
+                    categoryWorkouts.remove(at: index)
+                    workouts[category.name!] = categoryWorkouts
+                    
+                    // Delete from persistent storage
+                    viewContext.delete(workout)
+                    do {
+                        try viewContext.save()
+                    } catch {
+                        print("Failed to delete workout from persistent storage: \(error)")
+                    }
                 }
             }
         }
@@ -343,7 +404,7 @@ class WorkoutManager: ObservableObject {
     func weightHistory(for workoutName: String) -> [Date: [(reps: Int, weight: Float)]] {
         var weightProgression: [Date: [(reps: Int, weight: Float)]] = [:]
         
-        guard let workout = findWorkout(byName: workoutName) else { return [:] }
+        guard let workout = getWorkout(byName: workoutName) else { return [:] }
         
         let logs = workout.logs?.allObjects as? [WorkoutLog] ?? []
         for log in logs {
@@ -365,7 +426,7 @@ class WorkoutManager: ObservableObject {
     }
     
     func latestSet(workoutName: String) -> WorkoutSet? {
-        let log = latestLog(workoutName: workoutName) ?? createLog(for: (findWorkout(byName: workoutName) ?? createWorkout(name: workoutName, category: nil, color: nil, categoryManager: nil)))
+        let log = latestLog(workoutName: workoutName) ?? createLog(for: (getWorkout(byName: workoutName) ?? self.mockWorkout))
         guard let workoutSets = log.sets as? Set<WorkoutSet> else { return nil }
         
         var latestDate: Date? = nil
@@ -385,7 +446,7 @@ class WorkoutManager: ObservableObject {
     }
     
     func latestSet(workout: Workout) -> WorkoutSet? {
-        let log = latestLog(workout: workout) ?? createLog(for: (findWorkout(byName: workout.name!) ?? createWorkout(name: workout.name!, category: nil, color: nil, categoryManager: nil)))
+        let log = latestLog(workout: workout) ?? createLog(for: (getWorkout(byName: workout.name!) ?? self.mockWorkout))
         guard let workoutSets = log.sets as? Set<WorkoutSet> else { return nil }
         
         var latestDate: Date? = nil
@@ -405,7 +466,7 @@ class WorkoutManager: ObservableObject {
     }
     
     func latestLog(workoutName: String) -> WorkoutLog? {
-        guard let workout = findWorkout(byName: workoutName) else { return nil }
+        guard let workout = getWorkout(byName: workoutName) else { return nil }
 
         var latestDate: Date? = nil
         var latestLog: WorkoutLog? = nil

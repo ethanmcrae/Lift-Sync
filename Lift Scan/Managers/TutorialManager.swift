@@ -36,10 +36,10 @@ class TutorialManager: ObservableObject {
         // Check for total completion
         if step.wrappedValue == tutorial.completeValue {
             step.wrappedValue = -1
-            complete(tutorial)
+            completeTutorial(tutorial)
         } else {
             step.wrappedValue += 1
-            print("Incremented step to \(step.wrappedValue)")
+            updateStep(tutorial, step: step.wrappedValue)
         }
     }
     
@@ -48,14 +48,24 @@ class TutorialManager: ObservableObject {
     }
     
     static func getStep(_ tutorial: Tutorial) -> Int {
-        return NSUbiquitousKeyValueStore.default.object(forKey: tutorial.rawValue) as? Int ?? 1
+        let val = NSUbiquitousKeyValueStore.default.object(forKey: tutorial.rawValue) as? Int ?? 1
+        
+//        if val == 4 {
+//            updateStep(tutorial, step: 1)
+//        }
+        print("🔥 Found \(val)")
+        return val
     }
     
     static func isComplete(_ tutorial: Tutorial, step: Int) -> Bool {
         return step >= tutorial.completeValue
     }
     
-    static func complete(_ tutorial: Tutorial) {
-        NSUbiquitousKeyValueStore.default.set(true, forKey: tutorial.rawValue)
+    static func updateStep(_ tutorial: Tutorial, step: Int) {
+        NSUbiquitousKeyValueStore.default.set(step, forKey: tutorial.rawValue)
+    }
+    
+    static func completeTutorial(_ tutorial: Tutorial) {
+        NSUbiquitousKeyValueStore.default.set(-1, forKey: tutorial.rawValue)
     }
 }

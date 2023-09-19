@@ -29,7 +29,7 @@ struct SplashView: View {
 
             Image(systemName: shuffledSymbols[currentIndex])
                 .resizable()
-                .foregroundColor(Color("AccentColor-400"))
+                .foregroundColor(Color.accentColor400)
                 .scaledToFit()
                 .frame(width: 100, height: 100)  // Adjust frame size as needed
                 .opacity(opacity)
@@ -53,7 +53,7 @@ struct SplashView: View {
                 .font(.title2)
                 .padding(.top, 50)
                 .opacity(0.8)
-//                .foregroundStyle(.accent)
+                .padding(.bottom, 100)
 
             Spacer()
         }

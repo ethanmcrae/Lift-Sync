@@ -199,14 +199,13 @@
 		3AE50D1E2A79A24F00E33A34 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				3AE50D1F2A79A25C00E33A34 /* QRScannerView.swift */,
+				3A93605B2AB60A15006B7467 /* SplashView.swift */,
 				3A359F1D2A7C0F38000E90F9 /* HomeView.swift */,
 				3A9360622AB61ED0006B7467 /* HomeViewComponents */,
 				3AC28E032A83415A0084D5CF /* StatsViews */,
 				3AC27F1B2A7DAB2300D21A43 /* NewWorkoutFormView.swift */,
 				3AC27F1F2A7DE1DC00D21A43 /* NewWorkoutSetFormView.swift */,
 				3A93605F2AB6169B006B7467 /* TutorialHomeViews */,
-				3A93605B2AB60A15006B7467 /* SplashView.swift */,
 				3AE50D272A7A1F4F00E33A34 /* WorkoutGridView.swift */,
 				3AE101122A9407D4001948B3 /* WeightPicker.swift */,
 				3A993D2F2A9576000082F59A /* RepsPicker.swift */,
@@ -216,6 +215,7 @@
 				3AE50D232A7A1DA700E33A34 /* QRScannerButton.swift */,
 				3A359F1F2A7C12C2000E90F9 /* SettingsView.swift */,
 				3AE50D252A7A1EE300E33A34 /* WorkoutCategoryView.swift */,
+				3AE50D1F2A79A25C00E33A34 /* QRScannerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";

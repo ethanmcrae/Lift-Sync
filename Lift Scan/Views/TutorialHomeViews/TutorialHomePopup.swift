@@ -17,14 +17,12 @@ struct TutorialHomePopup: View {
     }
     
     var body: some View {
-        Button(action: {
-            TutorialManager.completeTutorialStep($step, tutorial: tutorial)
-        }) {
             HStack {
                 Image(systemName: "info.circle.fill")
                     .font(lotsOfText ? .title3 : .body)
-                    .foregroundStyle(Color.backgroundInverted)
+                    .foregroundStyle(Color.background)
                     .padding(.leading)
+                    .opacity(0.75)
                 
                 if lotsOfText {
                     Rectangle()
@@ -36,7 +34,7 @@ struct TutorialHomePopup: View {
                 Text(text)
                     .font(.body)
                     .multilineTextAlignment(.leading)
-                    .foregroundStyle(Color.backgroundInverted)
+                    .foregroundStyle(Color.background)
                     .padding(.trailing)
                     .padding(.top)
                     .padding(.bottom)
@@ -45,8 +43,7 @@ struct TutorialHomePopup: View {
             .lineLimit(1...5)
             .frame(width: small ? 175 : 300)
             .frame(minHeight: 70)
-        }
-        .background(Color.accentColor600)
+            .background(Color.accentAlt.gradient)
     }
 }
 

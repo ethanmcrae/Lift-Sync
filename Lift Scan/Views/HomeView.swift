@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct HomeView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
@@ -35,9 +36,10 @@ struct HomeView: View {
                             set: { if $0 { self.activeSheet = tutorialStep > 2 ? .scanner : nil } else { self.activeSheet = nil } }
                         ))
                         .popover(isPresented: TutorialManager.isShowingPopover(.home, currentStep: $tutorialStep, expected: 2)) {
-                            TutorialHomePopup(text: "Optional: Scan QR Codes by each machine to access your workout.", step: $tutorialStep, tutorial: tutorial)
+                            TutorialHomePopup(text: "Optional: Scan QR Codes by workout station to access your logs.", step: $tutorialStep, tutorial: tutorial)
                         }
                         .frame(height: geometry.size.height * 0.3)
+                        
                         ZStack {
                             Color("BackgroundColor")
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -50,6 +52,9 @@ struct HomeView: View {
                                     WorkoutCategoryView(selectedCategory: $selectedCategory, homeTutorialStep: $tutorialStep)
                                     
                                     WorkoutGridView(selectedCategory: $selectedCategory, onDisappear: self.onDisappear, homeTutorialStep: $tutorialStep)
+                                        .popover(isPresented: TutorialManager.isShowingPopover(tutorial, currentStep: $tutorialStep, expected: 4)) {
+                                            TutorialHomePopup(text: "This is where your future workouts will appear", step: $tutorialStep, tutorial: tutorial)
+                                        }
                                     
                                     Spacer()
                                 }
@@ -63,10 +68,10 @@ struct HomeView: View {
                         }
                     }
                     .fullScreen()
-                    .backgroundColor(Color("AccentColor-600"))
+                    .background(Color.accentColor600.gradient)
                     .onChange(of: scannedCode) { _ in
                         if let newScannedCode = scannedCode {
-                            let foundWorkout = self.workoutManager.findWorkout(byCode: newScannedCode)
+                            let foundWorkout = self.workoutManager.getWorkout(byCode: newScannedCode)
                             if let foundWorkout = foundWorkout {
                                 self.selectedWorkout = foundWorkout
                                 self.activeSheet = nil
@@ -110,14 +115,26 @@ struct HomeView: View {
         
 }
 
+#Preview {
+    let workoutManager = PreviewManager.mockWorkoutManager()
+    let categoryManager = PreviewManager.mockCategoryManager()
+    
+    // Skip tutorial
+    TutorialManager.updateStep(.home, step: -1)
 
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        let workoutManager = PreviewManager.mockWorkoutManager()
-        let categoryManager = PreviewManager.mockCategoryManager()
+    return HomeView()
+        .environmentObject(workoutManager)
+        .environmentObject(categoryManager)
+}
 
-        return HomeView()
-            .environmentObject(workoutManager)
-            .environmentObject(categoryManager)
-    }
+#Preview("Tutorial") {
+    let workoutManager = PreviewManager.mockWorkoutManager()
+    let categoryManager = PreviewManager.mockCategoryManager(empty: true)
+    
+    // Reset tutorial
+    TutorialManager.updateStep(.home, step: 1)
+
+    return HomeView()
+        .environmentObject(workoutManager)
+        .environmentObject(categoryManager)
 }

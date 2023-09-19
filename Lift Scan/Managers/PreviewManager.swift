@@ -62,29 +62,32 @@ struct PreviewManager {
         mockWorkoutGenerator("Lunges", category: "Legs", dayRange: 1...3, workoutManager: workoutManager, context: context)
         mockWorkoutGenerator("Crunches", category: "Core", dayRange: 0...2, workoutManager: workoutManager, context: context)
         mockWorkoutGenerator("Bench Press", category: "Chest / Tri", dayRange: 5...10, workoutManager: workoutManager, context: context, barWeight: 35)
-        mockWorkoutGenerator("Example Workout With a long name 1", category: "Test", dayRange: 0...2, workoutManager: workoutManager, context: context)
-        mockWorkoutGenerator("Example Workout With a long name 2", category: "Test", dayRange: 3...5, workoutManager: workoutManager, context: context)
-        mockWorkoutGenerator("Example Workout With a long name 3", category: "Test", dayRange: 6...8, workoutManager: workoutManager, context: context)
-        mockWorkoutGenerator("Example Workout With a long name 4", category: "Test", dayRange: 9...11, workoutManager: workoutManager, context: context)
-        mockWorkoutGenerator("Example Workout With a long name 5", category: "Test", dayRange: 12...14, workoutManager: workoutManager, context: context)
-        mockWorkoutGenerator("Example Workout With a long name 6", category: "Test", dayRange: 15...17, workoutManager: workoutManager, context: context)
-        mockWorkoutGenerator("Example Workout With a long name 7", category: "Test", dayRange: 18...20, workoutManager: workoutManager, context: context)
-        mockWorkoutGenerator("Example Workout With a long name 8", category: "Test", dayRange: 21...23, workoutManager: workoutManager, context: context)
-        mockWorkoutGenerator("Example Workout With a long name 9", category: "Test", dayRange: 24...26, workoutManager: workoutManager, context: context)
+        mockWorkoutGenerator("Example Workout With a long name 1", category: "Test", dayRange: 0...1, workoutManager: workoutManager, context: context)
+        mockWorkoutGenerator("Example Workout With a long name 2", category: "Test", dayRange: 1...2, workoutManager: workoutManager, context: context)
+        mockWorkoutGenerator("Example Workout With a long name 3", category: "Test", dayRange: 2...3, workoutManager: workoutManager, context: context)
+        mockWorkoutGenerator("Example Workout With a long name 4", category: "Test", dayRange: 5...6, workoutManager: workoutManager, context: context)
+        mockWorkoutGenerator("Example Workout With a long name 5", category: "Test", dayRange: 3...4, workoutManager: workoutManager, context: context)
+        mockWorkoutGenerator("Example Workout With a long name 6", category: "Test", dayRange: 6...7, workoutManager: workoutManager, context: context)
+        mockWorkoutGenerator("Example Workout With a long name 7", category: "Test", dayRange: 18...19, workoutManager: workoutManager, context: context)
+        mockWorkoutGenerator("Example Workout With a long name 8", category: "Test", dayRange: 30...31, workoutManager: workoutManager, context: context)
+        mockWorkoutGenerator("Example Workout With a long name 9", category: "Test", dayRange: 10...11, workoutManager: workoutManager, context: context)
+        mockWorkoutGenerator("Short Name 10", category: "Test", dayRange: 19...20, workoutManager: workoutManager, context: context)
         
         return workoutManager
     }
     
-    static func mockCategoryManager() -> CategoryManager {
+    static func mockCategoryManager(empty: Bool = false) -> CategoryManager {
         let persistentContainer = container()
         let categoryManager = CategoryManager(container: persistentContainer)
         let context = persistentContainer.viewContext
         
-//        categoryManager.create("Legs")
-//        categoryManager.create("Core")
-//        categoryManager.create("Chest / Tri")
-//        categoryManager.create("Back / Bic")
-//        categoryManager.create("Test")
+        if !empty {
+            categoryManager.create("Legs")
+            categoryManager.create("Core")
+            categoryManager.create("Chest / Tri")
+            categoryManager.create("Back / Bic")
+            categoryManager.create("Test")
+        }
         
         return categoryManager
     }
