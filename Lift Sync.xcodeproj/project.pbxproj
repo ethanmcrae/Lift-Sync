@@ -68,7 +68,7 @@
 		3ADC39832AB0C01B005AF5D8 /* BarWeightPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarWeightPicker.swift; sourceTree = "<group>"; };
 		3ADC39852AB0C149005AF5D8 /* BarWeightForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarWeightForm.swift; sourceTree = "<group>"; };
 		3AE101122A9407D4001948B3 /* WeightPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightPicker.swift; sourceTree = "<group>"; };
-		3AE50D062A79A23A00E33A34 /* Lift Scan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lift Scan.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3AE50D062A79A23A00E33A34 /* Lift Sync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lift Sync.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AE50D092A79A23A00E33A34 /* Lift_ScanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lift_ScanApp.swift; sourceTree = "<group>"; };
 		3AE50D0B2A79A23A00E33A34 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3AE50D0D2A79A23D00E33A34 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -156,7 +156,7 @@
 		3AE50CFD2A79A23A00E33A34 = {
 			isa = PBXGroup;
 			children = (
-				3AE50D082A79A23A00E33A34 /* Lift Scan */,
+				3AE50D082A79A23A00E33A34 /* Lift Sync */,
 				3AE50D072A79A23A00E33A34 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -164,12 +164,12 @@
 		3AE50D072A79A23A00E33A34 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3AE50D062A79A23A00E33A34 /* Lift Scan.app */,
+				3AE50D062A79A23A00E33A34 /* Lift Sync.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		3AE50D082A79A23A00E33A34 /* Lift Scan */ = {
+		3AE50D082A79A23A00E33A34 /* Lift Sync */ = {
 			isa = PBXGroup;
 			children = (
 				3AC28E002A814B980084D5CF /* fonts */,
@@ -185,7 +185,7 @@
 				3AE50D142A79A23D00E33A34 /* Lift_Scan.xcdatamodeld */,
 				3AE50D0F2A79A23D00E33A34 /* Preview Content */,
 			);
-			path = "Lift Scan";
+			path = "Lift Sync";
 			sourceTree = "<group>";
 		};
 		3AE50D0F2A79A23D00E33A34 /* Preview Content */ = {
@@ -223,9 +223,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3AE50D052A79A23A00E33A34 /* Lift Scan */ = {
+		3AE50D052A79A23A00E33A34 /* Lift Sync */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3AE50D1B2A79A23D00E33A34 /* Build configuration list for PBXNativeTarget "Lift Scan" */;
+			buildConfigurationList = 3AE50D1B2A79A23D00E33A34 /* Build configuration list for PBXNativeTarget "Lift Sync" */;
 			buildPhases = (
 				3AE50D022A79A23A00E33A34 /* Sources */,
 				3AE50D032A79A23A00E33A34 /* Frameworks */,
@@ -235,9 +235,9 @@
 			);
 			dependencies = (
 			);
-			name = "Lift Scan";
+			name = "Lift Sync";
 			productName = "Lift Scan";
-			productReference = 3AE50D062A79A23A00E33A34 /* Lift Scan.app */;
+			productReference = 3AE50D062A79A23A00E33A34 /* Lift Sync.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -268,7 +268,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3AE50D052A79A23A00E33A34 /* Lift Scan */,
+				3AE50D052A79A23A00E33A34 /* Lift Sync */,
 			);
 		};
 /* End PBXProject section */
@@ -453,14 +453,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Lift Scan/Lift_Scan.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Lift Sync/Lift_Scan.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Lift Scan/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Lift Sync/Preview Content\"";
 				DEVELOPMENT_TEAM = 6HR3MK32U8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Lift Scan/Info.plist";
+				INFOPLIST_FILE = "Lift Sync/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Lift Sync";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -473,7 +473,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.ethanmcrae.Lift-Scan";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ethanmcrae.Lift-Sync";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -486,14 +486,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Lift Scan/Lift_Scan.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Lift Sync/Lift_Scan.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Lift Scan/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Lift Sync/Preview Content\"";
 				DEVELOPMENT_TEAM = 6HR3MK32U8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Lift Scan/Info.plist";
+				INFOPLIST_FILE = "Lift Sync/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Lift Sync";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -506,7 +506,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.ethanmcrae.Lift-Scan";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ethanmcrae.Lift-Sync";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -526,7 +526,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3AE50D1B2A79A23D00E33A34 /* Build configuration list for PBXNativeTarget "Lift Scan" */ = {
+		3AE50D1B2A79A23D00E33A34 /* Build configuration list for PBXNativeTarget "Lift Sync" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3AE50D1C2A79A23D00E33A34 /* Debug */,
