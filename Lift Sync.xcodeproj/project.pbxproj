@@ -30,12 +30,12 @@
 		3ADC39842AB0C01B005AF5D8 /* BarWeightPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADC39832AB0C01B005AF5D8 /* BarWeightPicker.swift */; };
 		3ADC39862AB0C149005AF5D8 /* BarWeightForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADC39852AB0C149005AF5D8 /* BarWeightForm.swift */; };
 		3AE101132A9407D4001948B3 /* WeightPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE101122A9407D4001948B3 /* WeightPicker.swift */; };
-		3AE50D0A2A79A23A00E33A34 /* Lift_ScanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D092A79A23A00E33A34 /* Lift_ScanApp.swift */; };
+		3AE50D0A2A79A23A00E33A34 /* Lift_SyncApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D092A79A23A00E33A34 /* Lift_SyncApp.swift */; };
 		3AE50D0C2A79A23A00E33A34 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D0B2A79A23A00E33A34 /* ContentView.swift */; };
 		3AE50D0E2A79A23D00E33A34 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AE50D0D2A79A23D00E33A34 /* Assets.xcassets */; };
 		3AE50D112A79A23D00E33A34 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AE50D102A79A23D00E33A34 /* Preview Assets.xcassets */; };
 		3AE50D132A79A23D00E33A34 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D122A79A23D00E33A34 /* Persistence.swift */; };
-		3AE50D162A79A23D00E33A34 /* Lift_Scan.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D142A79A23D00E33A34 /* Lift_Scan.xcdatamodeld */; };
+		3AE50D162A79A23D00E33A34 /* Lift_Sync.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D142A79A23D00E33A34 /* Lift_Sync.xcdatamodeld */; };
 		3AE50D202A79A25C00E33A34 /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D1F2A79A25C00E33A34 /* QRScannerView.swift */; };
 		3AE50D222A7A16E100E33A34 /* WorkoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D212A7A16E100E33A34 /* WorkoutManager.swift */; };
 		3AE50D242A7A1DA700E33A34 /* QRScannerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE50D232A7A1DA700E33A34 /* QRScannerButton.swift */; };
@@ -69,13 +69,13 @@
 		3ADC39852AB0C149005AF5D8 /* BarWeightForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarWeightForm.swift; sourceTree = "<group>"; };
 		3AE101122A9407D4001948B3 /* WeightPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightPicker.swift; sourceTree = "<group>"; };
 		3AE50D062A79A23A00E33A34 /* Lift Sync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lift Sync.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3AE50D092A79A23A00E33A34 /* Lift_ScanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lift_ScanApp.swift; sourceTree = "<group>"; };
+		3AE50D092A79A23A00E33A34 /* Lift_SyncApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lift_SyncApp.swift; sourceTree = "<group>"; };
 		3AE50D0B2A79A23A00E33A34 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3AE50D0D2A79A23D00E33A34 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3AE50D102A79A23D00E33A34 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		3AE50D122A79A23D00E33A34 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		3AE50D152A79A23D00E33A34 /* Lift_Scan.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Lift_Scan.xcdatamodel; sourceTree = "<group>"; };
-		3AE50D172A79A23D00E33A34 /* Lift_Scan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lift_Scan.entitlements; sourceTree = "<group>"; };
+		3AE50D172A79A23D00E33A34 /* Lift_Sync.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lift_Sync.entitlements; sourceTree = "<group>"; };
 		3AE50D182A79A23D00E33A34 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3AE50D1F2A79A25C00E33A34 /* QRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
 		3AE50D212A7A16E100E33A34 /* WorkoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutManager.swift; sourceTree = "<group>"; };
@@ -173,16 +173,16 @@
 			isa = PBXGroup;
 			children = (
 				3AC28E002A814B980084D5CF /* fonts */,
-				3AE50D092A79A23A00E33A34 /* Lift_ScanApp.swift */,
+				3AE50D092A79A23A00E33A34 /* Lift_SyncApp.swift */,
 				3AE50D0B2A79A23A00E33A34 /* ContentView.swift */,
 				3AC28E062A8342A30084D5CF /* Extensions */,
 				3AC28E072A8342B90084D5CF /* Managers */,
 				3AE50D1E2A79A24F00E33A34 /* Views */,
 				3AE50D0D2A79A23D00E33A34 /* Assets.xcassets */,
 				3AE50D122A79A23D00E33A34 /* Persistence.swift */,
-				3AE50D172A79A23D00E33A34 /* Lift_Scan.entitlements */,
+				3AE50D172A79A23D00E33A34 /* Lift_Sync.entitlements */,
 				3AE50D182A79A23D00E33A34 /* Info.plist */,
-				3AE50D142A79A23D00E33A34 /* Lift_Scan.xcdatamodeld */,
+				3AE50D142A79A23D00E33A34 /* Lift_Sync.xcdatamodeld */,
 				3AE50D0F2A79A23D00E33A34 /* Preview Content */,
 			);
 			path = "Lift Sync";
@@ -303,12 +303,12 @@
 				3AE50D262A7A1EE300E33A34 /* WorkoutCategoryView.swift in Sources */,
 				3AE50D132A79A23D00E33A34 /* Persistence.swift in Sources */,
 				3AC28E0D2A8343F70084D5CF /* WorkoutsFrequencyView.swift in Sources */,
-				3AE50D162A79A23D00E33A34 /* Lift_Scan.xcdatamodeld in Sources */,
+				3AE50D162A79A23D00E33A34 /* Lift_Sync.xcdatamodeld in Sources */,
 				3AC27F1C2A7DAB2300D21A43 /* NewWorkoutFormView.swift in Sources */,
 				3AE50D0C2A79A23A00E33A34 /* ContentView.swift in Sources */,
 				3A93605C2AB60A15006B7467 /* SplashView.swift in Sources */,
 				3AC27F242A7EC4D100D21A43 /* ColorExtension.swift in Sources */,
-				3AE50D0A2A79A23A00E33A34 /* Lift_ScanApp.swift in Sources */,
+				3AE50D0A2A79A23A00E33A34 /* Lift_SyncApp.swift in Sources */,
 				3A359F1E2A7C0F38000E90F9 /* HomeView.swift in Sources */,
 				3A93605E2AB611A4006B7467 /* TutorialManager.swift in Sources */,
 				3AE50D242A7A1DA700E33A34 /* QRScannerButton.swift in Sources */,
@@ -453,7 +453,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Lift Sync/Lift_Scan.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Lift Sync/Lift_Sync.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Lift Sync/Preview Content\"";
@@ -486,7 +486,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Lift Sync/Lift_Scan.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Lift Sync/Lift_Sync.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Lift Sync/Preview Content\"";
@@ -538,13 +538,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		3AE50D142A79A23D00E33A34 /* Lift_Scan.xcdatamodeld */ = {
+		3AE50D142A79A23D00E33A34 /* Lift_Sync.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
 				3AE50D152A79A23D00E33A34 /* Lift_Scan.xcdatamodel */,
 			);
 			currentVersion = 3AE50D152A79A23D00E33A34 /* Lift_Scan.xcdatamodel */;
-			path = Lift_Scan.xcdatamodeld;
+			path = Lift_Sync.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

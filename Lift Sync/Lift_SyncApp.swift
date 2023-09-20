@@ -9,9 +9,7 @@
 // ‼️ TODOs ‼️
 // - - - - - - - - - - - - - - - - - - - -
 
-// When deleting a category, how do you want to handle all of the CUSTOM workouts that are tied to that category? They wont be able to be tapped on anymore...
-// Move the forms in Settings to more intuitive places. Exmaple: Create a + button in the Custom Workout Grid when a category is selected.
-// Add a bar weight
+// ...
 
 // - - - - - - - - - - - - - - - - - - - -
 
@@ -37,7 +35,7 @@ import SwiftUI
 import CoreData
 
 @main
-struct LiftScanApp: App {
+struct LiftSyncApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     let persistentContainer: NSPersistentCloudKitContainer
     @StateObject private var workoutManager: WorkoutManager
