@@ -116,7 +116,7 @@ struct SelectedWorkoutView: View {
                         }) {
                             Label("Record Set", systemImage: "plus.circle")
                                 .font(.system(size: 25))
-                                .foregroundColor(Color("BackgroundInvertedColor"))
+                                .foregroundColor(.white.opacity(0.95))
                                 .padding(20)
                                 .padding(.horizontal, 10)
                         }

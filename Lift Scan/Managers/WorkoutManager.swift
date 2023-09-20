@@ -122,9 +122,19 @@ class WorkoutManager: ObservableObject {
             // Add a new category if necessary
             if let categoryName = categoryName {
                 if let category = categoryManager.getCategory(categoryName) {
-                    associateCategory(category, to: existingWorkout)
+                    associateCategory(category, to: existingWorkout, sync: false)
                 }
             }
+            
+            // Associate QR Code with the existing workout if necessary
+            if let qrCode = qrCode {
+                if !qrCode.isEmpty {
+                    createAndAppendQRCode(qrCode, for: existingWorkout, sync: false)
+                }
+            }
+            
+            updateCloud(errorMessage: "Failed to update a previously existing workout")
+            
             return existingWorkout
         }
         
@@ -177,6 +187,25 @@ class WorkoutManager: ObservableObject {
         workout.addToLogs(workoutLog)
         print("Created log")
         return workoutLog
+    }
+    
+    func createAndAppendQRCode(_ url: String, for workout: Workout, sync: Bool = true) {
+        let qrCodeEntities = workout.qrCodes?.allObjects as? [QRCode] ?? []
+        
+        // Exit Early: A QR Code entity with a matching URL already exists
+        let exists = qrCodeEntities.contains(where: { $0.url == url })
+        if exists { return }
+        
+        // Create entity
+        let qrCode = QRCode(context: viewContext)
+        qrCode.url = url
+        
+        // Associate QRCode with Workout
+        workout.addToQrCodes(qrCode)
+        
+        if sync {
+            updateCloud(errorMessage: "Failed to create then append a QR Code to a workout")
+        }
     }
     
     func recordSet(reps: Int16, weight: Float, complete: Bool, workout: Workout) -> Void {
@@ -357,9 +386,9 @@ class WorkoutManager: ObservableObject {
     }
     
     func deleteSet(_ set: WorkoutSet, sync: Bool = true) {
-        // If after removing this entity, the parent structure (log) is now empty, then delete it also
+        // If removing this entity, will cause the parent structure (log) to be empty, then delete it also
         if let parentSetLogs = set.log?.sets as? Set<WorkoutSet> {
-            if parentSetLogs.isEmpty {
+            if parentSetLogs.count == 1 {
                 viewContext.delete(set.log!)
             }
         }

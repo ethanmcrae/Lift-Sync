@@ -39,7 +39,7 @@ struct WorkoutGridView: View {
                                     .padding(20)
                                     .frame(minWidth: 0, maxWidth: .infinity)
                                     .shadow(color: Color.accent.opacity(0.2), radius: 10)
-                                    .background(.white.gradient.opacity(backgroundOpacity))
+                                    .background(Color("BackgroundInvertedColor").gradient.opacity(backgroundOpacity))
                                     .cornerRadius(8)
                                     .shadow(color: Color.accentColor400.opacity(0.25), radius: 15, x: 10, y: 10)
                             }
@@ -66,15 +66,15 @@ struct WorkoutGridView: View {
                     HStack(alignment: .center, spacing: 2) {
                         Image(systemName: "plus.circle")
                             .font(.title)
-                            .foregroundColor(Color("BackgroundInvertedColor"))
+                            .foregroundColor(.white.opacity(0.95))
                         Text("Add Workout")
                             .font(.title3)
                             .fontWeight(.semibold)
-                            .foregroundColor(Color("BackgroundInvertedColor"))
+                            .foregroundColor(.white.opacity(0.95))
                             .padding(20)
                     }
                     .frame(minWidth: 0, maxWidth: .infinity)
-                    .shadow(color: Color("BackgroundColor"), radius: 10)
+//                    .shadow(color: Color("LightColor"), radius: 10)
                     .background(Color("AccentColor"))
                     .cornerRadius(10)
                     .shadow(color: Color(.black).opacity(0.75), radius: 10, x: 5, y: 10)
