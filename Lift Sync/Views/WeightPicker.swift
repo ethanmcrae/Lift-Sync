@@ -20,12 +20,21 @@ struct WeightPicker: View {
         let secondValues: [Float] = stride(from: 12.5, through: 300.0, by: 2.5).map { $0 }
         self.values = firstValues + secondValues
     }
+    
+    var isiPad: Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
+    }
 
     var body: some View {
         VStack {
             Picker("Select Value", selection: $weight) {
                 ForEach(values, id: \.self) { value in
-                    Text("\(value, specifier: "%.1f")").tag(value)
+                    if isiPad {
+                        Text("\(value, specifier: "%.1f")").tag(value)
+                            .font(.system(size: 25))
+                    } else {
+                        Text("\(value, specifier: "%.1f")").tag(value)
+                    }
                 }
             }
             .pickerStyle(.inline)

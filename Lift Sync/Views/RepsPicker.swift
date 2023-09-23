@@ -12,12 +12,21 @@ struct RepsPicker: View {
     let values: [Int16] = stride(from: 1, through: 200, by: 1).map { $0 }
     
     @Binding var reps: Int16
+    
+    var isiPad: Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
+    }
 
     var body: some View {
         VStack {
             Picker("Select Value", selection: $reps) {
                 ForEach(values, id: \.self) { value in
-                    Text("\(value)").tag(value)
+                    if isiPad {
+                        Text("\(value)").tag(value)
+                            .font(.system(size: 25))
+                    } else {
+                        Text("\(value)").tag(value)
+                    }
                 }
             }
             .pickerStyle(.inline)

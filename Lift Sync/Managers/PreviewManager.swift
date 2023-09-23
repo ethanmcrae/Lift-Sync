@@ -11,7 +11,7 @@ import CoreData
 struct PreviewManager {
     
     static func container() -> NSPersistentCloudKitContainer {
-        let container = NSPersistentCloudKitContainer(name: "Lift_Scan")
+        let container = NSPersistentCloudKitContainer(name: "Lift_Sync")
         let description = NSPersistentStoreDescription()
         description.url = URL(fileURLWithPath: "/dev/null")
         container.persistentStoreDescriptions = [description]

@@ -46,7 +46,7 @@ struct HomeView: View {
                                 .edgesIgnoringSafeArea(.all)
                             VStack {
                                 // Add "Create First" category button
-                                if categoryManager.categories.isEmpty {
+                                if categoryManager.categories.isEmpty && tutorialStep != 1 {
                                     CreateFirstCategoryForm(categoryName: $categoryName, tutorialStep: $tutorialStep, tutorial: tutorial)
                                 } else {
                                     WorkoutCategoryView(selectedCategory: $selectedCategory, homeTutorialStep: $tutorialStep)
@@ -96,6 +96,7 @@ struct HomeView: View {
                         }
                     }
                 }
+                .navigationViewStyle(StackNavigationViewStyle())
             }
             
             // Tutorial View 1

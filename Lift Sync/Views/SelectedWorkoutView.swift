@@ -30,6 +30,10 @@ struct SelectedWorkoutView: View {
     private func formattedWeight(_ weight: Float) -> String {
         return "\(weight.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(weight)) : String(format: "%.1f", weight))"
     }
+    
+    var isiPad: Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
+    }
 
     var body: some View {
         VStack {
@@ -64,7 +68,7 @@ struct SelectedWorkoutView: View {
             } else { // Initial Title (Non-Edit Mode)
                 HStack {
                     Text(workout.name ?? "Undefined")
-                        .font(.title)
+                        .font(isiPad ? .system(size: 50) : .title)
                         .fontWeight(.bold)
                         .padding(.vertical, 10)
                 }
@@ -77,7 +81,7 @@ struct SelectedWorkoutView: View {
             } else {
                 if barWeight != 0 {
                     Text("Bar Weight / Resistance: \(barWeight) lb")
-                        .font(.title3)
+                        .font(isiPad ? .title : .title3)
                 }
             }
             
@@ -115,10 +119,11 @@ struct SelectedWorkoutView: View {
                             showingRecordSetForm = true
                         }) {
                             Label("Record Set", systemImage: "plus.circle")
-                                .font(.system(size: 25))
+                                .font(.system(size: isiPad ? 35 : 25))
                                 .foregroundColor(.white.opacity(0.95))
                                 .padding(20)
-                                .padding(.horizontal, 10)
+                                .padding(.horizontal, isiPad ? 30: 10)
+                                .padding(isiPad ? 30 : 0)
                         }
                         .padding(.bottom, 20)
                         .buttonStyle(.borderedProminent)
@@ -234,12 +239,17 @@ struct WorkoutSetListView: View {
         }
     }
     
+    var isiPad: Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
+    }
+    
     var body: some View {
         LazyVStack {
             HStack {
                 if let date = log.date {
                     Text(date, style: .date)
-                        .font(.headline)
+                        .font(isiPad ? .title2 : .headline)
+                        .fontWeight(isiPad ? .semibold : .medium)
                         .opacity(0.8)
                 } else {
                     Text("Unknown Date")
@@ -249,7 +259,8 @@ struct WorkoutSetListView: View {
                 Spacer()
                 if index == 0 {
                     Text("Complete")
-                        .font(.subheadline)
+                        .font(isiPad ? .title3 : .subheadline)
+                        .fontWeight(isiPad ? .semibold : .medium)
                         .opacity(0.8)
                 }
             }
@@ -285,6 +296,10 @@ struct WorkoutSetRow: View {
     
     @State var showingRecordAdjustForm = false
     
+    var isiPad: Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
+    }
+    
     var body: some View {
         ZStack {
             Button(action: {
@@ -300,11 +315,11 @@ struct WorkoutSetRow: View {
                 Spacer()
                 if workoutSet.incomplete {
                     Image(systemName: "xmark.circle.fill")
-                        .font(.title2)
+                        .font(isiPad ? .title : .title2)
                         .foregroundStyle(Color.orange)
                 } else {
                     Image(systemName: "checkmark.circle.fill")
-                        .font(.title2)
+                        .font(isiPad ? .title : .title2)
                         .foregroundStyle(Color("AccentColor-400"))
                 }
             }
@@ -330,10 +345,16 @@ struct WorkoutSetRow: View {
     
     var RowContent: some View {
         HStack(spacing: 2) {
-            Text(formattedWeight(workoutSet.weight)).font(.title) // Weight
-            Text("lb").font(.subheadline).opacity(0.7) // Unit
-            Text(" x ").font(.title2).opacity(0.7).fontWeight(.heavy) // Multiplier
-            Text(" \(workoutSet.reps) ").font(.title) // Reps
+            Text(formattedWeight(workoutSet.weight))
+                .font(isiPad ? .system(size: 40) : .title) // Weight
+            Text("lb")
+                .font(.subheadline)
+                .opacity(0.7) // Unit
+            Text(" x ")
+                .font(isiPad ? .system(size: 30) : .title2).opacity(0.7)
+                .fontWeight(isiPad ? .medium : .bold) // Multiplier
+            Text(" \(workoutSet.reps) ")
+                .font(isiPad ? .system(size: 40) :.title) // Reps
             Spacer()
         }
         .foregroundStyle(Color("BackgroundInvertedColor"))
@@ -352,7 +373,7 @@ enum ActiveAlert: Identifiable {
     }
 }
 
-#Preview {
+#Preview("Bench Press") {
     let workoutManager = PreviewManager.mockWorkoutManager()
     @State var workout = workoutManager.workouts["Chest / Tri"]!.first!
 

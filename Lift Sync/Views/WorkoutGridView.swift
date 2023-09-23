@@ -16,6 +16,10 @@ struct WorkoutGridView: View {
     private func onCreateNewWorkout() -> Void {
         self.workout = nil
     }
+    
+    var isiPad: Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
+    }
 
     var body: some View {
         VStack {
@@ -26,17 +30,18 @@ struct WorkoutGridView: View {
                 let sortedWorkouts = unsortedWorkouts.sorted {
                     workoutManager.latestSet(workout: $0)?.date! ?? Date() > workoutManager.latestSet(workout: $1)?.date! ?? Date()
                 }
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 15), count: 2), spacing: 15) {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 15), count: isiPad ? 3 : 2), spacing: 15) {
                     ForEach(sortedWorkouts) { workout in
                         let backgroundOpacity = opacityBasedOnDate(workoutManager.latestSet(workout: workout)?.date ?? Date())
                         
                         NavigationLink(destination: SelectedWorkoutView(workout: Binding<Workout>(get: { workout }, set: { _ in }), onDisappear: onDisappear)
                             .environmentObject(workoutManager)) {
                                 Text(workout.name ?? "Unknown")
-                                    .font(.title3)
+                                    .font(isiPad ? .title : .title3)
                                     .fontWeight(.semibold)
                                     .foregroundStyle(Color("BackgroundColor-300"))
                                     .padding(20)
+                                    .padding(.vertical, isiPad ? 10 : 0)
                                     .frame(minWidth: 0, maxWidth: .infinity)
                                     .shadow(color: Color.accent.opacity(0.2), radius: 10)
                                     .background(Color("BackgroundInvertedColor").gradient.opacity(backgroundOpacity))
@@ -65,13 +70,14 @@ struct WorkoutGridView: View {
                 }, category: $selectedCategory)) {
                     HStack(alignment: .center, spacing: 2) {
                         Image(systemName: "plus.circle")
-                            .font(.title)
+                            .font(isiPad ? .system(size: 35) : .title2)
                             .foregroundColor(.white.opacity(0.95))
                         Text("Add Workout")
-                            .font(.title3)
+                            .font(isiPad ? .system(size: 35) : .title3)
                             .fontWeight(.semibold)
                             .foregroundColor(.white.opacity(0.95))
                             .padding(20)
+                            .padding(.vertical, isiPad ? 30 : 0)
                     }
                     .frame(minWidth: 0, maxWidth: .infinity)
 //                    .shadow(color: Color("LightColor"), radius: 10)
@@ -88,6 +94,11 @@ struct WorkoutGridView: View {
                         EmptyView()
                     }
                 }
+            } else {
+                Text("Select a workout category above...")
+                    .font(isiPad ? .title : .title3)
+                Spacer()
+                    .frame(height: 300)
             }
         }
         .frame(maxHeight: .infinity)
@@ -115,27 +126,48 @@ func opacityBasedOnDate(_ date: Date) -> Double {
     return opacity
 }
 
-struct WorkoutGridView_Previews: PreviewProvider {
-    static var previews: some View {
-        @State var selectedCategory = "Test"
-        @State var homeTutorialStep = 5
-        let workoutManager = PreviewManager.mockWorkoutManager()
-        let categoryManager = PreviewManager.mockCategoryManager()
+#Preview {
+    @State var selectedCategory = "Test"
+    @State var homeTutorialStep = 5
+    let workoutManager = PreviewManager.mockWorkoutManager()
+    let categoryManager = PreviewManager.mockCategoryManager()
 
-        return ZStack {
-            VStack {
-                Color("AccentColor-600")
-                Color("BackgroundColor")
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .edgesIgnoringSafeArea(.all)
-            VStack {
-                Spacer()
-                    .frame(maxHeight: .infinity)
-                WorkoutGridView(selectedCategory: $selectedCategory, onDisappear: {}, homeTutorialStep: $homeTutorialStep)
-                    .environmentObject(workoutManager)
-                    .environmentObject(categoryManager)
-            }
+    return ZStack {
+        VStack {
+            Color("AccentColor-600")
+            Color("BackgroundColor")
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .edgesIgnoringSafeArea(.all)
+        VStack {
+            Spacer()
+                .frame(maxHeight: .infinity)
+            WorkoutGridView(selectedCategory: $selectedCategory, onDisappear: {}, homeTutorialStep: $homeTutorialStep)
+                .environmentObject(workoutManager)
+                .environmentObject(categoryManager)
+        }
+    }
+}
+
+#Preview("Unselected Category") {
+    @State var selectedCategory = ""
+    @State var homeTutorialStep = 5
+    let workoutManager = PreviewManager.mockWorkoutManager()
+    let categoryManager = PreviewManager.mockCategoryManager()
+
+    return ZStack {
+        VStack {
+            Color("AccentColor-600")
+            Color("BackgroundColor")
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .edgesIgnoringSafeArea(.all)
+        VStack {
+            Spacer()
+                .frame(maxHeight: .infinity)
+            WorkoutGridView(selectedCategory: $selectedCategory, onDisappear: {}, homeTutorialStep: $homeTutorialStep)
+                .environmentObject(workoutManager)
+                .environmentObject(categoryManager)
         }
     }
 }

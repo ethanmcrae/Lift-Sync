@@ -21,7 +21,6 @@
 		3AC27F222A7DFB6B00D21A43 /* PreviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC27F212A7DFB6B00D21A43 /* PreviewManager.swift */; };
 		3AC27F242A7EC4D100D21A43 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC27F232A7EC4D100D21A43 /* ColorExtension.swift */; };
 		3AC27F262A7EC70700D21A43 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC27F252A7EC70700D21A43 /* ViewExtension.swift */; };
-		3AC28E022A814C8C0084D5CF /* GochiHand-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3AC28E012A814C8C0084D5CF /* GochiHand-Regular.ttf */; };
 		3AC28E052A83416A0084D5CF /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC28E042A83416A0084D5CF /* StatsView.swift */; };
 		3AC28E092A8342F30084D5CF /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC28E082A8342F30084D5CF /* DateExtension.swift */; };
 		3AC28E0B2A8343CA0084D5CF /* AverageWeightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC28E0A2A8343CA0084D5CF /* AverageWeightView.swift */; };
@@ -59,7 +58,6 @@
 		3AC27F212A7DFB6B00D21A43 /* PreviewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewManager.swift; sourceTree = "<group>"; };
 		3AC27F232A7EC4D100D21A43 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		3AC27F252A7EC70700D21A43 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
-		3AC28E012A814C8C0084D5CF /* GochiHand-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GochiHand-Regular.ttf"; path = "../../../../../../Downloads/Gochi_Hand/GochiHand-Regular.ttf"; sourceTree = "<group>"; };
 		3AC28E042A83416A0084D5CF /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		3AC28E082A8342F30084D5CF /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		3AC28E0A2A8343CA0084D5CF /* AverageWeightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageWeightView.swift; sourceTree = "<group>"; };
@@ -113,14 +111,6 @@
 			path = HomeViewComponents;
 			sourceTree = "<group>";
 		};
-		3AC28E002A814B980084D5CF /* fonts */ = {
-			isa = PBXGroup;
-			children = (
-				3AC28E012A814C8C0084D5CF /* GochiHand-Regular.ttf */,
-			);
-			path = fonts;
-			sourceTree = "<group>";
-		};
 		3AC28E032A83415A0084D5CF /* StatsViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -172,7 +162,6 @@
 		3AE50D082A79A23A00E33A34 /* Lift Sync */ = {
 			isa = PBXGroup;
 			children = (
-				3AC28E002A814B980084D5CF /* fonts */,
 				3AE50D092A79A23A00E33A34 /* Lift_SyncApp.swift */,
 				3AE50D0B2A79A23A00E33A34 /* ContentView.swift */,
 				3AC28E062A8342A30084D5CF /* Extensions */,
@@ -279,7 +268,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3AE50D112A79A23D00E33A34 /* Preview Assets.xcassets in Resources */,
-				3AC28E022A814C8C0084D5CF /* GochiHand-Regular.ttf in Resources */,
 				3AE50D0E2A79A23D00E33A34 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -462,11 +450,14 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Lift Sync/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Lift Sync";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to scan QR codes.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -495,11 +486,14 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Lift Sync/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Lift Sync";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to scan QR codes.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

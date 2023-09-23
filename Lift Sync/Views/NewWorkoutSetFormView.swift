@@ -24,30 +24,38 @@ struct NewWorkoutSetFormView: View {
     var correctText: String {
         return "\(update ? "Update" : "Record")"
     }
+    
+    var isiPad: Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
+    }
 
     var body: some View {
         VStack {
-            Section(header: Text(correctText + " Set").font(.title).padding(.bottom, 50).padding(.top, 20)) {
+            Section(header: Text(correctText + " Set")
+                .font(isiPad ? .system(size: 60) : /*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                .padding(.bottom, 50)
+                .padding(.top, 20)) {
+                if isiPad {
+                    Spacer()
+                }
                 HStack {
                     // Complete radio button
                     VStack {
-                        Text("All")
-                            .font(.subheadline)
+                        Text(isiPad ? "Complete" : "All")
+                            .font(isiPad ? .title : .subheadline)
                         Button(action: {
-                            print("")
                             complete.toggle()
-                            print("Complete: \(complete)")
                         }) {
                             if complete {
                                 Image(systemName: "checkmark.circle.fill")
-                                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                                    .font(isiPad ? .system(size: 40) : /*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                                     .foregroundColor(Color("BackgroundInvertedColor"))
-                                    .frame(height: 150)
+                                    .frame(height: isiPad ? 300 : 150)
                             } else {
                                 Image(systemName: "xmark.circle.fill")
-                                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                                    .font(isiPad ? .system(size: 40) : /*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                                     .foregroundColor(Color(.orange))
-                                    .frame(height: 150)
+                                    .frame(height: isiPad ? 300 : 150)
                             }
                         }
                     }
@@ -58,9 +66,9 @@ struct NewWorkoutSetFormView: View {
                     // Reps picker wheel
                     VStack {
                         Text("Reps")
-                            .font(.subheadline)
+                            .font(isiPad ? .title : .subheadline)
                         RepsPicker(reps: $reps)
-                            .frame(width: 125, height: 150)
+                            .frame(width: isiPad ? 200 : 125, height: isiPad ? 300 : 150)
                     }
                     
                     Spacer()
@@ -68,11 +76,14 @@ struct NewWorkoutSetFormView: View {
                     // Weight picker wheel
                     VStack {
                         Text("Weight")
-                            .font(.subheadline)
+                            .font(isiPad ? .title : .subheadline)
                         WeightPicker(weight: $weight)
-                            .frame(width: 150, height: 150)
+                            .frame(width: isiPad ? 300 : 150, height: isiPad ? 300 : 150)
                     }
                 }
+                    if isiPad {
+                        Spacer()
+                    }
             }
             Section {
                 HStack {
@@ -86,13 +97,12 @@ struct NewWorkoutSetFormView: View {
                         }
                     }, label: {
                         HStack(alignment: .center, spacing: 2) {
-                            Image(systemName: update ? "minus.circle" : "chevron.backward.circle")
-                                .font(.title2)
-                            Text(update ? "Delete" : "Cancel")
-                                .font(.title3)
-                                .padding(12)
+                            Label(update ? "Delete" : "Cancel", systemImage: update ? "minus.circle" : "chevron.backward.circle")
+                                .font(isiPad ? .system(size: 30) : .title3)
+                                .padding(isiPad ? 20 : 12)
+                                .foregroundStyle(cancelButtonColor)
+                                .padding(.horizontal, isiPad ? 30 : 0)
                         }
-                        .foregroundStyle(cancelButtonColor)
                     })
                     .padding(.bottom, 20)
                     .buttonStyle(.bordered)
@@ -105,16 +115,14 @@ struct NewWorkoutSetFormView: View {
                         isPresented = false
                     }, label: {
                         HStack(alignment: .center, spacing: 2) {
-                            Image(systemName: update ? "square.and.pencil" : "plus.circle")
-                                .font(.title2)
+                            Label(correctText, systemImage: update ? "plus.circle" : "square.and.pencil")
+                                .font(isiPad ? .system(size: 30) : .title3)
+                                .padding(isiPad ? 20 : 12)
                                 .foregroundColor(Color("TextAccentColor"))
-                            Text(correctText)
-                                .font(.title3)
-                                .foregroundColor(Color("TextAccentColor"))
-                                .padding(12)
+                                .padding(.horizontal, isiPad ? 80 : 10)
+ 
                         }
                     })
-                    //                .padding()
                     .padding(.bottom, 20)
                     .buttonStyle(.borderedProminent)
                 }

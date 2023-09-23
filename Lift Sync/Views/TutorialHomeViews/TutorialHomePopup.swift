@@ -13,14 +13,20 @@ struct TutorialHomePopup: View {
     var tutorial: TutorialManager.Tutorial
     var small: Bool = false
     var lotsOfText: Bool {
-        text.count > 30
+        isiPad
+            ? text.count > 30
+            : text.count > 45
+    }
+    
+    var isiPad: Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
     }
     
     var body: some View {
             HStack {
                 Image(systemName: "info.circle.fill")
-                    .font(lotsOfText ? .title3 : .body)
-                    .foregroundStyle(Color.background)
+                    .font(lotsOfText ? (isiPad ? .title : .title3) : (isiPad ? .title2 : .body))
+                    .foregroundStyle(Color.dark)
                     .padding(.leading)
                     .opacity(0.75)
                 
@@ -32,16 +38,16 @@ struct TutorialHomePopup: View {
                 }
                 
                 Text(text)
-                    .font(.body)
+                    .font(isiPad ? .title2 : .body)
                     .multilineTextAlignment(.leading)
-                    .foregroundStyle(Color.background)
+                    .foregroundStyle(Color.dark)
                     .padding(.trailing)
                     .padding(.top)
                     .padding(.bottom)
             }
             .presentationCompactAdaptation(horizontal: .popover, vertical: .sheet)
             .lineLimit(1...5)
-            .frame(width: small ? 175 : 300)
+            .frame(width: small ? (isiPad ? 250 : 175) : (isiPad ? 600 : 300))
             .frame(minHeight: 70)
             .background(Color.accentAlt.gradient)
     }

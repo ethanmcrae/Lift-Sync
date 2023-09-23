@@ -12,12 +12,21 @@ struct BarWeightPicker: View {
     let values: [Int16] = stride(from: 0, through: 300, by: 5).map { $0 }
     
     @Binding var barWeight: Int16
+    
+    var isiPad: Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
+    }
 
     var body: some View {
 //        VStack {
             Picker("Select Value", selection: $barWeight) {
                 ForEach(values, id: \.self) { value in
-                    Text("\(value)").tag(value)
+                    if isiPad {
+                        Text("\(value)").tag(value)
+                            .font(.system(size: 25))
+                    } else {
+                        Text("\(value)").tag(value)
+                    }
                 }
             }
             .pickerStyle(.inline)

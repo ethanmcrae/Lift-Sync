@@ -14,6 +14,10 @@ struct WorkoutCategoryView: View {
     @State var isAddNewSelected = false
     @State var showingDeleteAlert = false
     @State var categoryForDeletion = ""
+    
+    var isiPad: Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
+    }
 
     var body: some View {
         ScrollViewReader { scrollView in
@@ -73,11 +77,11 @@ struct WorkoutCategoryView: View {
                         },
                         secondaryButton: .cancel())
                 })
-                .frame(height: 80)
+                .frame(height: isiPad ? 120 : 80)
 //                .background(Color.orange)
             }
         }
-        .frame(height: 80)
+        .frame(height: isiPad ? 120 : 80)
 //        .background(Color.yellow)
     }
 }
@@ -87,9 +91,21 @@ struct CategoryLabel: View {
     let isSelected: Bool
     let shadowColor: Color
     
+    var isiPad: Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
+    }
+    
+    var labelTextSize: CGFloat {
+        if isiPad {
+            return isSelected ? 45 : 30
+        } else {
+            return isSelected ? 30 : 20
+        }
+    }
+    
     var body: some View {
         Text(categoryName)
-            .font(.system(size: isSelected ? 30 : 20))
+            .font(.system(size: labelTextSize))
             .padding(.horizontal, 30)
             .foregroundColor(Color("BackgroundInvertedColor"))
             .frame(height: 60)

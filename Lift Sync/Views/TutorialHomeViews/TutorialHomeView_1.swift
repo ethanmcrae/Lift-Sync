@@ -11,6 +11,10 @@ struct TutorialHomeView_1: View {
     @Binding var tutorialStep: Int
     let tutorial: TutorialManager.Tutorial
     
+    var isiPad: Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
+    }
+    
     var body: some View {
         ZStack {
             Rectangle()
@@ -20,21 +24,25 @@ struct TutorialHomeView_1: View {
             VStack {
                 ZStack {
                     Circle()
-                        .frame(width: 200, height: 250)
-                        .foregroundStyle(Color.backgroundInverted)
-                    Image(systemName: "dumbbell.fill")
-                        .foregroundStyle(.accent)
-                        .font(.system(size: 100))
-                        .padding()
+                        .frame(width: 225, height: 250)
+                        .foregroundStyle(Color.light)
+                    Image("Logo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 200)
                 }
                 VStack {
                     Text("Welcome to Lift Sync")
-                        .font(.title)
+                        .shadow(color: .black, radius: 4, x: 0, y: 2)
+                        .font(isiPad ? .largeTitle : .title)
                         .padding(.vertical, 4)
                     Text("Let's get started...")
+                        .font(isiPad ? .title2 : .body)
+                        .shadow(color: .black, radius: 4, x: 0, y: 2)
                 }
+                .foregroundStyle(Color.light)
                 .padding()
-                .background(RoundedRectangle(cornerRadius: 20.0).foregroundStyle(Color.black))
+//                .background(RoundedRectangle(cornerRadius: 20.0).foregroundStyle(Color.black))
                 .padding(.bottom, 100)
             }
         }

@@ -1,5 +1,5 @@
 //
-//  Lift_ScanApp.swift
+//  Lift_SyncApp.swift
 //  Lift Sync
 //
 //  Created by Ethan McRae on 8/1/23.
@@ -42,7 +42,7 @@ struct LiftSyncApp: App {
     @StateObject private var categoryManager: CategoryManager
 
     init() {
-        persistentContainer = NSPersistentCloudKitContainer(name: "Lift_Scan")
+        persistentContainer = NSPersistentCloudKitContainer(name: "Lift_Sync")
         persistentContainer.loadPersistentStores { (storeDescription, error) in
             if let error = error as NSError? {
                 print("Unresolved error \(error), \(error.userInfo)")

@@ -10,15 +10,25 @@ import SwiftUI
 struct BarWeightForm: View {
     @Binding var barWeight: Int16
     
+    var isiPad: Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
+    }
+    
     var body: some View {
         HStack {
             // Title
-            Text("Bar Weight")
-                .frame(width: 100, alignment: .leading)
+            if isiPad {
+                Text("Bar Weight / Resistance")
+                    .font(.system(size: 25))
+                    .frame(width: 400, alignment: .leading)
+            } else {
+                Text("Bar Weight")
+                    .frame(width: 100, alignment: .leading)
+            }
             
             // Weight Picker
             BarWeightPicker(barWeight: $barWeight)
-                .frame(height: 100)
+                .frame(height: isiPad ? 300 : 100)
         }
         .padding(.horizontal, 30)
     }

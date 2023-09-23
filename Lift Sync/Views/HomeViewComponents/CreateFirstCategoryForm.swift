@@ -43,7 +43,7 @@ struct CreateFirstCategoryForm: View {
 }
 
 #Preview {
-    var categoryManager = CategoryManager(container: NSPersistentCloudKitContainer(name: "Lift_Scan"))
+    var categoryManager = CategoryManager(container: NSPersistentCloudKitContainer(name: "Lift_Sync"))
     @State var categoryName = ""
     @State var tutorialStep = 0
     let tutorial = TutorialManager.Tutorial.home
@@ -53,7 +53,7 @@ struct CreateFirstCategoryForm: View {
 }
 
 #Preview("Tutorial") {
-    var categoryManager = CategoryManager(container: NSPersistentCloudKitContainer(name: "Lift_Scan"))
+    var categoryManager = CategoryManager(container: NSPersistentCloudKitContainer(name: "Lift_Sync"))
     @State var categoryName = ""
     @State var tutorialStep = 3
     let tutorial = TutorialManager.Tutorial.home
