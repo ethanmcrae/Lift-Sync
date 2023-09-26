@@ -72,7 +72,7 @@ struct WorkoutGridView: View {
                         Image(systemName: "plus.circle")
                             .font(isiPad ? .system(size: 35) : .title2)
                             .foregroundColor(.white.opacity(0.95))
-                        Text("Add Workout")
+                        Text("Add Exercise")
                             .font(isiPad ? .system(size: 35) : .title3)
                             .fontWeight(.semibold)
                             .foregroundColor(.white.opacity(0.95))

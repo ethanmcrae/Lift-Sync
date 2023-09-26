@@ -26,6 +26,7 @@ struct SelectedWorkoutView: View {
     @State var weight: Float = 100.0
     @State var reps: Int16 = 12
     @State var complete = true
+    @State var date = Date()
     
     private func formattedWeight(_ weight: Float) -> String {
         return "\(weight.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(weight)) : String(format: "%.1f", weight))"
@@ -94,7 +95,7 @@ struct SelectedWorkoutView: View {
                         }
                         
                         ForEach(Array(sortedLogs.enumerated()), id: \.element) { index, log in
-                            WorkoutSetListView(log: log, formattedWeight: formattedWeight, weight: $weight, reps: $reps, complete: $complete, index: index, editMode: $editMode)
+                            WorkoutSetListView(log: log, formattedWeight: formattedWeight, weight: $weight, reps: $reps, complete: $complete, date: $date, index: index, editMode: $editMode)
                         }
                         Spacer()
                             .frame(height: 130)
@@ -224,13 +225,16 @@ struct SelectedWorkoutView: View {
 
 struct WorkoutSetListView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
-    let log: WorkoutLog
+    @State var log: WorkoutLog
     let formattedWeight: (Float) -> String
     @Binding var weight: Float
     @Binding var reps: Int16
     @Binding var complete: Bool
+    @Binding var date: Date
     let index: Int
     @Binding var editMode: EditMode
+    
+    @State var showingDateForm = false
     
     func deleteWorkoutSet(at offsets: IndexSet) {
         for index in offsets {
@@ -246,18 +250,35 @@ struct WorkoutSetListView: View {
     var body: some View {
         LazyVStack {
             HStack {
-                if let date = log.date {
-                    Text(date, style: .date)
-                        .font(isiPad ? .title2 : .headline)
-                        .fontWeight(isiPad ? .semibold : .medium)
-                        .opacity(0.8)
+                if let logDate = log.date {
+                    if editMode == .active {
+                        Button(action: {
+                            date = logDate
+                            showingDateForm.toggle()
+                        }) {
+                            HStack {
+                                Image(systemName: "calendar")
+                                Text(logDate, style: .date)
+                                    .font(isiPad ? .title2 : .headline)
+                                    .fontWeight(isiPad ? .semibold : .medium)
+                                    .opacity(0.8)
+                            }
+                        }
+                        .buttonStyle(.bordered)
+                        .accentColor(.backgroundInverted)
+                    } else {
+                        Text(logDate, style: .date)
+                            .font(isiPad ? .title2 : .headline)
+                            .fontWeight(isiPad ? .semibold : .medium)
+                            .opacity(0.8)
+                    }
                 } else {
                     Text("Unknown Date")
                         .font(.headline)
                         .opacity(0.8)
                 }
                 Spacer()
-                if index == 0 {
+                if index == 0 && editMode == .inactive {
                     Text("Complete")
                         .font(isiPad ? .title3 : .subheadline)
                         .fontWeight(isiPad ? .semibold : .medium)
@@ -271,12 +292,16 @@ struct WorkoutSetListView: View {
                 let sortedWorkoutSets: [WorkoutSet] = (log.sets?.allObjects as? [WorkoutSet] ?? []).sorted(by: { ($0.date ?? Date()) < ($1.date ?? Date()) })
                 
                 ForEach(Array(sortedWorkoutSets.enumerated()), id: \.element) { selfIndex, workoutSet in
-                    WorkoutSetRow(workoutSet: workoutSet, formattedWeight: formattedWeight, weight: $weight, reps: $reps, complete: $complete, parentIndex: index, selfIndex: selfIndex, editMode: $editMode) {
+                    WorkoutSetRow(workoutSet: workoutSet, formattedWeight: formattedWeight, weight: $weight, reps: $reps, complete: $complete, date: $date, parentIndex: index, selfIndex: selfIndex, editMode: $editMode) {
                         workoutManager.deleteSet(workoutSet)
                     }
                 }
             }
         }
+        .sheet(isPresented: $showingDateForm, content: {
+            UpdateWorkoutDateForm(isPresented: $showingDateForm, date: $date, log: $log)
+            .presentationDetents([.height(640), .height(740)])
+        })
     }
 }
 
@@ -289,6 +314,7 @@ struct WorkoutSetRow: View {
     @Binding var weight: Float
     @Binding var reps: Int16
     @Binding var complete: Bool
+    @Binding var date: Date
     let parentIndex: Int
     let selfIndex: Int
     @Binding var editMode: EditMode
@@ -324,6 +350,9 @@ struct WorkoutSetRow: View {
                 }
             }
         }
+        .onLongPressGesture(perform: {
+            showingRecordAdjustForm.toggle()
+        })
         .padding()
         .background(selectedForDeletion ? Color.red.opacity(0.25) : Color("BackgroundColor-400").opacity(0.5 + max(0, 0.5 - Double(parentIndex) * 0.15)))
         .clipShape(RoundedRectangle(cornerRadius: 10))

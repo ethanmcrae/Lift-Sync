@@ -117,4 +117,15 @@ struct PreviewManager {
 
         workoutManager.workouts[category, default: []].append(workout)
     }
+    
+    static func createMockWorkoutLog() -> WorkoutLog {
+        let persistentContainer = container()
+        let workoutManager = WorkoutManager(container: persistentContainer)
+        let context = persistentContainer.viewContext
+        
+        let workoutLog = WorkoutLog(context: context)
+        workoutLog.barWeight = 0
+        workoutLog.date = Date()
+        return workoutLog
+    }
 }

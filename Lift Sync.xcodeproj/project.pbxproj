@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A0D615A2AC0BA1800AEAF04 /* UpdateWorkoutDateForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0D61592AC0BA1800AEAF04 /* UpdateWorkoutDateForm.swift */; };
 		3A14F06A2A7C4DA70005E554 /* CategoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A14F0692A7C4DA70005E554 /* CategoryManager.swift */; };
 		3A359F1E2A7C0F38000E90F9 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A359F1D2A7C0F38000E90F9 /* HomeView.swift */; };
 		3A359F202A7C12C2000E90F9 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A359F1F2A7C12C2000E90F9 /* SettingsView.swift */; };
@@ -44,6 +45,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3A0D61592AC0BA1800AEAF04 /* UpdateWorkoutDateForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateWorkoutDateForm.swift; sourceTree = "<group>"; };
 		3A14F0692A7C4DA70005E554 /* CategoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryManager.swift; sourceTree = "<group>"; };
 		3A359F1D2A7C0F38000E90F9 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		3A359F1F2A7C12C2000E90F9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -94,6 +96,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3A0D61582AC0B9A000AEAF04 /* SelectedWorkoutViews */ = {
+			isa = PBXGroup;
+			children = (
+				3AE50D292A7A20E500E33A34 /* SelectedWorkoutView.swift */,
+				3AC27F1F2A7DE1DC00D21A43 /* NewWorkoutSetFormView.swift */,
+				3AE101122A9407D4001948B3 /* WeightPicker.swift */,
+				3A993D2F2A9576000082F59A /* RepsPicker.swift */,
+				3ADC39832AB0C01B005AF5D8 /* BarWeightPicker.swift */,
+				3ADC39852AB0C149005AF5D8 /* BarWeightForm.swift */,
+				3A0D61592AC0BA1800AEAF04 /* UpdateWorkoutDateForm.swift */,
+			);
+			path = SelectedWorkoutViews;
+			sourceTree = "<group>";
+		};
 		3A93605F2AB6169B006B7467 /* TutorialHomeViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -193,14 +209,9 @@
 				3A9360622AB61ED0006B7467 /* HomeViewComponents */,
 				3AC28E032A83415A0084D5CF /* StatsViews */,
 				3AC27F1B2A7DAB2300D21A43 /* NewWorkoutFormView.swift */,
-				3AC27F1F2A7DE1DC00D21A43 /* NewWorkoutSetFormView.swift */,
 				3A93605F2AB6169B006B7467 /* TutorialHomeViews */,
 				3AE50D272A7A1F4F00E33A34 /* WorkoutGridView.swift */,
-				3AE101122A9407D4001948B3 /* WeightPicker.swift */,
-				3A993D2F2A9576000082F59A /* RepsPicker.swift */,
-				3ADC39832AB0C01B005AF5D8 /* BarWeightPicker.swift */,
-				3ADC39852AB0C149005AF5D8 /* BarWeightForm.swift */,
-				3AE50D292A7A20E500E33A34 /* SelectedWorkoutView.swift */,
+				3A0D61582AC0B9A000AEAF04 /* SelectedWorkoutViews */,
 				3AE50D232A7A1DA700E33A34 /* QRScannerButton.swift */,
 				3A359F1F2A7C12C2000E90F9 /* SettingsView.swift */,
 				3AE50D252A7A1EE300E33A34 /* WorkoutCategoryView.swift */,
@@ -300,6 +311,7 @@
 				3A359F1E2A7C0F38000E90F9 /* HomeView.swift in Sources */,
 				3A93605E2AB611A4006B7467 /* TutorialManager.swift in Sources */,
 				3AE50D242A7A1DA700E33A34 /* QRScannerButton.swift in Sources */,
+				3A0D615A2AC0BA1800AEAF04 /* UpdateWorkoutDateForm.swift in Sources */,
 				3AE50D282A7A1F4F00E33A34 /* WorkoutGridView.swift in Sources */,
 				3AE50D202A79A25C00E33A34 /* QRScannerView.swift in Sources */,
 				3A14F06A2A7C4DA70005E554 /* CategoryManager.swift in Sources */,

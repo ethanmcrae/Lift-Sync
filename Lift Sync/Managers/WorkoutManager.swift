@@ -242,6 +242,24 @@ class WorkoutManager: ObservableObject {
         
     }
     
+    func updateLog(_ log: WorkoutLog, date: Date, sync: Bool = true) {
+        log.date = date
+        
+        // Gather all child sets and sort them in chronological order
+        let sets = log.sets?.allObjects as? [WorkoutSet] ?? []
+        let sortedSets = sets.sorted(by: { $0.date! > $1.date! })
+        
+        // Update the date of each set
+        for (index, set) in sortedSets.enumerated() {
+            // Update the date of each child set - keeping the order in place
+            set.date = date.addingTimeInterval(TimeInterval(index))
+        }
+        
+        if sync {
+            updateCloud(errorMessage: "Failed to update workout log date")
+        }
+    }
+    
     func suggestedWeight(for workout: Workout) -> Float {
         let defaultWeight: Float = 100.0
         guard let latestLog = latestLog(workout: workout), let logDate = latestLog.date else { return defaultWeight }

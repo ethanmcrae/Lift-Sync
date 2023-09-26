@@ -25,19 +25,26 @@ struct NewWorkoutSetFormView: View {
         return "\(update ? "Update" : "Record")"
     }
     
+    var FormHeader: some View {
+        Text(correctText + " Set")
+            .font(isiPad ? .system(size: 60) : .title)
+            .padding(.bottom, 50)
+            .padding(.top, 20)
+    }
+    
     var isiPad: Bool {
         return UIDevice.current.userInterfaceIdiom == .pad
     }
 
     var body: some View {
         VStack {
-            Section(header: Text(correctText + " Set")
-                .font(isiPad ? .system(size: 60) : /*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-                .padding(.bottom, 50)
-                .padding(.top, 20)) {
+            // Section Contents: Title, Data Forms
+            Section(header: FormHeader) {
                 if isiPad {
                     Spacer()
                 }
+                
+                // Form Data
                 HStack {
                     // Complete radio button
                     VStack {
@@ -149,12 +156,6 @@ struct NewWorkoutSetFormView: View {
         }
     }
 }
-
-//struct NewWorkoutSetFormView_Previews: PreviewProvider {
-//    static var previews: some View {
-//
-//    }
-//}
 
 #Preview("Create") {
     @State var weight: Float = 120.0
