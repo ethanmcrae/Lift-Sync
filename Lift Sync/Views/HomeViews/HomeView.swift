@@ -18,6 +18,9 @@ struct HomeView: View {
     @State private var previousScannedCode = ""
     @State private var categoryName = ""
     
+    // Categories
+    @State private var isAddNewCategorySelected = false
+    
     // Tutorial State
     let tutorial = TutorialManager.Tutorial.home
     @State private var tutorialStep: Int = TutorialManager.getStep(.home)
@@ -36,7 +39,7 @@ struct HomeView: View {
                             set: { if $0 { self.activeSheet = tutorialStep > 2 ? .scanner : nil } else { self.activeSheet = nil } }
                         ))
                         .popover(isPresented: TutorialManager.isShowingPopover(.home, currentStep: $tutorialStep, expected: 2)) {
-                            TutorialHomePopup(text: "Optional: Scan QR Codes by workout station to access your logs.", step: $tutorialStep, tutorial: tutorial)
+                            TutorialHomePopup(text: "If your gym's machines have QR codes on them, use this to quickly pull up your workout logs for that exercise.", step: $tutorialStep, tutorial: tutorial)
                         }
                         .frame(height: geometry.size.height * 0.3)
                         
@@ -49,12 +52,9 @@ struct HomeView: View {
                                 if categoryManager.categories.isEmpty && tutorialStep != 1 {
                                     CreateFirstCategoryForm(categoryName: $categoryName, tutorialStep: $tutorialStep, tutorial: tutorial)
                                 } else {
-                                    WorkoutCategoryView(selectedCategory: $selectedCategory, homeTutorialStep: $tutorialStep)
+                                    WorkoutCategoryView(selectedCategory: $selectedCategory, homeTutorialStep: $tutorialStep, isAddNewSelected: $isAddNewCategorySelected)
                                     
-                                    WorkoutGridView(selectedCategory: $selectedCategory, onDisappear: self.onDisappear, homeTutorialStep: $tutorialStep)
-                                        .popover(isPresented: TutorialManager.isShowingPopover(tutorial, currentStep: $tutorialStep, expected: 4)) {
-                                            TutorialHomePopup(text: "This is where your future workouts will appear", step: $tutorialStep, tutorial: tutorial)
-                                        }
+                                    WorkoutGridView(selectedCategory: $selectedCategory, onDisappear: self.onDisappear, homeTutorialStep: $tutorialStep, isAddNewCategorySelected: $isAddNewCategorySelected)
                                     
                                     Spacer()
                                 }

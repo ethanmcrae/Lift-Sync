@@ -88,6 +88,7 @@ struct NewWorkoutFormView: View {
                 .font(isiPad ? .title2 : .body)
                 .padding(.vertical, isiPad ? 8 : 0)
                 .padding(.horizontal, isiPad ? 4 : 0)
+                .disabled(newWorkoutName.isEmpty)
             }
         }
     }

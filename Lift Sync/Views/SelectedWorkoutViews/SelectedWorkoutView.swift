@@ -23,7 +23,7 @@ struct SelectedWorkoutView: View {
     @State private var activeAlert: ActiveAlert? = nil
     
     // To pass into the "Record Set" form
-    @State var weight: Float = 100.0
+    @State var weight: Float = 50.0
     @State var reps: Int16 = 12
     @State var complete = true
     @State var date = Date()
@@ -119,7 +119,7 @@ struct SelectedWorkoutView: View {
                         Button(action: {
                             showingRecordSetForm = true
                         }) {
-                            Label("Record Set", systemImage: "plus.circle")
+                            Label("New Set", systemImage: "square.and.pencil")
                                 .font(.system(size: isiPad ? 35 : 25))
                                 .foregroundColor(.white.opacity(0.95))
                                 .padding(20)

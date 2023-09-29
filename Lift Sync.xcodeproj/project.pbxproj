@@ -119,12 +119,17 @@
 			path = TutorialHomeViews;
 			sourceTree = "<group>";
 		};
-		3A9360622AB61ED0006B7467 /* HomeViewComponents */ = {
+		3A9360622AB61ED0006B7467 /* HomeViews */ = {
 			isa = PBXGroup;
 			children = (
+				3A359F1D2A7C0F38000E90F9 /* HomeView.swift */,
+				3AC27F1B2A7DAB2300D21A43 /* NewWorkoutFormView.swift */,
+				3AE50D272A7A1F4F00E33A34 /* WorkoutGridView.swift */,
+				3AE50D252A7A1EE300E33A34 /* WorkoutCategoryView.swift */,
 				3A93606A2AB74453006B7467 /* CreateFirstCategoryForm.swift */,
+				3AE50D232A7A1DA700E33A34 /* QRScannerButton.swift */,
 			);
-			path = HomeViewComponents;
+			path = HomeViews;
 			sourceTree = "<group>";
 		};
 		3AC28E032A83415A0084D5CF /* StatsViews */ = {
@@ -205,16 +210,11 @@
 			isa = PBXGroup;
 			children = (
 				3A93605B2AB60A15006B7467 /* SplashView.swift */,
-				3A359F1D2A7C0F38000E90F9 /* HomeView.swift */,
-				3A9360622AB61ED0006B7467 /* HomeViewComponents */,
-				3AC28E032A83415A0084D5CF /* StatsViews */,
-				3AC27F1B2A7DAB2300D21A43 /* NewWorkoutFormView.swift */,
+				3A9360622AB61ED0006B7467 /* HomeViews */,
 				3A93605F2AB6169B006B7467 /* TutorialHomeViews */,
-				3AE50D272A7A1F4F00E33A34 /* WorkoutGridView.swift */,
 				3A0D61582AC0B9A000AEAF04 /* SelectedWorkoutViews */,
-				3AE50D232A7A1DA700E33A34 /* QRScannerButton.swift */,
 				3A359F1F2A7C12C2000E90F9 /* SettingsView.swift */,
-				3AE50D252A7A1EE300E33A34 /* WorkoutCategoryView.swift */,
+				3AC28E032A83415A0084D5CF /* StatsViews */,
 				3AE50D1F2A79A25C00E33A34 /* QRScannerView.swift */,
 			);
 			path = Views;

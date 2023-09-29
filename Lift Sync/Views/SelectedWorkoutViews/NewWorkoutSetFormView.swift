@@ -22,7 +22,7 @@ struct NewWorkoutSetFormView: View {
     var cancelButtonColor: Color { update ? Color.red : Color.backgroundInverted.opacity(0.8) }
     
     var correctText: String {
-        return "\(update ? "Update" : "Record")"
+        return "\(update ? "Update" : "New")"
     }
     
     var FormHeader: some View {

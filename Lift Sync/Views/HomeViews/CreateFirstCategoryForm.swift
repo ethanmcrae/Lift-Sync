@@ -30,6 +30,7 @@ struct CreateFirstCategoryForm: View {
                     categoryManager.create(categoryName)
                     categoryName = ""
                 }
+                .disabled(categoryName.isEmpty)
                 .font(.title3)
             } header: {
                 VStack {

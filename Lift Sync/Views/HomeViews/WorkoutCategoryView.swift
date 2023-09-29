@@ -11,7 +11,7 @@ struct WorkoutCategoryView: View {
     @Binding var selectedCategory: String
     @EnvironmentObject var categoryManager: CategoryManager
     @Binding var homeTutorialStep: Int
-    @State var isAddNewSelected = false
+    @Binding var isAddNewSelected: Bool
     @State var showingDeleteAlert = false
     @State var categoryForDeletion = ""
     
@@ -41,7 +41,7 @@ struct WorkoutCategoryView: View {
                                     showingDeleteAlert = true
                                 }
                                 .popover(isPresented: TutorialManager.isShowingPopover(TutorialManager.Tutorial.home, currentStep: $homeTutorialStep, expected: 5)) {
-                                    TutorialHomePopup(text: "Workouts go here", step: $homeTutorialStep, tutorial: TutorialManager.Tutorial.home)
+                                    TutorialHomePopup(text: "Select the category you just created", step: $homeTutorialStep, tutorial: TutorialManager.Tutorial.home)
                                 }
                         }
                         if isAddNewSelected {
@@ -154,8 +154,9 @@ struct AddCategoryForm: View {
                     .padding(.vertical, 12)
 //                    .background(Color.accentColor)
 //                    .cornerRadius(8)
-                    .foregroundColor(Color("AccentColor-400"))
+                    .foregroundColor(categoryName.isEmpty ? .primary.opacity(0.5) : Color("AccentColor-400"))
             }
+            .disabled(categoryName.isEmpty)
         }
 //        .padding()
         .frame(width: width, height: 60)
@@ -170,6 +171,7 @@ struct WorkoutCategoryView_Previews: PreviewProvider {
         let categoryManager = PreviewManager.mockCategoryManager()
         @State var selectedCategory = "Legs"
         @State var homeTutorialStep = 4
+        @State var isAddNewSelected = false
 
         return ZStack {
             VStack {
@@ -182,7 +184,7 @@ struct WorkoutCategoryView_Previews: PreviewProvider {
             VStack {
                 Spacer()
                     .frame(height: 50)
-                WorkoutCategoryView(selectedCategory: $selectedCategory, homeTutorialStep: $homeTutorialStep)
+                WorkoutCategoryView(selectedCategory: $selectedCategory, homeTutorialStep: $homeTutorialStep, isAddNewSelected: $isAddNewSelected)
                     .environmentObject(workoutManager)
                     .environmentObject(categoryManager)
             }

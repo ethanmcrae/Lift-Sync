@@ -261,7 +261,7 @@ class WorkoutManager: ObservableObject {
     }
     
     func suggestedWeight(for workout: Workout) -> Float {
-        let defaultWeight: Float = 100.0
+        let defaultWeight: Float = 50.0
         guard let latestLog = latestLog(workout: workout), let logDate = latestLog.date else { return defaultWeight }
         
         // Check if the last recorded log for this workout has been within the last hour
@@ -473,7 +473,7 @@ class WorkoutManager: ObservableObject {
     }
     
     func latestSet(workoutName: String) -> WorkoutSet? {
-        let log = latestLog(workoutName: workoutName) ?? createLog(for: (getWorkout(byName: workoutName) ?? self.mockWorkout))
+        guard let log = latestLog(workoutName: workoutName) else { return nil }
         guard let workoutSets = log.sets as? Set<WorkoutSet> else { return nil }
         
         var latestDate: Date? = nil
@@ -493,7 +493,7 @@ class WorkoutManager: ObservableObject {
     }
     
     func latestSet(workout: Workout) -> WorkoutSet? {
-        let log = latestLog(workout: workout) ?? createLog(for: (getWorkout(byName: workout.name!) ?? self.mockWorkout))
+        guard let log = latestLog(workout: workout) else { return nil }
         guard let workoutSets = log.sets as? Set<WorkoutSet> else { return nil }
         
         var latestDate: Date? = nil
