@@ -27,6 +27,7 @@ struct SelectedWorkoutView: View {
     @State var reps: Int16 = 12
     @State var complete = true
     @State var date = Date()
+    @State var completionIcon = "checkmark.circle.fill"
     
     private func formattedWeight(_ weight: Float) -> String {
         return "\(weight.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(weight)) : String(format: "%.1f", weight))"
@@ -57,7 +58,7 @@ struct SelectedWorkoutView: View {
                         .multilineTextAlignment(.center)
                         .autocapitalization(.words)
                         .font(.title)
-//                        .fontWeight(.bold)
+                        .fontWeight(.bold)
                         .foregroundColor(.primary)
                         .padding(.vertical, 10)
                         .background(Color("BackgroundInvertedColor").opacity(0.1))
@@ -95,7 +96,7 @@ struct SelectedWorkoutView: View {
                         }
                         
                         ForEach(Array(sortedLogs.enumerated()), id: \.element) { index, log in
-                            WorkoutSetListView(log: log, formattedWeight: formattedWeight, weight: $weight, reps: $reps, complete: $complete, date: $date, index: index, editMode: $editMode)
+                            WorkoutSetListView(log: log, formattedWeight: formattedWeight, weight: $weight, reps: $reps, complete: $complete, date: $date, completionIcon: $completionIcon, index: index, editMode: $editMode)
                         }
                         Spacer()
                             .frame(height: 130)
@@ -112,10 +113,10 @@ struct SelectedWorkoutView: View {
                     .ignoresSafeArea()
                     .allowsHitTesting(false)
                 
-                VStack {
-                    Spacer()
-                    
-                    HStack {
+                if editMode == .inactive {
+                    VStack {
+                        Spacer()
+                        
                         Button(action: {
                             showingRecordSetForm = true
                         }) {
@@ -128,10 +129,11 @@ struct SelectedWorkoutView: View {
                         }
                         .padding(.bottom, 20)
                         .buttonStyle(.borderedProminent)
+                        .shadow(radius: 10, x: 0, y: 5)
                         .frame(maxWidth: .infinity)
                     }
+                    .padding(.bottom, 20)
                 }
-                .padding(.bottom, 20)
             }
             .padding(.top, 20)
         }
@@ -143,11 +145,15 @@ struct SelectedWorkoutView: View {
         }
         .navigationBarItems(trailing: Button(action: {
             if editMode == .inactive {
-                editMode = .active
+                withAnimation {
+                    editMode = .active
+                }
                 lastSavedWorkoutName = workout.name ?? "Undefined"
                 currentWorkoutName = workout.name ?? "Undefined"
             } else {
-                editMode = .inactive
+                withAnimation {
+                    editMode = .inactive
+                }
                 
                 // We don't want to save a workout without a name
                 guard !currentWorkoutName.isEmpty else { return }
@@ -196,16 +202,16 @@ struct SelectedWorkoutView: View {
             }
         }
         .sheet(isPresented: $showingRecordSetForm, content: {
-            NewWorkoutSetFormView(isPresented: $showingRecordSetForm, weight: $weight, reps: $reps, complete: $complete, selectedForDeletion: Binding<Bool>(get: { false }, set: { _ in }), update: false, onPrimary: {
+            NewWorkoutSetFormView(isPresented: $showingRecordSetForm, weight: $weight, reps: $reps, complete: $complete, selectedForDeletion: Binding<Bool>(get: { false }, set: { _ in }), completionIcon: $completionIcon, update: false, onPrimary: {
                 print("Recording: \(reps) x \(weight)")
-                workoutManager.recordSet(reps: reps, weight: weight, complete: complete, workout: workout)
-                workoutManager.updateCloud(errorMessage: "Failed to record new WorkoutSet")
+                workoutManager.recordSet(reps: reps, weight: weight, complete: complete, completionIcon: completionIcon, workout: workout)
             }, onSecondary: {})
             .presentationDetents([.height(450), .height(550)])
             .onAppear {
                 weight = workoutManager.suggestedWeight(for: workout)
                 reps = workoutManager.suggestedReps(for: workout)
                 complete = true
+                completionIcon = "checkmark.circle.fill"
                 print("Custom weight: \(weight)")
                 print("Custom reps: \(reps)")
             }
@@ -231,6 +237,7 @@ struct WorkoutSetListView: View {
     @Binding var reps: Int16
     @Binding var complete: Bool
     @Binding var date: Date
+    @Binding var completionIcon: String
     let index: Int
     @Binding var editMode: EditMode
     
@@ -279,7 +286,7 @@ struct WorkoutSetListView: View {
                 }
                 Spacer()
                 if index == 0 && editMode == .inactive {
-                    Text("Complete")
+                    Text("Performance")
                         .font(isiPad ? .title3 : .subheadline)
                         .fontWeight(isiPad ? .semibold : .medium)
                         .opacity(0.8)
@@ -292,7 +299,7 @@ struct WorkoutSetListView: View {
                 let sortedWorkoutSets: [WorkoutSet] = (log.sets?.allObjects as? [WorkoutSet] ?? []).sorted(by: { ($0.date ?? Date()) < ($1.date ?? Date()) })
                 
                 ForEach(Array(sortedWorkoutSets.enumerated()), id: \.element) { selfIndex, workoutSet in
-                    WorkoutSetRow(workoutSet: workoutSet, formattedWeight: formattedWeight, weight: $weight, reps: $reps, complete: $complete, date: $date, parentIndex: index, selfIndex: selfIndex, editMode: $editMode) {
+                    WorkoutSetRow(workoutSet: workoutSet, formattedWeight: formattedWeight, weight: $weight, reps: $reps, complete: $complete, date: $date, completionIcon: $completionIcon, parentIndex: index, selfIndex: selfIndex, editMode: $editMode) {
                         workoutManager.deleteSet(workoutSet)
                     }
                 }
@@ -315,6 +322,7 @@ struct WorkoutSetRow: View {
     @Binding var reps: Int16
     @Binding var complete: Bool
     @Binding var date: Date
+    @Binding var completionIcon: String
     let parentIndex: Int
     let selfIndex: Int
     @Binding var editMode: EditMode
@@ -328,39 +336,46 @@ struct WorkoutSetRow: View {
     
     var body: some View {
         ZStack {
-            Button(action: {
-                if editMode == .active {
-                    showingRecordAdjustForm.toggle()
-                }
-            }) {
-                RowContent
-            }
-            .disabled(editMode == .inactive)
+            RowContent
             
             HStack {
                 Spacer()
-                if workoutSet.incomplete {
-                    Image(systemName: "xmark.circle.fill")
+                if let icon = workoutSet.completionType?.icon {
+                    Image(systemName: icon)
                         .font(isiPad ? .title : .title2)
-                        .foregroundStyle(Color.orange)
+                        .foregroundStyle(WorkoutManager.completionIconToColor(icon))
+                        .onLongPressGesture(perform: {
+                            showingRecordAdjustForm.toggle()
+                        })
                 } else {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(isiPad ? .title : .title2)
-                        .foregroundStyle(Color("AccentColor-400"))
+                    if workoutSet.incomplete {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(isiPad ? .title : .title2)
+                            .foregroundStyle(Color.orange)
+                            .onLongPressGesture(perform: {
+                                showingRecordAdjustForm.toggle()
+                            })
+                    } else {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(isiPad ? .title : .title2)
+                            .foregroundStyle(Color("AccentColor-400"))
+                            .onLongPressGesture(perform: {
+                                showingRecordAdjustForm.toggle()
+                            })
+                    }
                 }
             }
         }
-        .onLongPressGesture(perform: {
-            showingRecordAdjustForm.toggle()
-        })
+
         .padding()
         .background(selectedForDeletion ? Color.red.opacity(0.25) : Color("BackgroundColor-400").opacity(0.5 + max(0, 0.5 - Double(parentIndex) * 0.15)))
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .sheet(isPresented: $showingRecordAdjustForm, content: {
-            NewWorkoutSetFormView(isPresented: $showingRecordAdjustForm, weight: $weight, reps: $reps, complete: $complete, selectedForDeletion: $selectedForDeletion, update: true, onPrimary: {
+            NewWorkoutSetFormView(isPresented: $showingRecordAdjustForm, weight: $weight, reps: $reps, complete: $complete, selectedForDeletion: $selectedForDeletion, completionIcon: $completionIcon, update: true, onPrimary: {
                 workoutSet.weight = weight
                 workoutSet.reps = reps
                 workoutSet.incomplete = !complete
+                workoutManager.updateCompletionType(for: workoutSet, icon: completionIcon, sync: false)
                 workoutManager.updateCloud(errorMessage: "Failed to update WorkoutSet")
             }, onSecondary: onDelete)
             .presentationDetents([.height(450), .height(550)])
@@ -368,22 +383,35 @@ struct WorkoutSetRow: View {
                 weight = workoutSet.weight
                 reps = workoutSet.reps
                 complete = !workoutSet.incomplete
+                completionIcon = workoutSet.completionType?.icon ?? (complete ? "checkmark.circle.fill" : "xmark.circle.fill")
             }
         })
     }
     
     var RowContent: some View {
-        HStack(spacing: 2) {
-            Text(formattedWeight(workoutSet.weight))
-                .font(isiPad ? .system(size: 40) : .title) // Weight
-            Text("lb")
-                .font(.subheadline)
-                .opacity(0.7) // Unit
-            Text(" x ")
-                .font(isiPad ? .system(size: 30) : .title2).opacity(0.7)
-                .fontWeight(isiPad ? .medium : .bold) // Multiplier
-            Text(" \(workoutSet.reps) ")
-                .font(isiPad ? .system(size: 40) :.title) // Reps
+        HStack {
+            Button(action: {
+                if editMode == .active {
+                    showingRecordAdjustForm.toggle()
+                }
+            }) {
+                HStack(spacing: 2) {
+                    Text(formattedWeight(workoutSet.weight))
+                        .font(isiPad ? .system(size: 40) : .title) // Weight
+                    Text("lb")
+                        .font(.subheadline)
+                        .opacity(0.7) // Unit
+                    Text(" x ")
+                        .font(isiPad ? .system(size: 30) : .title2).opacity(0.7)
+                        .fontWeight(isiPad ? .medium : .bold) // Multiplier
+                    Text(" \(workoutSet.reps) ")
+                        .font(isiPad ? .system(size: 40) :.title) // Reps
+                }
+            }
+            .disabled(editMode == .inactive)
+            .onLongPressGesture(perform: {
+                showingRecordAdjustForm.toggle()
+            })
             Spacer()
         }
         .foregroundStyle(Color("BackgroundInvertedColor"))

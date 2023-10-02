@@ -102,6 +102,7 @@ struct PreviewManager {
             let workoutLog = WorkoutLog(context: context)
             let workoutDate = Calendar.current.date(byAdding: .day, value: -day, to: Date())
             workoutLog.date = workoutDate
+            workoutLog.barWeight = barWeight
             
             let weightValues = [100, 110, 115, 120, 125, 130]
             for value in weightValues.prefix(Int.random(in: 1...weightValues.count)) {
@@ -127,5 +128,16 @@ struct PreviewManager {
         workoutLog.barWeight = 0
         workoutLog.date = Date()
         return workoutLog
+    }
+    
+    static func createMockCompletionType() -> CompletionType {
+        let persistentContainer = container()
+        let workoutManager = WorkoutManager(container: persistentContainer)
+        let context = persistentContainer.viewContext
+        
+        let completionType = CompletionType(context: context)
+        completionType.name = "All"
+        completionType.icon = "checkmark.circle.fill"
+        return completionType
     }
 }

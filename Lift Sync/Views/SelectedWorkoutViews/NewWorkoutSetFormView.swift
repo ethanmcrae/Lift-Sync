@@ -14,6 +14,7 @@ struct NewWorkoutSetFormView: View {
     @Binding var reps: Int16
     @Binding var complete: Bool
     @Binding var selectedForDeletion: Bool
+    @Binding var completionIcon: String
     let update: Bool
     var onPrimary: () -> Void
     var onSecondary: () -> Void
@@ -21,12 +22,8 @@ struct NewWorkoutSetFormView: View {
     
     var cancelButtonColor: Color { update ? Color.red : Color.backgroundInverted.opacity(0.8) }
     
-    var correctText: String {
-        return "\(update ? "Update" : "New")"
-    }
-    
     var FormHeader: some View {
-        Text(correctText + " Set")
+        Text((update ? "Update" : "New") + " Set")
             .font(isiPad ? .system(size: 60) : .title)
             .padding(.bottom, 50)
             .padding(.top, 20)
@@ -47,25 +44,7 @@ struct NewWorkoutSetFormView: View {
                 // Form Data
                 HStack {
                     // Complete radio button
-                    VStack {
-                        Text(isiPad ? "Complete" : "All")
-                            .font(isiPad ? .title : .subheadline)
-                        Button(action: {
-                            complete.toggle()
-                        }) {
-                            if complete {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .font(isiPad ? .system(size: 40) : /*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-                                    .foregroundColor(Color("BackgroundInvertedColor"))
-                                    .frame(height: isiPad ? 300 : 150)
-                            } else {
-                                Image(systemName: "xmark.circle.fill")
-                                    .font(isiPad ? .system(size: 40) : /*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-                                    .foregroundColor(Color(.orange))
-                                    .frame(height: isiPad ? 300 : 150)
-                            }
-                        }
-                    }
+                    CompletePicker(completionIcon: $completionIcon)
                     
                     Spacer()
                     Spacer()
@@ -122,7 +101,7 @@ struct NewWorkoutSetFormView: View {
                         isPresented = false
                     }, label: {
                         HStack(alignment: .center, spacing: 2) {
-                            Label(correctText, systemImage: update ? "plus.circle" : "square.and.pencil")
+                            Label(update ? "Update" : "Record", systemImage: update ? "plus.circle" : "square.and.pencil")
                                 .font(isiPad ? .system(size: 30) : .title3)
                                 .padding(isiPad ? 20 : 12)
                                 .foregroundColor(Color("TextAccentColor"))
@@ -163,11 +142,12 @@ struct NewWorkoutSetFormView: View {
     @State var complete = true
     @State var isPresented = true
     @State var selectedForDeletion = true
+    @State var completionIcon = "checkmark.circle.fill"
     let update = false
     let onPrimary = {}
     let onSecondary = {}
 
-    return NewWorkoutSetFormView(isPresented: $isPresented, weight: $weight, reps: $reps, complete: $complete, selectedForDeletion: $selectedForDeletion, update: update, onPrimary: onPrimary, onSecondary: onSecondary)
+    return NewWorkoutSetFormView(isPresented: $isPresented, weight: $weight, reps: $reps, complete: $complete, selectedForDeletion: $selectedForDeletion, completionIcon: $completionIcon, update: update, onPrimary: onPrimary, onSecondary: onSecondary)
 }
 
 #Preview("Update") {
@@ -176,9 +156,10 @@ struct NewWorkoutSetFormView: View {
     @State var complete = true
     @State var isPresented = true
     @State var selectedForDeletion = true
+    @State var completionIcon = "checkmark.circle.fill"
     let update = true
     let onPrimary = {}
     let onSecondary = {}
 
-    return NewWorkoutSetFormView(isPresented: $isPresented, weight: $weight, reps: $reps, complete: $complete, selectedForDeletion: $selectedForDeletion, update: update, onPrimary: onPrimary, onSecondary: onSecondary)
+    return NewWorkoutSetFormView(isPresented: $isPresented, weight: $weight, reps: $reps, complete: $complete, selectedForDeletion: $selectedForDeletion, completionIcon: $completionIcon, update: update, onPrimary: onPrimary, onSecondary: onSecondary)
 }

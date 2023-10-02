@@ -31,9 +31,6 @@ struct RepsPicker: View {
             }
             .pickerStyle(.inline)
         }
-        .onAppear {
-            print("RepsPicker: \(reps)")
-        }
     }
 }
 

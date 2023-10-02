@@ -159,7 +159,6 @@ class WorkoutManager: ObservableObject {
         fetchRequest.predicate = NSPredicate(format: "workoutName == %@", cleanName)
         if let logs = try? viewContext.fetch(fetchRequest) {
             for log in logs {
-                print("Found an old log to add")
                 newWorkout.addToLogs(log)
             }
         }
@@ -177,7 +176,6 @@ class WorkoutManager: ObservableObject {
     }
     
     func createLog(for workout: Workout) -> WorkoutLog {
-        print("Creating log")
         let workoutLog = WorkoutLog(context: viewContext)
         workoutLog.date = Date()
         workoutLog.workout = workout
@@ -185,7 +183,6 @@ class WorkoutManager: ObservableObject {
         workoutLog.barWeight = workout.barWeight
         
         workout.addToLogs(workoutLog)
-        print("Created log")
         return workoutLog
     }
     
@@ -208,14 +205,12 @@ class WorkoutManager: ObservableObject {
         }
     }
     
-    func recordSet(reps: Int16, weight: Float, complete: Bool, workout: Workout) -> Void {
-        print("Recording set...")
+    func recordSet(reps: Int16, weight: Float, complete: Bool, completionIcon: String, workout: Workout, sync: Bool = true) -> Void {
         // Find a log to relate the new set with
         var log = latestLog(workout: workout) ?? createLog(for: workout)
         
         // Establish whether a new log should be created or not (determined by time)
         if isLatestLogOlderThanThreeHours(latestLog: log) {
-            print("Log existed but creating a newer one")
             log = createLog(for: workout)
         }
         
@@ -225,7 +220,72 @@ class WorkoutManager: ObservableObject {
         setEntity.weight = weight
         setEntity.incomplete = !complete
         log.addToSets(setEntity)
-        print("...Done recording set")
+        
+        // Create/Associate a CompletionType entity relationship
+        updateCompletionType(for: setEntity, icon: completionIcon, sync: false)
+        
+        if sync {
+            updateCloud(errorMessage: "Failed to record new WorkoutSet")
+        }
+    }
+    
+    static func completionIconToName(_ icon: String) -> String {
+        var output: String
+
+        switch icon {
+        case "xmark.circle.fill":
+            output = "Flop"
+        case "checkmark.circle.fill":
+            output = "Complete"
+        case "flame.fill":
+            output = "Maxed"
+        case "eurozonesign.circle.fill":
+            output = "Too Easy"
+        default:
+            output = "Unknown"
+        }
+
+        return output
+    }
+    
+    static func completionIconToColor(_ icon: String) -> Color {
+        var output: Color
+
+        switch icon {
+        case "xmark.circle.fill":
+            output = Color.red
+        case "clock.badge.exclamationmark.fill":
+            output = Color.orange
+        case "checkmark.circle.fill":
+            output = Color("AccentColor-400")
+        case "flame.fill":
+            output = Color.primary
+        case "eurozonesign.circle.fill":
+            output = Color.green
+        default:
+            output = Color("AccentColor-400")
+        }
+
+        return output
+    }
+    
+    func updateCompletionType(for workoutSet: WorkoutSet, icon: String, sync: Bool = true) {
+        // Create a CompletionType entity if it doesn't already exist
+        if workoutSet.completionType == nil  {
+            let completionType = CompletionType(context: viewContext)
+            completionType.name = WorkoutManager.completionIconToName(icon)
+            completionType.icon = icon
+            completionType.set = workoutSet
+            workoutSet.completionType = completionType
+        }
+        // Otherwise, update the icon on the already existant: CompletionType
+        else {
+            workoutSet.completionType!.icon = icon
+        }
+        
+        if sync {
+            updateCloud(errorMessage: "Failed to update completion type icon")
+        }
     }
     
     func updateBarWeight(for workout: Workout, barWeight: Int16, sync: Bool = true) {

@@ -39,9 +39,6 @@ struct WeightPicker: View {
             }
             .pickerStyle(.inline)
         }
-        .onAppear {
-            print("WightPicker: \(weight)")
-        }
     }
 }
 

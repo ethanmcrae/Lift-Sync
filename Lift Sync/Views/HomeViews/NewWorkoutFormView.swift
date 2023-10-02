@@ -26,8 +26,8 @@ struct NewWorkoutFormView: View {
     var body: some View {
         Form {
             // Non-Optional Info
-            Section(header: Text("New Workout")) {
-                TextField("Workout Name", text: $newWorkoutName)
+            Section(header: Text("New Exercise")) {
+                TextField("Exercise Name", text: $newWorkoutName)
                     .autocapitalization(.words)
                     .font(isiPad ? .title : .body)
                     .padding(.vertical, isiPad ? 12 : 0)
@@ -83,7 +83,7 @@ struct NewWorkoutFormView: View {
                         onComplete(newWorkout)
                     }
                 }) {
-                    Text("Create Workout")
+                    Text("Create Exercise")
                 }
                 .font(isiPad ? .title2 : .body)
                 .padding(.vertical, isiPad ? 8 : 0)

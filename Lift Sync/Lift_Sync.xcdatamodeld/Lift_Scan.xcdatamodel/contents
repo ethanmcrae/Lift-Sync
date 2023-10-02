@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22189.1" systemVersion="23A339" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22222" systemVersion="23A344" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="Category" representedClassName="Category" syncable="YES" codeGenerationType="class">
         <attribute name="name" attributeType="String" defaultValueString="QR Code Scanned"/>
         <relationship name="workouts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Workout" inverseName="categories" inverseEntity="Workout"/>
+    </entity>
+    <entity name="CompletionType" representedClassName="CompletionType" syncable="YES" codeGenerationType="class">
+        <attribute name="color" optional="YES" attributeType="String"/>
+        <attribute name="icon" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="set" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WorkoutSet" inverseName="completionType" inverseEntity="WorkoutSet"/>
     </entity>
     <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -31,6 +37,7 @@
         <attribute name="incomplete" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="reps" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="weight" attributeType="Float" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="completionType" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CompletionType" inverseName="set" inverseEntity="CompletionType"/>
         <relationship name="log" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WorkoutLog" inverseName="sets" inverseEntity="WorkoutLog"/>
     </entity>
 </model>
