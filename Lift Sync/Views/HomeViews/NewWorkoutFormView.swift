@@ -14,6 +14,7 @@ struct NewWorkoutFormView: View {
     let qrCode: String?
     var onComplete: ((Workout?) -> Void)
     @Binding var category: String
+    @State var newCategoryName = ""
     
     @State var newWorkoutName = ""
     @State var barWeight: Int16 = 0
@@ -34,13 +35,34 @@ struct NewWorkoutFormView: View {
                     .padding(.horizontal, isiPad ? 4 : 0)
                 
                 Picker("Category", selection: $category) {
+                    // Display "Create New" as the FIRST option for QR Scanning workflow
+                    if qrCode != nil {
+                        Text("Create New")
+                            .fontWeight(.semibold)
+                            .tag("Create New") // An obscure tag to signify it is the "Create New" option
+                    }
+                    
+                    // Display all custom categories
                     ForEach(categoryManager.categories, id: \.self) { categoryName in
                         Text(categoryName)
+//                            .tag(categoryName)
+                    }
+                    
+                    // Display "Create New" as the LAST option for the NON-QR Scanning workflow
+                    if qrCode == nil {
+                        Text("Create New")
+                            .fontWeight(.semibold)
+                            .tag("Create New") // An obscure tag to signify it is the "Create New" option
                     }
                 }
                 .font(isiPad ? .title3 : .body)
                 .padding(.vertical, isiPad ? 8 : 0)
                 .padding(.horizontal, isiPad ? 4 : 0)
+                
+                if category.isEmpty || category == "Create New" {
+                    TextField("New Category Name", text: $newCategoryName)
+                        .font(isiPad ? .title3 : .body)
+                }
             }
             .font(isiPad ? .headline : .footnote)
             
@@ -72,33 +94,72 @@ struct NewWorkoutFormView: View {
                 .padding(.vertical, isiPad ? 8 : 0)
                 .padding(.horizontal, isiPad ? 4 : 0)
                 
-                // Submit
-                Button(action: {
-                    let trimmedName = newWorkoutName.trimmingCharacters(in: .whitespacesAndNewlines)
-                    let absoluteCategory: String? = category.isEmpty ? nil : category
-                    if !trimmedName.isEmpty {
-                        let newWorkout = workoutManager.createWorkout(name: trimmedName, categoryName: absoluteCategory, color: nil, qrCode: qrCode, categoryManager: categoryManager, barWeight: barWeight)
-                        newWorkoutName = ""
-                        isPresenting = false
-                        onComplete(newWorkout)
+                // Submit (and create new category)
+                if category.isEmpty || category == "Create New" {
+                    Button(action: {
+                        let trimmedName = newWorkoutName.trimmingCharacters(in: .whitespacesAndNewlines)
+                        if !trimmedName.isEmpty {
+                            let trimmedCategory = newCategoryName.trimmingCharacters(in: .whitespacesAndNewlines)
+                            if !trimmedCategory.isEmpty {
+                                // Create Category
+                                categoryManager.create(newCategoryName)
+                                
+                                // Create workout
+                                let newWorkout = workoutManager.createWorkout(name: trimmedName, categoryName: newCategoryName, color: nil, qrCode: qrCode, categoryManager: categoryManager, barWeight: barWeight)
+                                newWorkoutName = ""
+                                isPresenting = false
+                                onComplete(newWorkout)
+                            }
+                        }
+                    }) {
+                        Text("Create Exercise & Category")
                     }
-                }) {
-                    Text("Create Exercise")
+                    .font(isiPad ? .title2 : .body)
+                    .padding(.vertical, isiPad ? 8 : 0)
+                    .padding(.horizontal, isiPad ? 4 : 0)
+                    .disabled(newWorkoutName.isEmpty || ((category.isEmpty || category == "Create New") && newCategoryName.isEmpty))
                 }
-                .font(isiPad ? .title2 : .body)
-                .padding(.vertical, isiPad ? 8 : 0)
-                .padding(.horizontal, isiPad ? 4 : 0)
-                .disabled(newWorkoutName.isEmpty)
+                
+                // Submit (normal)
+                else {
+                    Button(action: {
+                        let trimmedName = newWorkoutName.trimmingCharacters(in: .whitespacesAndNewlines)
+                        let absoluteCategory: String? = category.isEmpty ? nil : category
+                        if !trimmedName.isEmpty {
+                            let newWorkout = workoutManager.createWorkout(name: trimmedName, categoryName: absoluteCategory, color: nil, qrCode: qrCode, categoryManager: categoryManager, barWeight: barWeight)
+                            newWorkoutName = ""
+                            isPresenting = false
+                            onComplete(newWorkout)
+                        }
+                    }) {
+                        Text("Create Exercise")
+                    }
+                    .font(isiPad ? .title2 : .body)
+                    .padding(.vertical, isiPad ? 8 : 0)
+                    .padding(.horizontal, isiPad ? 4 : 0)
+                    .disabled(newWorkoutName.isEmpty)
+                }
             }
         }
     }
 }
 
-#Preview {
+#Preview("Normal") {
     let workoutManager = PreviewManager.mockWorkoutManager()
     let categoryManager = PreviewManager.mockCategoryManager()
     @State var isPresenting = true
     @State var category = "Legs"
+    
+    return NewWorkoutFormView(isPresenting: $isPresenting, qrCode: nil, onComplete: {_ in }, category: $category)
+        .environmentObject(workoutManager)
+        .environmentObject(categoryManager)
+}
+
+#Preview("QR Scanned") {
+    let workoutManager = PreviewManager.mockWorkoutManager()
+    let categoryManager = PreviewManager.mockCategoryManager(empty: true)
+    @State var isPresenting = true
+    @State var category = ""
     
     return NewWorkoutFormView(isPresenting: $isPresenting, qrCode: "ExampleQRCodeUrl", onComplete: {_ in }, category: $category)
         .environmentObject(workoutManager)

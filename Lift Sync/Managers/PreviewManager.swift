@@ -110,6 +110,15 @@ struct PreviewManager {
                 workoutSet.weight = Float(value)
                 workoutSet.reps = Int16.random(in: 5...12)
                 workoutSet.date = workoutDate?.addingTimeInterval(Double(value)) // Higher weights will be newer
+                
+                // Random completion type
+                let completionType = CompletionType(context: context)
+                let icon = ["xmark.circle.fill", "checkmark.circle.fill", "flame.fill", "eurozonesign.circle.fill"].randomElement()
+                completionType.name = WorkoutManager.completionIconToName(icon!)
+                completionType.icon = icon
+                completionType.set = workoutSet
+                workoutSet.completionType = completionType
+                
                 workoutLog.addToSets(workoutSet)
             }
             

@@ -72,3 +72,9 @@ extension Color {
         return Color(uiColor: UIColor(hue: h, saturation: s, brightness: newBrightness, alpha: a))
     }
 }
+
+extension ShapeStyle {
+    func anyShapeStyle() -> AnyShapeStyle {
+        return AnyShapeStyle(self)
+    }
+}

@@ -313,6 +313,7 @@ struct WorkoutSetListView: View {
 }
 
 struct WorkoutSetRow: View {
+    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var workoutManager: WorkoutManager
     @State private var showingDeleteAlert = false
     @State var selectedForDeletion = false
@@ -330,8 +331,23 @@ struct WorkoutSetRow: View {
     
     @State var showingRecordAdjustForm = false
     
+    // Pulse animation
+    @State var pulse = false
+    
     var isiPad: Bool {
         return UIDevice.current.userInterfaceIdiom == .pad
+    }
+    
+    var defaultColor: Color {
+       Color("BackgroundColor-400").opacity(0.5 + max(0, 0.5 - Double(parentIndex) * 0.15))
+    }
+    
+    var backgroundColor: Color {
+        if selectedForDeletion {
+            return Color.red.opacity(0.25)
+        } else {
+            return defaultColor
+        }
     }
     
     var body: some View {
@@ -343,7 +359,7 @@ struct WorkoutSetRow: View {
                 if let icon = workoutSet.completionType?.icon {
                     Image(systemName: icon)
                         .font(isiPad ? .title : .title2)
-                        .foregroundStyle(WorkoutManager.completionIconToColor(icon))
+                        .foregroundStyle(WorkoutManager.completionIconToColor(icon, darkMode: colorScheme == .dark))
                         .onLongPressGesture(perform: {
                             showingRecordAdjustForm.toggle()
                         })
@@ -366,9 +382,9 @@ struct WorkoutSetRow: View {
                 }
             }
         }
-
         .padding()
-        .background(selectedForDeletion ? Color.red.opacity(0.25) : Color("BackgroundColor-400").opacity(0.5 + max(0, 0.5 - Double(parentIndex) * 0.15)))
+        .background(backgroundColor)
+        .overlay(pulsingOverlay)
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .sheet(isPresented: $showingRecordAdjustForm, content: {
             NewWorkoutSetFormView(isPresented: $showingRecordAdjustForm, weight: $weight, reps: $reps, complete: $complete, selectedForDeletion: $selectedForDeletion, completionIcon: $completionIcon, update: true, onPrimary: {
@@ -415,6 +431,48 @@ struct WorkoutSetRow: View {
             Spacer()
         }
         .foregroundStyle(Color("BackgroundInvertedColor"))
+    }
+    
+    var pulsingOverlay: some View {
+        if selectedForDeletion {
+            return AnyView(RoundedRectangle(cornerRadius: 10).fill(Color.red.opacity(0.25)))
+        }
+        
+        let isPulseIcon = workoutSet.completionType?.icon == "flame.fill"
+        
+        return AnyView(
+            Rectangle()
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(
+                            colors: isPulseIcon ? [
+                                colorScheme == .dark
+                                    ? Color.accentColor.opacity(pulse ? 0.25 : 0.10)
+                                    : Color.accentColor.opacity(pulse ? 0.20 : 0.05),
+                                .clear,
+                                .clear,
+                                .clear,
+                                
+                                colorScheme == .dark
+                                    ? Color.accentColor.opacity(pulse ? 0.25 : 0.10)
+                                    : Color.accentColor.opacity(pulse ? 0.20 : 0.05),
+                                colorScheme == .dark
+                                ? Color.accentColor.opacity(pulse ? 0.75 : 0.50)
+                                    : Color.accentColor.opacity(pulse ? 0.50 : 0.30),
+                            ] : [.clear]
+                        ),
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                    .opacity(0.25)
+                )
+                .allowsHitTesting(false)
+                .onAppear {
+                    withAnimation(Animation.easeInOut(duration: 3.5).repeatForever(autoreverses: true)) {
+                        pulse.toggle()
+                    }
+                }
+        )
     }
 }
 

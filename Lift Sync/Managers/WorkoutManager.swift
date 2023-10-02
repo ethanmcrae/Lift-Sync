@@ -229,46 +229,6 @@ class WorkoutManager: ObservableObject {
         }
     }
     
-    static func completionIconToName(_ icon: String) -> String {
-        var output: String
-
-        switch icon {
-        case "xmark.circle.fill":
-            output = "Flop"
-        case "checkmark.circle.fill":
-            output = "Complete"
-        case "flame.fill":
-            output = "Maxed"
-        case "eurozonesign.circle.fill":
-            output = "Too Easy"
-        default:
-            output = "Unknown"
-        }
-
-        return output
-    }
-    
-    static func completionIconToColor(_ icon: String) -> Color {
-        var output: Color
-
-        switch icon {
-        case "xmark.circle.fill":
-            output = Color.red
-        case "clock.badge.exclamationmark.fill":
-            output = Color.orange
-        case "checkmark.circle.fill":
-            output = Color("AccentColor-400")
-        case "flame.fill":
-            output = Color.primary
-        case "eurozonesign.circle.fill":
-            output = Color.green
-        default:
-            output = Color("AccentColor-400")
-        }
-
-        return output
-    }
-    
     func updateCompletionType(for workoutSet: WorkoutSet, icon: String, sync: Bool = true) {
         // Create a CompletionType entity if it doesn't already exist
         if workoutSet.completionType == nil  {
@@ -616,5 +576,97 @@ class WorkoutManager: ObservableObject {
         let threeHoursInSeconds: TimeInterval = 3 * 60 * 60
 
         return timeInterval > threeHoursInSeconds
+    }
+}
+
+// Static Properties
+extension WorkoutManager {
+    static func completionIconToName(_ icon: String) -> String {
+        var output: String
+
+        switch icon {
+        case "xmark.circle.fill":
+            output = "Flop"
+        case "checkmark.circle.fill":
+            output = "Complete"
+        case "flame.fill":
+            output = "100%"
+        case "eurozonesign.circle.fill":
+            output = "Too Easy"
+        default:
+            output = "Unknown"
+        }
+
+        return output
+    }
+    
+    static func completionIconToColor(_ icon: String, darkMode: Bool) -> some ShapeStyle {
+        var colors: [Color]
+
+        switch icon {
+        case "xmark.circle.fill":
+            colors = [
+                Color.red,
+                darkMode ? Color.purple : Color.purple.darker()!
+            ]
+        case "checkmark.circle.fill":
+            colors = [
+                Color.accentColor600,
+                Color.accentColor300,
+            ]
+        case "flame.fill":
+            colors = [
+                darkMode ? Color.yellow : Color.orange, // The innermost part of the flame
+                darkMode ? Color.orange : Color.red,    // The middle part of the flame
+                darkMode ? Color.red : Color.red.darker()!       // The outermost part of the flame
+            ]
+//        case "eurozonesign.circle.fill":
+//            colors = [
+//                Color.accentColor600,
+//                darkMode ? Color.blue : Color.blue.darker()!,
+//            ]
+        default:
+            colors = [
+                Color.accentColor600,
+                Color.accentColor300,
+            ]
+        }
+
+        return LinearGradient(
+            gradient: Gradient(
+                colors: colors
+            ),
+            startPoint: .top,
+            endPoint: .bottom
+        )
+        .anyShapeStyle()
+    }
+}
+
+#Preview("Icon Colors") {
+    HStack {
+        // Dark Mode
+        ZStack {
+            Color.black
+            VStack(spacing: 30) {
+                ForEach(["xmark.circle.fill", "checkmark.circle.fill", "flame.fill", "eurozonesign.circle.fill", "", "questionmark.circle.fill"], id: \.self) { icon in
+                    Image(systemName: icon)
+                        .font(.title)
+                        .foregroundStyle(WorkoutManager.completionIconToColor(icon, darkMode: true))
+                }
+            }
+        }
+        
+        // Light Mode
+        ZStack {
+            Color.white
+            VStack(spacing: 30) {
+                ForEach(["xmark.circle.fill", "checkmark.circle.fill", "flame.fill", "eurozonesign.circle.fill", "", "questionmark.circle.fill"], id: \.self) { icon in
+                    Image(systemName: icon)
+                        .font(.title)
+                        .foregroundStyle(WorkoutManager.completionIconToColor(icon, darkMode: false))
+                }
+            }
+        }
     }
 }
